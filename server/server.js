@@ -1,26 +1,29 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import router from "./routes/playlists.js";
+import router from "./routes/playlistsRoute.js";
 import * as dotenv from "dotenv";
+import playlistsRoute from "./routes/playlistsRoute.js";
 
 dotenv.config();
 
 const app = express();
-
-app.use(express.json());
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
-
-app.use(cors());
-
 const port = process.env.PORT || 5000;
-app.listen(port, () => {
-  console.log("Listening on port " + port);
-});
+
+const addMiddlewares = () => {
+  app.use(express.json());
+  app.use(
+    express.urlencoded({
+      extended: true,
+    })
+  );
+
+  const corsOptions = {
+    origin: "http://localhost:3000",
+    credentials: true,
+  };
+  app.use(cors(corsOptions));
+};
 
 const connectToDB = async () => {
   try {
@@ -31,6 +34,20 @@ const connectToDB = async () => {
   }
 };
 
-connectToDB();
+const startServer = () => {
+  app.listen(port, () => {
+    console.log("Listening on port " + port);
+  });
+};
 
-app.use("/api", router);
+const loadRoutes = () => {
+  app.use("/api", router);
+  app.use("api/all", playlistsRoute);
+};
+
+(async function controller() {
+  await connectToDB();
+  addMiddlewares();
+  loadRoutes();
+  startServer();
+})();
