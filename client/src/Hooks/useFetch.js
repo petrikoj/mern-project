@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 
 const useFetch = (url) => {
-  const [data, setData] = useState(null);
-  const [totalItems, setTotalItems] = useState(null);
+  const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const getData = async () => {
@@ -12,7 +11,6 @@ const useFetch = (url) => {
       const result = await response.json();
       console.log("Fetch result:", result);
       setData(result);
-      setTotalItems(result.totalItems);
       setLoading(false);
     } catch (error) {
       setError(error);
@@ -21,6 +19,6 @@ const useFetch = (url) => {
   useEffect(() => {
     getData();
   }, [url]);
-  return { data, totalItems, error, loading };
+  return { data, error, loading };
 };
 export default useFetch;
