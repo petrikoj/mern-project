@@ -7,10 +7,14 @@ const playlistSchema = new mongoose.Schema({
     unique: true,
   },
   author: {
-    type: String,
     required: true,
-    unique: false,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
   },
+  // author_name: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "user",
+  // },
   description: {
     type: String,
     required: true,
@@ -25,6 +29,7 @@ const playlistSchema = new mongoose.Schema({
     required: true,
     unique: true,
     single: {
+      type: Object,
       artist: { type: String, required: true },
       song_title: { type: String, required: true },
       album: { type: String, required: false },
