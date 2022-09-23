@@ -7,10 +7,7 @@ const getAllPlaylists = async (request, response) => {
     if (allPlaylists.length === 0) {
       response.status(200).json({ msg: "Nothing found in DB" });
     } else {
-      response.status(200).json({
-        allPlaylists,
-        totalItems: allPlaylists.length,
-      });
+      response.status(200).json(allPlaylists);
     }
   } catch (error) {
     response.status(500).json({

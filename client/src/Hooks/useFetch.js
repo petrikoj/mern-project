@@ -10,7 +10,7 @@ const useFetch = (url) => {
       const response = await fetch(url);
       console.log("useFetch response --> ", response);
       const result = await response.json();
-      console.log(result);
+      console.log("Fetch result:", result);
       setData(result);
       setTotalItems(result.totalItems);
       setLoading(false);

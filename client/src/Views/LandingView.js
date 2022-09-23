@@ -14,7 +14,7 @@ function LandingView() {
     <Center>
       <VStack>
         <Heading fontFamily="body">Hello World</Heading>
-        {playlists.allPlaylists.map((playlist, id) => {
+        {playlists.map((playlist, id) => {
           return (
             <div key={id}>
               <h2>{playlist.title}</h2>
@@ -23,21 +23,12 @@ function LandingView() {
                 return (
                   <div key={id}>
                     <p>{song.artist}</p>
-                    <p>{song.song_title}</p>
+                    <p>"{song.song_title}"</p>
                   </div>
                 );
               })}
             </div>
           );
-
-          // {
-          //   playlist.songs.map((song, id) => {
-          //     <div key={id}>
-          //       <p>{song.artist}</p>
-          //       <p>{song.song_title}</p>
-          //     </div>;
-          //   });
-          // }
         })}
         ;
       </VStack>
