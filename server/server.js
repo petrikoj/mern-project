@@ -2,8 +2,9 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import router from "./routes/playlistsRoute.js";
-import * as dotenv from "dotenv";
 import playlistsRoute from "./routes/playlistsRoute.js";
+import usersRoute from "./routes/usersRoute.js";
+import * as dotenv from "dotenv";
 
 dotenv.config();
 
@@ -42,7 +43,8 @@ const startServer = () => {
 
 const loadRoutes = () => {
   app.use("/api", router);
-  app.use("api/all", playlistsRoute);
+  app.use("/api/playlists/", playlistsRoute);
+  app.use("/api/users/", usersRoute);
 };
 
 (async function controller() {
