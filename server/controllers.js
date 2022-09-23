@@ -9,7 +9,7 @@ const getAllPlaylists = async (request, response) => {
     } else {
       response.status(200).json({
         allPlaylists,
-        items: allPlaylists.length,
+        totalItems: allPlaylists.length,
       });
     }
   } catch (error) {
