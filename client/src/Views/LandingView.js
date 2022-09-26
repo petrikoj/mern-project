@@ -1,6 +1,7 @@
 import React from "react";
 import { Center, Heading, VStack } from "@chakra-ui/react";
 import useFetch from "../Hooks/useFetch";
+import SignUp from "../Components/userRelated/SignUp.js";
 
 function LandingView() {
   const {
@@ -19,7 +20,7 @@ function LandingView() {
             return (
               <div key={playlist._id}>
                 <h2>{playlist.title}</h2>
-                <p>{playlist.author}</p>
+                <p>{playlist.author.username}</p>
                 {playlist.songs.map((song, i) => {
                   return (
                     <div key={i}>
@@ -32,6 +33,7 @@ function LandingView() {
             );
           })}
         ;
+        <SignUp />
       </VStack>
     </Center>
   );

@@ -11,6 +11,7 @@ const playlistSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
+
   // author_name: {
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: "user",
@@ -23,6 +24,10 @@ const playlistSchema = new mongoose.Schema({
     type: String,
     required: false,
     unique: true,
+  },
+  mood: {
+    type: String,
+    required: true,
   },
   songs: {
     type: Array,

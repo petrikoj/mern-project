@@ -11,10 +11,14 @@
   "author": "petrikoj",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cloudinary": "^1.32.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
+    "express-validator": "^6.14.2",
     "mongoose": "^6.6.1",
+    "multer": "^1.4.5-lts.1",
     "nodemon": "^2.0.20"
   }
 }
