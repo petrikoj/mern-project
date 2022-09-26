@@ -5,6 +5,7 @@ import router from "./routes/playlistsRoute.js";
 import playlistsRoute from "./routes/playlistsRoute.js";
 import usersRoute from "./routes/usersRoute.js";
 import * as dotenv from "dotenv";
+import { cloudinaryConfig } from "./cloudinaryConfig.js";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ const addMiddlewares = () => {
     credentials: true,
   };
   app.use(cors(corsOptions));
+  cloudinaryConfig();
 };
 
 const connectToDB = async () => {
