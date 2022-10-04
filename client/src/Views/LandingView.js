@@ -4,18 +4,18 @@ import useFetch from "../Hooks/useFetch";
 import SignUp from "../Components/userRelated/SignUp.js";
 
 function LandingView() {
-  const {
-    data: playlists,
-    loading,
-    error,
-  } = useFetch("http://localhost:5000/api/all");
-  console.log(playlists);
+  // const {
+  //   data: playlists,
+  //   loading,
+  //   error,
+  // } = useFetch("http://localhost:5000/api/all");
+  // console.log(playlists);
 
   return (
     <Center>
       <VStack>
         <Heading fontFamily="body">Hello World</Heading>
-        {playlists &&
+        {/* {playlists &&
           playlists.map((playlist) => {
             return (
               <div key={playlist._id}>
@@ -32,7 +32,7 @@ function LandingView() {
               </div>
             );
           })}
-        ;
+        ; */}
         <SignUp />
       </VStack>
     </Center>

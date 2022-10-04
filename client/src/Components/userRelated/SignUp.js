@@ -33,8 +33,35 @@ function SignUp() {
       );
       const result = await response.json();
       console.log("Result:", result);
-      setNewUser({ ...newUser, user_avatar: result.user_img });
+      setNewUser({ ...newUser, avatar: result.avatar });
     } catch (error) {}
+  };
+
+  const registerNewUser = async () => {
+    let urlencoded = new URLSearchParams();
+    urlencoded.append("username", newUser.username);
+    urlencoded.append("email", newUser.email);
+    urlencoded.append("password", newUser.password);
+    urlencoded.append(
+      "avatar",
+      newUser.avatar
+        ? newUser.avatar
+        : "https://www.kindpng.com/imgv/iwoTwxh_transparent-radio-icon-png-headphones-icon-icon-png/"
+    );
+    const requestOptions = {
+      method: "POST",
+      body: urlencoded,
+    };
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/users/signup",
+        requestOptions
+      );
+      const results = await response.json();
+      console.log("Result:", results);
+    } catch (error) {
+      console.log("Fetch error", error);
+    }
   };
 
   return (
@@ -55,7 +82,7 @@ function SignUp() {
           type="text"
           name="email"
           id="email"
-          value={newUser.user_email ? newUser.user_email : ""}
+          value={newUser.email ? newUser.email : ""}
           onChange={handleChangeHandler}
         />
       </div>
@@ -73,7 +100,8 @@ function SignUp() {
         <input type="file" name="image" onChange={attachFileHandler} />
         <button onClick={submitForm}>Upload img</button>
       </form>
-      {newUser.user_avatar && <img src={newUser.user_avatar} alt="user pic" />}
+      {newUser.avatar && <img src={newUser.avatar} alt="user pic" />}
+      <button onClick={registerNewUser}>Sign up</button>
     </Container>
   );
 }

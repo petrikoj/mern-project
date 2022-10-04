@@ -27,7 +27,7 @@ const getAllUsers = async (request, response) => {
   }
 };
 
-// POST userPicture + signup new User
+// POST userPicture
 
 const uploadUserPicture = async (request, response) => {
   console.log("request.body:", request.body);
@@ -40,7 +40,7 @@ const uploadUserPicture = async (request, response) => {
     console.log("uploadResult", uploadResult);
     response.status(200).json({
       message: "Upload successful",
-      user_img: uploadResult.url,
+      avatar: uploadResult.url,
     });
   } catch (error) {
     response.status(500).json({
@@ -62,6 +62,8 @@ const uploadUserPicture = async (request, response) => {
 //   }
 // };
 
+// POST newUser
+
 const signUp = async (request, response) => {
   console.log("Request.body:", request.body);
   try {
@@ -72,17 +74,17 @@ const signUp = async (request, response) => {
       const hashedPassword = await encryptPassword(request.body.password);
 
       body("password").isLength({ min: 8 });
-      body("user_email").isEmail();
+      body("email").isEmail();
       const error = validationResult(request);
       if (!error.isEmpty()) {
         return response.status(400).json({ error: error.array() });
       }
 
       const newUser = new User({
-        username: request.body.userName,
-        user_email: request.body.email,
+        username: request.body.username,
+        email: request.body.email,
         password: hashedPassword,
-        user_avatar: request.body.user_img,
+        avatar: request.body.avatar,
       });
 
       try {
@@ -90,8 +92,8 @@ const signUp = async (request, response) => {
         response.status(201).json({
           user: {
             username: savedUser.username,
-            email: savedUser.user_email,
-            user_avatar: savedUser.user_avatar,
+            email: savedUser.email,
+            avatar: savedUser.avatar,
           },
           message: "User registration successful",
         });

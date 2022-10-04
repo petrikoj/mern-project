@@ -6,8 +6,9 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  user_email: {
+  email: {
     type: String,
+    required: true,
     lowercase: true,
     unique: true,
     // match: /.+\@.+\..+/,
@@ -15,9 +16,14 @@ const userSchema = new mongoose.Schema({
     //   return validator.isEmail(value);
     // },
   },
-  user_avatar: {
+  avatar: {
     type: String,
   },
+  password: {
+    type: String,
+    required: true,
+  },
+
   playlists: [{ type: mongoose.Schema.Types.ObjectId, ref: "playlist" }],
 });
 
