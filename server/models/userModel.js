@@ -3,14 +3,14 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true,
-    unique: true,
+    // required: true,
+    // unique: true,
   },
   email: {
     type: String,
     required: true,
     lowercase: true,
-    unique: true,
+    // unique: true,
     // match: /.+\@.+\..+/,
     // validate: (value) => {
     //   return validator.isEmail(value);
@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    // required: true,
   },
 
   playlists: [{ type: mongoose.Schema.Types.ObjectId, ref: "playlist" }],
