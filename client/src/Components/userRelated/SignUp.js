@@ -5,18 +5,20 @@ function SignUp() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [newUser, setNewUser] = useState({});
 
-  const handleChangeHandler = (e) => {
-    setNewUser({ ...newUser, [e.target.name]: e.target.value });
+  const handleChangeHandler = (event) => {
+    setNewUser({ ...newUser, [event.target.name]: event.target.value });
   };
 
-  const attachFileHandler = (e) => {
-    setSelectedFile(e.target.files[0]);
+  const attachFileHandler = (event) => {
+    setSelectedFile(event.target.files[0]);
   };
 
   const submitForm = async (event) => {
     event.preventDefault();
     const formData = new FormData();
-    console.log("Selected file:", selectedFile);
+    formData.append("image", selectedFile);
+
+    console.log("selectedFile:", selectedFile);
     console.log("formData:", formData);
 
     const requestOptions = {
@@ -60,7 +62,7 @@ function SignUp() {
       <div>
         <label htmlFor="password">Password</label>
         <input
-          type="text"
+          type="password"
           name="password"
           id="password"
           value={newUser.password ? newUser.password : ""}
@@ -68,10 +70,10 @@ function SignUp() {
         />
       </div>
       <form>
-        <input type="file" onChange={attachFileHandler} />
+        <input type="file" name="image" onChange={attachFileHandler} />
         <button onClick={submitForm}>Upload img</button>
       </form>
-      {newUser.user_avatar && <img src={newUser.user_avatar} alt="userPic" />}
+      {newUser.user_avatar && <img src={newUser.user_avatar} alt="user pic" />}
     </Container>
   );
 }
