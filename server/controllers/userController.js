@@ -1,7 +1,8 @@
 import User from "../models/userModel.js";
 import { v2 as cloudinary } from "cloudinary";
 import { body, validationResult } from "express-validator";
-import encryptPassword from "../utils/encryptPassword.js";
+import { encryptPassword, verifyPassword } from "../utils/bcrypt.js";
+import { issueToken } from "../utils/jwt.js";
 
 // GET all users
 
@@ -110,4 +111,39 @@ const signUp = async (request, response) => {
   }
 };
 
-export { getAllUsers, uploadUserPicture, signUp };
+const login = async (request, response) => {
+  console.log("Request.body:", request.body);
+  try {
+    const existingUser = await User.findOne({ email: request.body.email });
+    if (!existingUser) {
+      response.status(401).json({ message: "No such user found" });
+    }
+    if (existingUser) {
+      // Create a function to compare request pw with pw stored in db: //
+      const verified = await verifyPassword(
+        request.body.password,
+        existingUser.password
+      );
+      if (!verified) {
+        response.status(401).json({ message: "Wrong password" });
+      }
+      if (verified) {
+        console.log("User is logged in");
+        const token = issueToken(existingUser.id);
+        console.log("Token:", token);
+        response.status(201).json({
+          message: "User is logged in",
+          user: {
+            id: existingUser._id,
+            username: existingUser.username,
+            email: existingUser.email,
+            avatar: existingUser.avatar,
+          },
+          token,
+        });
+      }
+    }
+  } catch (error) {}
+};
+
+export { getAllUsers, uploadUserPicture, signUp, login };

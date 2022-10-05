@@ -5,6 +5,7 @@ const theme = extendTheme({
     global: {
       body: {
         bg: "yellow.100",
+        color: "blackAlpha.900",
       },
       fonts: {
         heading: `"Vollkorn", serif`,

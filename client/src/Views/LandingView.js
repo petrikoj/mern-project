@@ -2,6 +2,7 @@ import React from "react";
 import { Center, Heading, VStack } from "@chakra-ui/react";
 import useFetch from "../Hooks/useFetch";
 import SignUp from "../Components/userRelated/SignUp.js";
+import Login from "../Components/userRelated/Login.js";
 
 function LandingView() {
   // const {
@@ -34,6 +35,7 @@ function LandingView() {
           })}
         ; */}
         <SignUp />
+        <Login />
       </VStack>
     </Center>
   );
