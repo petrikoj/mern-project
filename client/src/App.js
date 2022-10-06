@@ -4,7 +4,6 @@ import { ChakraProvider } from "@chakra-ui/react";
 import LandingView from "./Views/LandingView";
 import theme from "./Styles/theme";
 import getToken from "./utils/getToken.js";
-import removeToken from "./utils/removeToken.js";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -22,8 +21,9 @@ function App() {
   };
 
   const handleLogout = () => {
-    removeToken();
+    localStorage.removeItem("token");
     setUser(false);
+    console.log("User?", user);
   };
 
   useEffect(() => {

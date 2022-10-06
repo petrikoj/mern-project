@@ -146,4 +146,15 @@ const login = async (request, response) => {
   } catch (error) {}
 };
 
-export { getAllUsers, uploadUserPicture, signUp, login };
+// GET user profile
+
+const getUserProfile = async (request, response) => {
+  console.log("Request.user:", request.user);
+  response.status(201).json({
+    email: request.user.email,
+    username: request.user.username,
+    avatar: request.user.avatar,
+  });
+};
+
+export { getAllUsers, getUserProfile, uploadUserPicture, signUp, login };

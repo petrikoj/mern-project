@@ -5,7 +5,9 @@ import router from "./routes/playlistsRoute.js";
 import playlistsRoute from "./routes/playlistsRoute.js";
 import usersRoute from "./routes/usersRoute.js";
 import * as dotenv from "dotenv";
-import { cloudinaryConfig } from "./cloudinaryConfig.js";
+import { cloudinaryConfig } from "./config/cloudinaryConfig.js";
+import passport from "passport";
+import passportConfig from "./config/passportConfig.js";
 
 dotenv.config();
 
@@ -26,6 +28,9 @@ const addMiddlewares = () => {
   };
   app.use(cors(corsOptions));
   cloudinaryConfig();
+
+  app.use(passport.initialize());
+  passportConfig(passport);
 };
 
 const connectToDB = async () => {
