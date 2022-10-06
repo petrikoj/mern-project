@@ -74,12 +74,12 @@ const signUp = async (request, response) => {
     } else {
       const hashedPassword = await encryptPassword(request.body.password);
 
-      body("password").isLength({ min: 8 });
+      /*    body("password").isLength({ min: 8 });
       body("email").isEmail();
       const error = validationResult(request);
       if (!error.isEmpty()) {
         return response.status(400).json({ error: error.array() });
-      }
+      } */
 
       const newUser = new User({
         username: request.body.username,
