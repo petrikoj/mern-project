@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Container } from "@chakra-ui/react";
+import { isValidEmail, isValidPassword } from "../../utils/validators";
 
 function SignUp() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [newUser, setNewUser] = useState({});
+  const [error, setError] = useState(null);
 
   const handleChangeHandler = (event) => {
     setNewUser({ ...newUser, [event.target.name]: event.target.value });
