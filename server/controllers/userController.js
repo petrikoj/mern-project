@@ -1,6 +1,5 @@
 import User from "../models/userModel.js";
 import { v2 as cloudinary } from "cloudinary";
-import { body, validationResult } from "express-validator";
 import { encryptPassword, verifyPassword } from "../utils/bcrypt.js";
 import { issueToken } from "../utils/jwt.js";
 
@@ -66,20 +65,14 @@ const uploadUserPicture = async (request, response) => {
 // POST newUser
 
 const signUp = async (request, response) => {
-  console.log("Request.body:", request.body);
+  console.log("Request.body @ const signUp:", request.body);
+
   try {
     const existingUser = await User.findOne({ email: request.body.email });
     if (existingUser) {
       response.status(409).json({ message: "User already exists" });
     } else {
       const hashedPassword = await encryptPassword(request.body.password);
-
-      /*    body("password").isLength({ min: 8 });
-      body("email").isEmail();
-      const error = validationResult(request);
-      if (!error.isEmpty()) {
-        return response.status(400).json({ error: error.array() });
-      } */
 
       const newUser = new User({
         username: request.body.username,
@@ -111,8 +104,10 @@ const signUp = async (request, response) => {
   }
 };
 
+// Login
+
 const login = async (request, response) => {
-  console.log("Request.body:", request.body);
+  console.log("Request.body from login:", request.body);
   try {
     const existingUser = await User.findOne({ email: request.body.email });
     if (!existingUser) {
