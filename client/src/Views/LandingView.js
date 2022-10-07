@@ -1,9 +1,9 @@
 import { React, useState } from "react";
 import { Center, Heading, VStack } from "@chakra-ui/react";
-import useFetch from "../Hooks/useFetch";
-import SignUp from "../Components/userRelated/SignUp.js";
-import Login from "../Components/userRelated/Login.js";
-import Profile from "../Components/userRelated/Profile.js";
+import useFetch from "../hooks/useFetch";
+import SignUp from "../components/userRelated/SignUp.js";
+import Login from "../components/userRelated/Login.js";
+import Profile from "../components/userRelated/Profile.js";
 
 function LandingView() {
   // const {
