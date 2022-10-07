@@ -1,8 +1,8 @@
-import "./Styles/App.css";
+import "./styles/App.css";
 import { useEffect, useState } from "react";
 import { ChakraProvider } from "@chakra-ui/react";
-import LandingView from "./Views/LandingView";
-import theme from "./Styles/theme";
+import LandingView from "./views/LandingView";
+import theme from "./styles/theme";
 import getToken from "./utils/getToken.js";
 
 function App() {
