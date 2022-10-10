@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Container } from "@chakra-ui/react";
 import { isValidEmail, isValidPassword } from "../../utils/validators";
 
 function SignUp() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [newUser, setNewUser] = useState({});
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
+  const [emailError, setEmailError] = useState(null);
+  const [passwordError, setPasswordError] = useState(null);
+  const [credentialsError, setCredentialsError] = useState(null);
 
   const handleChangeHandler = (event) => {
     setNewUser({ ...newUser, [event.target.name]: event.target.value });
@@ -40,31 +43,52 @@ function SignUp() {
   };
 
   const registerNewUser = async () => {
-    let urlencoded = new URLSearchParams();
-    urlencoded.append("username", newUser.username);
-    urlencoded.append("email", newUser.email);
-    urlencoded.append("password", newUser.password);
-    urlencoded.append(
-      "avatar",
-      newUser.avatar
-        ? newUser.avatar
-        : "https://www.kindpng.com/imgv/iwoTwxh_transparent-radio-icon-png-headphones-icon-icon-png/"
-    );
-    const requestOptions = {
-      method: "POST",
-      body: urlencoded,
-    };
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/users/signup",
-        requestOptions
+    if (!isValidEmail(newUser.email) && !isValidPassword(newUser.password)) {
+      alert(credentialsError);
+      return;
+    }
+    if (!isValidEmail(newUser.email)) {
+      alert(emailError);
+      return;
+    }
+    if (!isValidPassword(newUser.password)) {
+      alert(passwordError);
+      return;
+    }
+
+    if (isValidEmail(newUser.email) && isValidPassword(newUser.password)) {
+      let urlencoded = new URLSearchParams();
+      urlencoded.append("username", newUser.username);
+      urlencoded.append("email", newUser.email);
+      urlencoded.append("password", newUser.password);
+      urlencoded.append(
+        "avatar",
+        newUser.avatar
+          ? newUser.avatar
+          : "https://www.kindpng.com/imgv/iwoTwxh_transparent-radio-icon-png-headphones-icon-icon-png/"
       );
-      const results = await response.json();
-      console.log("Result:", results);
-    } catch (error) {
-      console.log("Fetch error", error);
+      const requestOptions = {
+        method: "POST",
+        body: urlencoded,
+      };
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/users/signup",
+          requestOptions
+        );
+        const results = await response.json();
+        console.log("Result:", results);
+      } catch (error) {
+        console.log("Fetch error", error);
+      }
     }
   };
+
+  useEffect(() => {
+    setCredentialsError("Wrong credentials");
+    setEmailError("Wrong E-Mail");
+    setPasswordError("Wrong Password");
+  }, [credentialsError, emailError, passwordError]);
 
   return (
     <Container>
