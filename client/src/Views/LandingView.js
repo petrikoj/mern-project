@@ -4,6 +4,7 @@ import useFetch from "../hooks/useFetch";
 import SignUp from "../components/userRelated/SignUp.js";
 import Login from "../components/userRelated/Login.js";
 import Profile from "../components/userRelated/Profile.js";
+import PostPlaylist from "../components/userRelated/PostPlaylist";
 
 function LandingView() {
   // const {
@@ -38,6 +39,7 @@ function LandingView() {
         <SignUp />
         <Login />
         <Profile />
+        <PostPlaylist />
       </VStack>
     </Center>
   );
