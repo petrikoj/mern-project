@@ -35,7 +35,7 @@ const uploadUserPicture = async (request, response) => {
 
   try {
     const uploadResult = await cloudinary.uploader.upload(request.file.path, {
-      folder: "mern-project",
+      folder: "mern-project/users",
     });
     console.log("uploadResult", uploadResult);
     response.status(200).json({
