@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { Box, Container } from "@chakra-ui/react";
+import { Box, Button, Container, Heading } from "@chakra-ui/react";
 import { isValidEmail, isValidPassword } from "../../utils/validators.js";
 
 function Login() {
@@ -10,7 +10,6 @@ function Login() {
 
   const handleChangeHandler = (event) => {
     setUserLogin({ ...userLogin, [event.target.name]: event.target.value });
-    console.log(userLogin);
   };
 
   const handleLogin = async () => {
@@ -66,7 +65,6 @@ function Login() {
 
   return (
     <Box>
-      <h2>Login</h2>
       <Container>
         <div>
           <label htmlFor="email">E-Mail</label>
@@ -88,7 +86,7 @@ function Login() {
             onChange={handleChangeHandler}
           />
         </div>
-        <button onClick={handleLogin}>Login</button>
+        <Button onClick={handleLogin}>Login</Button>
       </Container>
     </Box>
   );
