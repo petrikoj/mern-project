@@ -26,16 +26,18 @@ const playlistSchema = new mongoose.Schema({
     required: true,
   },
   songs: {
-    type: Array,
-    required: true,
-    unique: true,
-    single: {
-      type: Object,
-      artist: { type: String, required: true },
-      song_title: { type: String, required: true },
-      album: { type: String, required: false },
-      // release_year: { type: String, required: false },
-      cover_url: { type: String, required: false },
+    $push: {
+      type: Array,
+      required: true,
+      unique: true,
+      single: {
+        type: Object,
+        artist: { type: String, required: true },
+        song_title: { type: String, required: true },
+        album: { type: String, required: false },
+        // release_year: { type: String, required: false },
+        cover_url: { type: String, required: false },
+      },
     },
   },
   date: { type: Date, default: Date.now },
