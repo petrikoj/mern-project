@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Container } from "@chakra-ui/react";
+import { Button, Container, FormControl, Input } from "@chakra-ui/react";
 import { isValidEmail, isValidPassword } from "../../utils/validators";
 
 function SignUp() {
@@ -122,12 +122,12 @@ function SignUp() {
           onChange={handleChangeHandler}
         />
       </div>
-      <form>
-        <input type="file" name="image" onChange={attachFileHandler} />
-        <button onClick={submitForm}>Upload img</button>
-      </form>
+      <FormControl>
+        <Input type="file" name="image" onChange={attachFileHandler} />
+        <Button onClick={submitForm}>Upload img</Button>
+      </FormControl>
       {newUser.avatar && <img src={newUser.avatar} alt="user pic" />}
-      <button onClick={registerNewUser}>Sign up</button>
+      <Button onClick={registerNewUser}>Sign up</Button>
     </Container>
   );
 }
