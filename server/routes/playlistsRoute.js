@@ -5,6 +5,7 @@ import {
   postNewPlaylist,
   uploadPlaylistPicture,
 } from "../controllers/playlistControllers.js";
+import jwtAuth from "../utils/jwtAuth.js";
 
 const router = express.Router();
 
