@@ -1,42 +1,39 @@
-import "./styles/App.css";
-import { useEffect, useState } from "react";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AuthContextProvider } from "./context/AuthContext.js";
+import ProtectedRoute from "./components/userRelated/ProtectedRoute";
 import { ChakraProvider } from "@chakra-ui/react";
-import LandingView from "./views/LandingView";
 import theme from "./styles/theme";
-import getToken from "./utils/getToken.js";
+import LandingView from "./views/LandingView";
+import SignUpView from "./views/SignUpView";
+import LoginView from "./views/LoginView";
+import ProfileView from "./views/ProfileView";
+import PostPlaylist from "./components/userRelated/PostPlaylist";
+import Navbar from "./components/layoutRelated/Navbar.js";
 
 function App() {
-  const [user, setUser] = useState(null);
-
-  const isUserLoggedIn = () => {
-    const token = getToken();
-    if (token) {
-      setUser(true);
-      console.log("User logged in");
-    }
-    if (!token) {
-      setUser(false);
-      console.log("User NOT logged in");
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setUser(false);
-    console.log("User?", user);
-  };
-
-  useEffect(() => {
-    isUserLoggedIn();
-  }, [user]);
-
   return (
-    <ChakraProvider theme={theme}>
-      <div className="App">
-        <LandingView />
-        <button onClick={handleLogout}>Logout</button>
-      </div>
-    </ChakraProvider>
+    <BrowserRouter>
+      <ChakraProvider theme={theme}>
+        <AuthContextProvider>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<LandingView />} />
+            <Route path="/signup" element={<SignUpView />} />
+            <Route path="/login" element={<LoginView />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfileView />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/create-playlist" element={<PostPlaylist />} />
+          </Routes>
+        </AuthContextProvider>
+      </ChakraProvider>
+    </BrowserRouter>
   );
 }
 
