@@ -29,7 +29,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/create-playlist" element={<PostPlaylist />} />
+            <Route
+              path="/create-playlist"
+              element={
+                <ProtectedRoute>
+                  <PostPlaylist />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </AuthContextProvider>
       </ChakraProvider>
