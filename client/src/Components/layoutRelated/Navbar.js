@@ -1,5 +1,6 @@
-import React, { useContext } from "react";
-import { HamburgerIcon, InfoIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import React, { useContext, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+import { HamburgerIcon, Icon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -11,14 +12,26 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Text,
 } from "@chakra-ui/react";
+import { MdLogout, MdOutlinePlaylistAdd } from "react-icons/md";
+import { BiUser } from "react-icons/bi";
+
 import { AuthContext } from "../../context/AuthContext";
 
 function Navbar() {
-  const { user } = useContext(AuthContext);
+  const { user, checkUserStatus, logoutUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    checkUserStatus();
+    console.log("useEffect ran in Navbar.js");
+  }, [user]);
+
   return (
     <Flex justify="space-between" p={"5"}>
-      <Heading>playlist.</Heading>
+      <NavLink to={"/"}>
+        <Heading>playlist.</Heading>
+      </NavLink>
       {user ? (
         <Menu>
           <MenuButton
@@ -28,14 +41,35 @@ function Navbar() {
             variant="ghost"
           />
           <MenuList>
-            <MenuItem>Profile</MenuItem>
-            <MenuItem icon={<PlusSquareIcon />}>Create Playlist</MenuItem>
-            <MenuItem>Something</MenuItem>
-            <MenuItem>Logout</MenuItem>
+            <NavLink to={"/profile"}>
+              <MenuItem>
+                <Icon as={BiUser} mr="2" />
+                Profile
+              </MenuItem>
+            </NavLink>
+            <NavLink to={"/create-playlist"}>
+              <MenuItem>
+                <Icon as={MdOutlinePlaylistAdd} mr="2" />
+                Create Playlist
+              </MenuItem>
+            </NavLink>
+            {/* <MenuItem>Something</MenuItem> */}
+            <MenuItem onClick={logoutUser}>
+              <Icon as={MdLogout} mr="2" />
+              Logout
+            </MenuItem>
           </MenuList>
         </Menu>
       ) : (
-        <Button>Sign up</Button>
+        <HStack>
+          <NavLink to={"/signup"}>
+            <Button>Sign up</Button>
+          </NavLink>
+          <Text>or</Text>
+          <NavLink to={"/login"}>
+            <Button>Login</Button>
+          </NavLink>
+        </HStack>
       )}
     </Flex>
   );
