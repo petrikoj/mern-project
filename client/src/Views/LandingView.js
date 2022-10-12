@@ -39,11 +39,10 @@ function LandingView() {
             );
           })}
         ; */}
-        <SignUp />
+        {/*  <SignUp />
         <Login />
         <Profile />
-        <PostPlaylist />
-        <Button onClick={logoutUser}>Logout</Button>
+        <PostPlaylist /> */}
       </VStack>
     </Center>
   );
