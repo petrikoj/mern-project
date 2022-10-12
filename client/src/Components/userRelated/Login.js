@@ -1,12 +1,16 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext } from "react";
 import { Box, Button, Container, Heading } from "@chakra-ui/react";
 import { isValidEmail, isValidPassword } from "../../utils/validators.js";
+import { AuthContext } from "../../context/AuthContext.js";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [userLogin, setUserLogin] = useState({});
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
   const [credentialsError, setCredentialsError] = useState(null);
+
+  const redirect = useNavigate();
 
   const handleChangeHandler = (event) => {
     setUserLogin({ ...userLogin, [event.target.name]: event.target.value });
@@ -49,6 +53,7 @@ function Login() {
 
         if (token) {
           localStorage.setItem("token", token);
+          redirect("/");
         }
         console.log("Result:", result);
       } catch (error) {
