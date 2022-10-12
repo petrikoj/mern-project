@@ -78,6 +78,58 @@ function PostPlaylist() {
     }
   };
 
+  // Send input data with JSON stringify
+
+  const uploadPlaylist = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const myJSON = JSON.stringify({
+      title: newPlaylist.title,
+      author: newPlaylist.author,
+      description: newPlaylist.description,
+      img_url: newPlaylist.image_url,
+      mood: newPlaylist.mood,
+      songs: songs.forEach((single) => {
+        (artist = newPlaylist.single.artist),
+          (song_title = newPlaylist.single.song_title),
+          (album = newPlaylist.single.album),
+          (cover_url = newPlaylist.single.cover_url);
+        return single;
+      }),
+      /*   },
+      songs: [
+        {
+          artist: "",
+          song_title: "",
+          album: "",
+          cover_url: "",
+        },
+      ], */
+      date: null,
+      likes: null,
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: myJSON,
+    };
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/playlists/create",
+        requestOptions
+      );
+      const result = response;
+      // const result = await response.text();
+      console.log(result);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  //
+
   return (
     <>
       <FormControl isRequired={true}>
@@ -203,7 +255,7 @@ function PostPlaylist() {
         </Stack>
         <IconButton icon={<AddIcon />} />
       </FormControl>
-      <Button onClick={submitPlaylist}>Submit</Button>
+      <Button onClick={uploadPlaylist}>Submit</Button>
     </>
   );
 }
