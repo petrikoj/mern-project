@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/AuthContext.js";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const { checkUserStatus } = useContext(AuthContext);
   const [userLogin, setUserLogin] = useState({});
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
@@ -54,6 +55,7 @@ function Login() {
         if (token) {
           localStorage.setItem("token", token);
           redirect("/");
+          checkUserStatus();
         }
         console.log("Result:", result);
       } catch (error) {
