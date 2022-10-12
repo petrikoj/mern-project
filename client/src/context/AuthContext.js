@@ -1,10 +1,13 @@
 import React, { createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import getToken from "../utils/getToken";
 
 export const AuthContext = createContext();
 
 export const AuthContextProvider = (props) => {
   const [user, setUser] = useState(null);
+
+  const redirect = useNavigate();
 
   const checkUserStatus = () => {
     const token = getToken();
@@ -21,6 +24,7 @@ export const AuthContextProvider = (props) => {
   const logoutUser = () => {
     localStorage.removeItem("token");
     checkUserStatus();
+    redirect("/");
     console.log("User logged out successfully");
   };
 
@@ -56,7 +60,7 @@ export const AuthContextProvider = (props) => {
 
   return (
     <AuthContext.Provider
-      value={{ checkUserStatus, logoutUser, getUser, user }}
+      value={{ checkUserStatus, logoutUser, getUser, user, setUser }}
     >
       {props.children}
     </AuthContext.Provider>
