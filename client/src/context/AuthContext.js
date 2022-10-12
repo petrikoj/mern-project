@@ -13,6 +13,7 @@ export const AuthContextProvider = (props) => {
     const token = getToken();
     if (token) {
       setUser(true);
+
       console.log("User logged in");
     }
     if (!token) {
