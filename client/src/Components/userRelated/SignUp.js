@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { Button, Container, FormControl, Input } from "@chakra-ui/react";
+import {
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Input,
+} from "@chakra-ui/react";
 import { isValidEmail, isValidPassword } from "../../utils/validators";
 
 function SignUp() {
@@ -63,7 +69,7 @@ function SignUp() {
       urlencoded.append("password", newUser.password);
       urlencoded.append(
         "avatar",
-        newUser.avatar
+        newUser.avatar !== ""
           ? newUser.avatar
           : "https://www.kindpng.com/imgv/iwoTwxh_transparent-radio-icon-png-headphones-icon-icon-png/"
       );
@@ -92,37 +98,35 @@ function SignUp() {
 
   return (
     <Container>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          value={newUser.username ? newUser.username : ""}
-          name="username"
-          onChange={handleChangeHandler}
-        />
-      </div>
-      <div>
-        <label htmlFor="email">E-Mail</label>
-        <input
-          type="text"
-          name="email"
-          id="email"
-          value={newUser.email ? newUser.email : ""}
-          onChange={handleChangeHandler}
-        />
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          value={newUser.password ? newUser.password : ""}
-          onChange={handleChangeHandler}
-        />
-      </div>
+      <FormLabel>Username</FormLabel>
+      <Input
+        id="username"
+        type="text"
+        value={newUser.username ? newUser.username : ""}
+        name="username"
+        placeholder="e. g. musiclover030"
+        onChange={handleChangeHandler}
+      />
+      <FormLabel>E-Mail</FormLabel>
+      <Input
+        type="text"
+        name="email"
+        id="email"
+        placeholder="e. g. this@that.okay"
+        value={newUser.email ? newUser.email : ""}
+        onChange={handleChangeHandler}
+      />
+      <FormLabel>Password</FormLabel>
+      <Input
+        type="password"
+        name="password"
+        id="password"
+        placeholder="Must contain at least 6 characters"
+        value={newUser.password ? newUser.password : ""}
+        onChange={handleChangeHandler}
+      />
       <FormControl>
+        <FormLabel>Profile Picture</FormLabel>
         <Input type="file" name="image" onChange={attachFileHandler} />
         <Button onClick={submitForm}>Upload img</Button>
       </FormControl>
