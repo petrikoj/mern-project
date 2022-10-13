@@ -1,12 +1,14 @@
-import { Heading } from "@chakra-ui/react";
+import { Center, Heading, VStack } from "@chakra-ui/react";
 import Profile from "../components/userRelated/Profile";
 
 function ProfileView() {
   return (
-    <>
-      <Heading>Profile</Heading>
-      <Profile />
-    </>
+    <Center>
+      <VStack>
+        <Heading>Profile</Heading>
+        <Profile />
+      </VStack>
+    </Center>
   );
 }
 
