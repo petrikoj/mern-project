@@ -1,3 +1,5 @@
+import { Image, Text } from "@chakra-ui/react";
+import { useEffect } from "react";
 import { useState } from "react";
 
 function Profile() {
@@ -38,15 +40,22 @@ function Profile() {
     }
   };
   console.log("Profile:", userProfile);
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
   return (
     <>
-      <button onClick={getProfile}>Profile</button>
       {userProfile && (
-        <div>
-          <p>{userProfile.username}</p>
-          <p>{userProfile.email}</p>
-          <img src={userProfile.avatar} alt={userProfile.username} />
-        </div>
+        <>
+          <Image
+            src={userProfile.avatar}
+            alt={userProfile.username}
+            boxSize="24"
+          />
+          <Text>Welcome {userProfile.username}</Text>
+        </>
       )}
     </>
   );
