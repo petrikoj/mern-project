@@ -1,8 +1,18 @@
 import { React, useState, useEffect, useContext } from "react";
-import { Box, Button, Container, Heading } from "@chakra-ui/react";
+import {
+  Button,
+  Icon,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputLeftElement,
+  VStack,
+} from "@chakra-ui/react";
 import { isValidEmail, isValidPassword } from "../../utils/validators.js";
 import { AuthContext } from "../../context/AuthContext.js";
 import { useNavigate } from "react-router-dom";
+import { FiMail } from "react-icons/fi";
+import { MdOutlinePassword } from "react-icons/md";
 
 function Login() {
   const { checkUserStatus } = useContext(AuthContext);
@@ -71,31 +81,36 @@ function Login() {
   }, [credentialsError, emailError, passwordError]);
 
   return (
-    <Box>
-      <Container>
-        <div>
-          <label htmlFor="email">E-Mail</label>
-          <input
-            type="text"
-            name="email"
-            id="email"
-            value={userLogin.email ? userLogin.email : ""}
-            onChange={handleChangeHandler}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            value={userLogin.password ? userLogin.password : ""}
-            onChange={handleChangeHandler}
-          />
-        </div>
-        <Button onClick={handleLogin}>Login</Button>
-      </Container>
-    </Box>
+    <VStack>
+      <InputGroup>
+        <InputLeftAddon>
+          <Icon as={FiMail} />
+        </InputLeftAddon>
+        <Input
+          type="text"
+          name="email"
+          id="email"
+          placeholder="E-Mail"
+          value={userLogin.email ? userLogin.email : ""}
+          onChange={handleChangeHandler}
+        />
+      </InputGroup>
+      <InputGroup>
+        <InputLeftAddon>
+          <Icon as={MdOutlinePassword} />
+        </InputLeftAddon>
+        <Input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Password"
+          value={userLogin.password ? userLogin.password : ""}
+          onChange={handleChangeHandler}
+        />
+      </InputGroup>
+
+      <Button onClick={handleLogin}>Login</Button>
+    </VStack>
   );
 }
 
