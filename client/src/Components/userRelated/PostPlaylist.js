@@ -1,20 +1,41 @@
 import React, { useState } from "react";
 import {
+  Box,
   Button,
   FormControl,
   FormLabel,
-  IconButton,
   Input,
   InputGroup,
   Select,
   Stack,
 } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
 
 function PostPlaylist() {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [newPlaylist, setNewPlaylist] = useState({});
-  const [image_url, setImage_url] = useState("");
+  const [newPlaylist, setNewPlaylist] = useState({
+    title: "",
+    author: "",
+    description: "",
+    img_url: "",
+    mood: "",
+    songs: [
+      {
+        single: {
+          artist: "",
+          song_title: "",
+          album: "",
+        },
+      },
+    ],
+    date: null,
+    likes: null,
+  });
+  const [songArray, setSongArray] = useState([
+    { artist: "", song_title: "", album: "" },
+    { artist: "", song_title: "", album: "" },
+    { artist: "", song_title: "", album: "" },
+  ]);
+  //  const [image_url, setImage_url] = useState("");
 
   // Upload playlist picture
 
@@ -42,24 +63,43 @@ function PostPlaylist() {
       );
       const result = await response.json();
       console.log("Result:", result);
-      setNewPlaylist({ ...newPlaylist, image_url: result.image_url });
+      setNewPlaylist({ ...newPlaylist, img_url: result.img_url });
     } catch (error) {}
   };
 
-  // Send input data
+  // Track input data
 
   const handleChangeHandler = (event) => {
     setNewPlaylist({ ...newPlaylist, [event.target.name]: event.target.value });
   };
 
-  const submitPlaylist = async () => {
+  const handleSongInputHandler = (event, index) => {
+    const { name, value } = event.target;
+    const mySongs = [...songArray];
+    mySongs[index][name] = value;
+    setSongArray(mySongs);
+  };
+
+  const handleAddSongInputField = () => {
+    setSongArray([...songArray, { artist: "", song_title: "", album: "" }]);
+  };
+
+  const handleRemoveSongInputField = (index) => {
+    const mySongs = [...songArray];
+    mySongs.splice(index, 1);
+    setSongArray(mySongs);
+  };
+
+  // Upload (OLD!)
+
+  /*  const submitPlaylist = async () => {
     let urlencoded = new URLSearchParams();
     urlencoded.append("title", newPlaylist.title);
     urlencoded.append("description", newPlaylist.description);
     // urlencoded.append("author", newPlaylist.author);
     urlencoded.append("mood", newPlaylist.mood);
     urlencoded.append("songs", newPlaylist.songs);
-    urlencoded.append("image_url", newPlaylist.image_url);
+    urlencoded.append("image_url", newPlaylist.img_url);
 
     const requestOptions = {
       method: "POST",
@@ -76,7 +116,7 @@ function PostPlaylist() {
     } catch (error) {
       console.log("Fetch error", error);
     }
-  };
+  }; */
 
   // Send input data with JSON stringify
 
@@ -84,28 +124,13 @@ function PostPlaylist() {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    const myJSON = JSON.stringify({
+    const myPlaylist = JSON.stringify({
       title: newPlaylist.title,
       author: newPlaylist.author,
       description: newPlaylist.description,
-      img_url: newPlaylist.image_url,
+      img_url: newPlaylist.img_url,
       mood: newPlaylist.mood,
-      songs: songs.forEach((single) => {
-        (artist = newPlaylist.single.artist),
-          (song_title = newPlaylist.single.song_title),
-          (album = newPlaylist.single.album),
-          (cover_url = newPlaylist.single.cover_url);
-        return single;
-      }),
-      /*   },
-      songs: [
-        {
-          artist: "",
-          song_title: "",
-          album: "",
-          cover_url: "",
-        },
-      ], */
+      songs: songArray,
       date: null,
       likes: null,
     });
@@ -113,7 +138,7 @@ function PostPlaylist() {
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
-      body: myJSON,
+      body: myPlaylist,
     };
 
     try {
@@ -121,14 +146,12 @@ function PostPlaylist() {
         "http://localhost:5000/api/playlists/create",
         requestOptions
       );
-      const result = response;
-      // const result = await response.text();
+      const result = await response.json();
       console.log(result);
     } catch (error) {
       console.log("error", error);
     }
   };
-  //
 
   return (
     <>
@@ -175,85 +198,45 @@ function PostPlaylist() {
           <option>focus</option>
         </Select>
         <FormLabel>Songs</FormLabel>
+        {songArray.map((single, i) => {
+          return (
+            <Box key={i}>
+              <Stack direction="row">
+                <InputGroup name="single">
+                  <Input
+                    name="artist"
+                    type="text"
+                    placeholder="Artist"
+                    value={single.artist ? single.artist : ""}
+                    onChange={(e) => handleSongInputHandler(e, i)}
+                  />
+                  <Input
+                    name="song_title"
+                    type="text"
+                    placeholder="Song Title"
+                    value={single.song_title ? single.song_title : ""}
+                    onChange={(e) => handleSongInputHandler(e, i)}
+                  />
+                  <Input
+                    name="album"
+                    type="text"
+                    placeholder="Album"
+                    value={single.album ? single.album : ""}
+                    onChange={(e) => handleSongInputHandler(e, i)}
+                  />
+                  {/* <Input placeholder="Release Year" /> */}
+                </InputGroup>
+              </Stack>
+            </Box>
+          );
+        })}
+
         <Stack direction="row">
-          <Input
-            name="artist"
-            type="text"
-            placeholder="Artist"
-            /*  value={
-              newPlaylist.songs.single.artist
-                ? newPlaylist.songs.single.artist
-                : ""
-            } */
-            onChange={handleChangeHandler}
-          />
-          <Input
-            name="song_title"
-            type="text"
-            placeholder="Song Title"
-            /* value={
-              newPlaylist.songs.single.song_title
-                ? newPlaylist.songs.single.song_title
-                : ""
-            } */
-            onChange={handleChangeHandler}
-          />
-          <Input
-            name="album"
-            type="text"
-            placeholder="Album"
-            /*  value={
-              newPlaylist.songs.single.album
-                ? newPlaylist.songs.single.album
-                : ""
-            } */
-            onChange={handleChangeHandler}
-          />
-          {/* <Input placeholder="Release Year" /> */}
+          <Button onClick={handleAddSongInputField}>Add Song</Button>
+          {songArray.length > 3 && (
+            <Button onClick={handleRemoveSongInputField}>Remove song</Button>
+          )}
         </Stack>
-        <Stack direction="row">
-          <Input
-            name="artist"
-            type="text"
-            placeholder="Artist"
-            onChange={handleChangeHandler}
-          />
-          <Input
-            name="song_title"
-            type="text"
-            placeholder="Song Title"
-            onChange={handleChangeHandler}
-          />
-          <Input
-            name="album"
-            type="text"
-            placeholder="Album"
-            onChange={handleChangeHandler}
-          />
-          {/* <Input placeholder="Release Year" /> */}
-        </Stack>
-        <Stack direction="row">
-          <Input
-            name="artist"
-            type="text"
-            placeholder="Artist"
-            onChange={handleChangeHandler}
-          />
-          <Input
-            name="song_title"
-            type="text"
-            placeholder="Song Title"
-            onChange={handleChangeHandler}
-          />
-          <Input
-            name="album"
-            type="text"
-            placeholder="Album"
-            onChange={handleChangeHandler}
-          />
-          {/* <Input placeholder="Release Year" /> */}
-        </Stack>
-        <IconButton icon={<AddIcon />} />
       </FormControl>
       <Button onClick={uploadPlaylist}>Submit</Button>
     </>
