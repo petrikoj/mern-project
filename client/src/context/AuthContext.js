@@ -25,7 +25,7 @@ export const AuthContextProvider = (props) => {
   const logoutUser = () => {
     localStorage.removeItem("token");
     checkUserStatus();
-    redirect("/");
+    redirect("/", { replace: true });
     console.log("User logged out successfully");
   };
 
