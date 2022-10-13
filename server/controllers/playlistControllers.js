@@ -59,7 +59,7 @@ const uploadPlaylistPicture = async (request, response) => {
     console.log("uploadResult", uploadResult);
     response.status(200).json({
       message: "Upload successful",
-      image_url: uploadResult.url,
+      img_url: uploadResult.url,
     });
   } catch (error) {
     response.status(500).json({
