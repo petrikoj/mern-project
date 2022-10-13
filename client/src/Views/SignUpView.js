@@ -1,12 +1,14 @@
-import { Heading } from "@chakra-ui/react";
+import { Center, Heading, VStack } from "@chakra-ui/react";
 import SignUp from "../components/userRelated/SignUp";
 
 function SignUpView() {
   return (
-    <>
-      <Heading>Sign Up</Heading>
-      <SignUp />
-    </>
+    <Center>
+      <VStack>
+        <Heading>Sign Up</Heading>
+        <SignUp />
+      </VStack>
+    </Center>
   );
 }
 
