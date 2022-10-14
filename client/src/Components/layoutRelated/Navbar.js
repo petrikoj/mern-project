@@ -8,6 +8,7 @@ import {
   Heading,
   HStack,
   IconButton,
+  Image,
   Menu,
   MenuButton,
   MenuItem,
@@ -20,58 +21,68 @@ import { BiUser } from "react-icons/bi";
 import { AuthContext } from "../../context/AuthContext";
 
 function Navbar() {
-  const { user, checkUserStatus, logoutUser } = useContext(AuthContext);
+  const { user, getUserProfile, userProfile, checkUserStatus, logoutUser } =
+    useContext(AuthContext);
 
   useEffect(() => {
     checkUserStatus();
+    getUserProfile();
     console.log("useEffect ran in Navbar.js");
   }, [user]);
 
   return (
-    <Flex justify="space-between" p={"5"}>
-      <NavLink to={"/"}>
-        <Heading>playlist.</Heading>
-      </NavLink>
+    <Box position="sticky" top="0" width="100%" mb="2">
       {user ? (
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            aria-label="Options"
-            icon={<HamburgerIcon />}
-            variant="ghost"
-          />
-          <MenuList>
-            <NavLink to={"/profile"}>
-              <MenuItem>
-                <Icon as={BiUser} mr="2" />
-                Profile
+        <Flex justify="space-between" align="center" p="5">
+          <Image src={userProfile.avatar} boxSize="8" borderRadius="full" />
+          <NavLink to={"/"}>
+            <Heading>playlist.</Heading>
+          </NavLink>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label="Options"
+              icon={<HamburgerIcon />}
+              variant="ghost"
+            />
+            <MenuList>
+              <NavLink to={"/profile"}>
+                <MenuItem>
+                  <Icon as={BiUser} mr="2" />
+                  Profile
+                </MenuItem>
+              </NavLink>
+              <NavLink to={"/create-playlist"}>
+                <MenuItem>
+                  <Icon as={MdOutlinePlaylistAdd} mr="2" />
+                  Create Playlist
+                </MenuItem>
+              </NavLink>
+              {/* <MenuItem>Something</MenuItem> */}
+              <MenuItem onClick={logoutUser}>
+                <Icon as={MdLogout} mr="2" />
+                Logout
               </MenuItem>
-            </NavLink>
-            <NavLink to={"/create-playlist"}>
-              <MenuItem>
-                <Icon as={MdOutlinePlaylistAdd} mr="2" />
-                Create Playlist
-              </MenuItem>
-            </NavLink>
-            {/* <MenuItem>Something</MenuItem> */}
-            <MenuItem onClick={logoutUser}>
-              <Icon as={MdLogout} mr="2" />
-              Logout
-            </MenuItem>
-          </MenuList>
-        </Menu>
+            </MenuList>
+          </Menu>
+        </Flex>
       ) : (
-        <HStack>
-          <NavLink to={"/signup"}>
-            <Button>Sign up</Button>
+        <Flex justify="space-between" align="center" p={"5"}>
+          <NavLink to={"/"}>
+            <Heading>playlist.</Heading>
           </NavLink>
-          <Text>or</Text>
-          <NavLink to={"/login"}>
-            <Button>Login</Button>
-          </NavLink>
-        </HStack>
+          <HStack>
+            <NavLink to={"/signup"}>
+              <Button>Sign up</Button>
+            </NavLink>
+            <Text>or</Text>
+            <NavLink to={"/login"}>
+              <Button>Login</Button>
+            </NavLink>
+          </HStack>
+        </Flex>
       )}
-    </Flex>
+    </Box>
   );
 }
 
