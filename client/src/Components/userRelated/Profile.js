@@ -27,8 +27,9 @@ function Profile() {
 
         const result = await response.json();
         setUserProfile({
-          email: result.email,
+          _id: result._id,
           username: result.username,
+          email: result.email,
           avatar: result.avatar,
         });
       } catch (error) {
@@ -39,7 +40,6 @@ function Profile() {
       console.log("No token for this user");
     }
   };
-  console.log("Profile:", userProfile);
 
   useEffect(() => {
     getProfile();
@@ -49,11 +49,6 @@ function Profile() {
     <>
       {userProfile && (
         <>
-          <Image
-            src={userProfile.avatar}
-            alt={userProfile.username}
-            boxSize="24"
-          />
           <Text>Welcome {userProfile.username}</Text>
         </>
       )}
