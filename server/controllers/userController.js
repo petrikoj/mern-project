@@ -88,6 +88,7 @@ const signUp = async (request, response) => {
             username: savedUser.username,
             email: savedUser.email,
             avatar: savedUser.avatar,
+            _id: savedUser._id,
           },
           message: "User registration successful",
         });
@@ -124,12 +125,13 @@ const login = async (request, response) => {
       }
       if (verified) {
         console.log("User is logged in");
-        const token = issueToken(existingUser.id);
+        const token = issueToken(existingUser._id);
         console.log("Token:", token);
         response.status(201).json({
           message: "User is logged in",
           user: {
-            id: existingUser._id,
+            // id vs _id??
+            _id: existingUser._id,
             username: existingUser.username,
             email: existingUser.email,
             avatar: existingUser.avatar,
@@ -144,8 +146,9 @@ const login = async (request, response) => {
 // GET user profile
 
 const getUserProfile = async (request, response) => {
-  console.log("Request.user:", request.user);
+  console.log("Request.user from getUserProfile():", request.user);
   response.status(201).json({
+    _id: request.user._id,
     email: request.user.email,
     username: request.user.username,
     avatar: request.user.avatar,
