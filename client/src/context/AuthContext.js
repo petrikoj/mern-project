@@ -50,6 +50,7 @@ export const AuthContextProvider = (props) => {
         );
 
         const result = await response.json();
+        console.log(result);
         setUserProfile({
           _id: result._id,
           username: result.username,
