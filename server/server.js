@@ -21,6 +21,11 @@ const addMiddlewares = () => {
       extended: true,
     })
   );
+  app.use(
+    express.raw({
+      extended: true,
+    })
+  );
 
   const corsOptions = {
     origin: "http://localhost:3000",
