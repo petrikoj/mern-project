@@ -6,6 +6,8 @@ export const AuthContext = createContext();
 
 export const AuthContextProvider = (props) => {
   const [user, setUser] = useState(null);
+  const [userProfile, setUserProfile] = useState({});
+  const [error, setError] = useState(null);
 
   const redirect = useNavigate();
 
@@ -13,7 +15,6 @@ export const AuthContextProvider = (props) => {
     const token = getToken();
     if (token) {
       setUser(true);
-
       console.log("User logged in");
     }
     if (!token) {
@@ -29,9 +30,45 @@ export const AuthContextProvider = (props) => {
     console.log("User logged out successfully");
   };
 
-  const getUser = async (token) => {
+  const getUserProfile = async () => {
+    const token = localStorage.getItem("token");
+    console.log("Token:", token);
+
+    if (token) {
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${token}`);
+
+      const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+      };
+
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/users/profile",
+          requestOptions
+        );
+
+        const result = await response.json();
+        setUserProfile({
+          _id: result._id,
+          username: result.username,
+          email: result.email,
+          avatar: result.avatar,
+        });
+      } catch (error) {
+        console.log("Error accessing user's profile", error);
+      }
+    } else {
+      setError(true);
+      console.log("No token for this user");
+    }
+  };
+
+  /* const getUserProfile = async () => {
+    const token = localStorage.getItem("token");
     const myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer " + token);
+    myHeaders.append("Authorization", "Bearer" + token);
     const requestOptions = {
       method: "GET",
       headers: myHeaders,
@@ -42,17 +79,16 @@ export const AuthContextProvider = (props) => {
         requestOptions
       );
       const result = await response.json();
-      setUser({
-        _id: result._id,
+      console.log(result);
+      setUserProfile({
         username: result.username,
         email: result.email,
         avatar: result.avatar,
       });
-      console.log("User from AuthContext:", user);
     } catch (error) {
       console.log(error);
     }
-  };
+  }; */
 
   useEffect(() => {
     checkUserStatus();
@@ -61,7 +97,14 @@ export const AuthContextProvider = (props) => {
 
   return (
     <AuthContext.Provider
-      value={{ checkUserStatus, logoutUser, getUser, user, setUser }}
+      value={{
+        checkUserStatus,
+        getUserProfile,
+        userProfile,
+        logoutUser,
+        user,
+        setUser,
+      }}
     >
       {props.children}
     </AuthContext.Provider>
