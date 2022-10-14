@@ -121,7 +121,7 @@ function SignUp() {
         type="password"
         name="password"
         id="password"
-        placeholder="Must contain at least 6 characters"
+        placeholder="At least 6 characters"
         value={newUser.password ? newUser.password : ""}
         onChange={handleChangeHandler}
       />
