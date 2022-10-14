@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
 import Playlist from "../models/playlistModel.js";
 import { v2 as cloudinary } from "cloudinary";
+import User from "../models/userModel.js";
 
 // GET all playlists
 
@@ -19,7 +21,7 @@ const getAllPlaylists = async (request, response) => {
     }
   } catch (error) {
     response.status(500).json({
-      msg: "Server failed",
+      message: "Server failed",
       error: error,
     });
   }
@@ -31,6 +33,7 @@ const postNewPlaylist = async (request, response) => {
   const newPlaylist = new Playlist({
     title: request.body.title,
     author: request.body.author,
+    author_id: request.body.author_id,
     description: request.body.description,
     mood: request.body.mood,
     image_url: request.body.image_url,
@@ -43,6 +46,24 @@ const postNewPlaylist = async (request, response) => {
     response.status(200).json({ message: "Playlist succesfully created" });
   } catch (error) {
     response.status(409).json({ message: "Failed to upload", error: error });
+  }
+};
+
+// Alternative upload function
+
+const uploadNewPlaylist = async (request, response) => {
+  console.log("request.body", request.body);
+  try {
+    const playlist = await Playlist.create(request.body);
+    response.status(200).json(playlist);
+
+    /*  await User.findOneAndUpdate(
+      { _id: author_id },
+      { $push: { playlists: playlist._id } }
+    ); */
+  } catch (error) {
+    response.status(500).json({ error: error.message });
+    return;
   }
 };
 
@@ -69,4 +90,4 @@ const uploadPlaylistPicture = async (request, response) => {
   }
 };
 
-export { getAllPlaylists, postNewPlaylist, uploadPlaylistPicture };
+export { getAllPlaylists, uploadPlaylistPicture, uploadNewPlaylist };
