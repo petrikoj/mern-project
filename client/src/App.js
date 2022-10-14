@@ -8,8 +8,8 @@ import LandingView from "./views/LandingView";
 import SignUpView from "./views/SignUpView";
 import LoginView from "./views/LoginView";
 import ProfileView from "./views/ProfileView";
-import PostPlaylist from "./components/userRelated/PostPlaylist";
 import Navbar from "./components/layoutRelated/Navbar.js";
+import PostPlaylistView from "./views/PostPlaylistView.js";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -33,7 +33,7 @@ function App() {
           path="/create-playlist"
           element={
             <ProtectedRoute>
-              <PostPlaylist />
+              <PostPlaylistView />
             </ProtectedRoute>
           }
         />
