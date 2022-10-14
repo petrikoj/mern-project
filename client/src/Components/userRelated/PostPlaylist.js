@@ -9,12 +9,17 @@ import {
   Select,
   Stack,
 } from "@chakra-ui/react";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { SuccessAlert } from "../layoutRelated/Alerts";
 
 function PostPlaylist() {
+  const { userProfile } = useContext(AuthContext);
   const [selectedFile, setSelectedFile] = useState(null);
   const [newPlaylist, setNewPlaylist] = useState({
     title: "",
     author: "",
+    author_id: "",
     description: "",
     img_url: "",
     mood: "",
@@ -63,6 +68,8 @@ function PostPlaylist() {
       );
       const result = await response.json();
       console.log("Result:", result);
+      /* const message = result.message;
+      SuccessAlert(message); */
       setNewPlaylist({ ...newPlaylist, img_url: result.img_url });
     } catch (error) {}
   };
@@ -84,9 +91,10 @@ function PostPlaylist() {
     setSongArray([...songArray, { artist: "", song_title: "", album: "" }]);
   };
 
-  const handleRemoveSongInputField = (index) => {
+  const handleRemoveSongInputField = () => {
     const mySongs = [...songArray];
-    mySongs.splice(index, 1);
+    mySongs.pop();
+    // mySongs.splice(index, 1);
     setSongArray(mySongs);
   };
 
@@ -126,12 +134,15 @@ function PostPlaylist() {
 
     const myPlaylist = JSON.stringify({
       title: newPlaylist.title,
-      author: newPlaylist.author,
+      author: userProfile.username,
+      // author: newPlaylist.author,
+      author_id: userProfile._id,
       description: newPlaylist.description,
       img_url: newPlaylist.img_url,
       mood: newPlaylist.mood,
       songs: songArray,
-      date: null,
+      date: Date.now(),
+      // date still to be updated to given timezone
       likes: null,
     });
 
@@ -177,10 +188,11 @@ function PostPlaylist() {
         <Input
           name="author"
           type="text"
-          value={newPlaylist.author ? newPlaylist.author : ""}
-          isReadOnly={false}
+          // value={newPlaylist.author ? newPlaylist.author : ""}
+          value={userProfile.username}
+          isReadOnly={true}
           onChange={handleChangeHandler}
-        ></Input>
+        />
         <FormLabel>Mood</FormLabel>
         <Select
           name="mood"
