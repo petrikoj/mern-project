@@ -7,7 +7,12 @@ const playlistSchema = new mongoose.Schema({
     unique: true,
   },
   author: {
-    // required: true,
+    required: true,
+    type: mongoose.Schema.Types.String,
+    ref: "user",
+  },
+  author_id: {
+    required: true,
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
