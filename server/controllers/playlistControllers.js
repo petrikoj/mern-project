@@ -31,6 +31,30 @@ const getAllPlaylists = async (request, response) => {
   }
 };
 
+// GET playlist by ID
+
+const getPlaylistById = async (request, response) => {
+  let wantedPlaylistId = request.params.id;
+  await Playlist.findById(wantedPlaylistId)
+    .populate("title")
+    .exec(function (error, playlist) {
+      try {
+        if (playlist === undefined || playlist === null) {
+          response.status(200).json({ msg: "Object not found" });
+          console.log("Object not found");
+        } else {
+          response.status(200).json(playlist);
+          console.log("Server/getPlaylistbyId:", playlist);
+        }
+      } catch (eror) {
+        response.status(500).json({
+          message: "Server failed",
+          error: error,
+        });
+      }
+    });
+};
+
 // POST new playlist
 
 const postNewPlaylist = async (request, response) => {
@@ -106,4 +130,9 @@ const uploadPlaylistPicture = async (request, response) => {
   }
 };
 
-export { getAllPlaylists, uploadPlaylistPicture, postNewPlaylist };
+export {
+  getAllPlaylists,
+  getPlaylistById,
+  uploadPlaylistPicture,
+  postNewPlaylist,
+};
