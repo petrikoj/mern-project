@@ -7,10 +7,14 @@ import User from "../models/userModel.js";
 
 const getAllPlaylists = async (request, response) => {
   const allPlaylists = await Playlist.find({})
-    .populate({
+    /* .populate({
       path: "author",
-      select: ["_id", "username"],
+      select: "username",
     })
+    .populate({
+      path: "author_id",
+      select: "_id",
+    }) */
     .exec();
   console.log("Logging all playlists:", allPlaylists);
   try {
