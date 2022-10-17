@@ -47,25 +47,37 @@ const postNewPlaylist = async (request, response) => {
   } catch (error) {
     response.status(409).json({ message: "Failed to upload", error: error });
   }
+  try {
+    await User.findOneAndUpdate(
+      { _id: request.body.author_id },
+      { $push: { playlists: newPlaylist._id } },
+      { new: true }
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 // Alternative upload function
 
-const uploadNewPlaylist = async (request, response) => {
+/* const uploadNewPlaylist = async (request, response) => {
   console.log("request.body", request.body);
   try {
     const playlist = await Playlist.create(request.body);
     response.status(200).json(playlist);
-
-    /*  await User.findOneAndUpdate(
-      { _id: author_id },
-      { $push: { playlists: playlist._id } }
-    ); */
   } catch (error) {
     response.status(500).json({ error: error.message });
     return;
   }
-};
+  try {
+    await User.findOneAndUpdate(
+      { _id: request.body.author_id },
+      { $push: { playlists: playlist._id } }
+    );
+  } catch (error) {
+    alert(error);
+  }
+}; */
 
 // Upload playlist img
 
@@ -90,4 +102,4 @@ const uploadPlaylistPicture = async (request, response) => {
   }
 };
 
-export { getAllPlaylists, uploadPlaylistPicture, uploadNewPlaylist };
+export { getAllPlaylists, uploadPlaylistPicture, postNewPlaylist };
