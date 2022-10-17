@@ -10,6 +10,7 @@ import LoginView from "./views/LoginView";
 import ProfileView from "./views/ProfileView";
 import Navbar from "./components/layoutRelated/Navbar.js";
 import PostPlaylistView from "./views/PostPlaylistView.js";
+import PlaylistView from "./views/PlaylistView.js";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -29,6 +30,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/playlists/all" element={<PlaylistView />} />
         <Route
           path="/create-playlist"
           element={
