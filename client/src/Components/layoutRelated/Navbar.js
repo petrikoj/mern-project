@@ -31,9 +31,19 @@ function Navbar() {
   }, [user]);
 
   return (
-    <Box position="sticky" top="0" width="100%" mb="2">
+    <Box
+      position="sticky"
+      top="0"
+      h="16"
+      width="100%"
+      p="2"
+      mb="3"
+      zIndex="banner"
+      bg="yellow.100"
+      boxSize="full"
+    >
       {user ? (
-        <Flex justify="space-between" align="center" p="5">
+        <Flex justify="space-around" align="center" p="5">
           <Image src={userProfile.avatar} boxSize="8" borderRadius="full" />
           <NavLink to={"/"}>
             <Heading>playlist.</Heading>
@@ -67,7 +77,7 @@ function Navbar() {
           </Menu>
         </Flex>
       ) : (
-        <Flex justify="space-between" align="center" p={"5"}>
+        <Flex justify="space-around" align="center" p={"3"}>
           <NavLink to={"/"}>
             <Heading>playlist.</Heading>
           </NavLink>
