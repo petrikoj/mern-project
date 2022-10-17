@@ -9,5 +9,13 @@ const SuccessAlert = ({ message }) => {
     </Alert>
   );
 };
+const ErrorAlert = ({ message }) => {
+  return (
+    <Alert status="error">
+      <AlertIcon />
+      {message}
+    </Alert>
+  );
+};
 
-export { SuccessAlert };
+export { SuccessAlert, ErrorAlert };
