@@ -11,6 +11,7 @@ import ProfileView from "./views/ProfileView";
 import Navbar from "./components/layoutRelated/Navbar.js";
 import PostPlaylistView from "./views/PostPlaylistView.js";
 import PlaylistView from "./views/PlaylistView.js";
+import DetailView from "./views/DetailView.js";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -31,6 +32,7 @@ function App() {
           }
         />
         <Route path="/playlists/all" element={<PlaylistView />} />
+        <Route path="/playlists/:id" element={<DetailView />} />
         <Route
           path="/create-playlist"
           element={
