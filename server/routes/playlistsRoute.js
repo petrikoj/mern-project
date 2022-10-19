@@ -11,12 +11,12 @@ import jwtAuth from "../utils/jwtAuth.js";
 const router = express.Router();
 
 router.get("/all", getAllPlaylists);
-router.get("/:id", getPlaylistById);
-router.post("/create", postNewPlaylist);
+router.get("/:_id", getPlaylistById);
 router.post(
   "/image-upload",
   multerUploads.single("image"),
   uploadPlaylistPicture
 );
+router.post("/create", postNewPlaylist);
 
 export default router;
