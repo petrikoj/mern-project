@@ -4,6 +4,7 @@ import {
   Container,
   FormControl,
   FormLabel,
+  Image,
   Input,
 } from "@chakra-ui/react";
 import { isValidEmail, isValidPassword } from "../../utils/validators";
@@ -130,7 +131,15 @@ function SignUp() {
         <Input type="file" name="image" onChange={attachFileHandler} />
         <Button onClick={submitForm}>Upload img</Button>
       </FormControl>
-      {newUser.avatar && <img src={newUser.avatar} alt="user pic" />}
+      {newUser.avatar && (
+        <Image
+          borderRadius="full"
+          fit="fill"
+          boxSize="36"
+          src={newUser.avatar}
+          alt="user pic"
+        />
+      )}
       <Button onClick={registerNewUser}>Sign up</Button>
     </Container>
   );
