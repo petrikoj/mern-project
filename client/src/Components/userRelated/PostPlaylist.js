@@ -2,24 +2,29 @@ import React, { useState } from "react";
 import {
   Box,
   Button,
+  Center,
   FormControl,
   FormLabel,
+  Image,
   Input,
   InputGroup,
   Select,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { SuccessAlert } from "../layoutRelated/Alerts";
+import getToken from "../../utils/getToken";
 
 function PostPlaylist() {
   const { userProfile } = useContext(AuthContext);
+
+  const toast = useToast();
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [newPlaylist, setNewPlaylist] = useState({
     title: "",
-    author: "",
-    author_id: "",
+    creator: "",
     description: "",
     img_url: "",
     mood: "",
@@ -33,14 +38,14 @@ function PostPlaylist() {
       },
     ],
     date: null,
-    likes: null,
+    liked_by: [],
   });
   const [songArray, setSongArray] = useState([
     { artist: "", song_title: "", album: "" },
     { artist: "", song_title: "", album: "" },
     { artist: "", song_title: "", album: "" },
   ]);
-  //  const [image_url, setImage_url] = useState("");
+  // const [cloudinaryUrl, setCloudinaryUrl] = useState("");
 
   // Upload playlist picture
 
@@ -68,13 +73,14 @@ function PostPlaylist() {
       );
       const result = await response.json();
       console.log("Result:", result);
-      /* const message = result.message;
-      SuccessAlert(message); */
       setNewPlaylist({ ...newPlaylist, img_url: result.img_url });
-    } catch (error) {}
+      console.log("newPlaylist :>> ", newPlaylist);
+    } catch (error) {
+      console.log("error :>> ", error);
+    }
   };
 
-  // Track input data
+  // Control input data
 
   const handleChangeHandler = (event) => {
     setNewPlaylist({ ...newPlaylist, [event.target.name]: event.target.value });
@@ -134,16 +140,15 @@ function PostPlaylist() {
 
     const myPlaylist = JSON.stringify({
       title: newPlaylist.title,
-      author: userProfile.username,
-      // author: newPlaylist.author,
-      author_id: userProfile._id,
+      creator: userProfile._id,
       description: newPlaylist.description,
       img_url: newPlaylist.img_url,
       mood: newPlaylist.mood,
       songs: songArray,
       date: Date.now(),
       // date still to be updated to given timezone
-      likes: null,
+      liked_by: [],
+      comments: [],
     });
 
     const requestOptions = {
@@ -151,7 +156,7 @@ function PostPlaylist() {
       headers: myHeaders,
       body: myPlaylist,
     };
-
+    console.log("requestOptions", requestOptions);
     try {
       const response = await fetch(
         "http://localhost:5000/api/playlists/create",
@@ -159,6 +164,13 @@ function PostPlaylist() {
       );
       const result = await response.json();
       console.log(result);
+      toast({
+        title: `${result.message}`,
+        status: "info",
+        variant: "subtle",
+        duration: 1500,
+        isClosable: true,
+      });
     } catch (error) {
       console.log("error", error);
     }
@@ -169,6 +181,15 @@ function PostPlaylist() {
       <FormControl isRequired={true}>
         <FormLabel>Playlist Picture</FormLabel>
         <Input type="file" name="image" onChange={attachFileHandler} />
+        {newPlaylist.img_url && (
+          <Center>
+            <Image
+              boxSize="36"
+              src={newPlaylist.img_url}
+              alt="playlist picture"
+            />
+          </Center>
+        )}
         <Button onClick={submitForm}>Upload img</Button>
         <FormLabel>Playlist Title</FormLabel>
         <Input
@@ -184,7 +205,7 @@ function PostPlaylist() {
           value={newPlaylist.description ? newPlaylist.description : ""}
           onChange={handleChangeHandler}
         />
-        <FormLabel>Author</FormLabel>
+        {/* <FormLabel>Author</FormLabel>
         <Input
           name="author"
           type="text"
@@ -192,7 +213,7 @@ function PostPlaylist() {
           value={userProfile.username}
           isReadOnly={true}
           onChange={handleChangeHandler}
-        />
+        /> */}
         <FormLabel>Mood</FormLabel>
         <Select
           name="mood"
