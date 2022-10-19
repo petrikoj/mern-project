@@ -56,7 +56,7 @@ function Navbar() {
               variant="ghost"
             />
             <MenuList>
-              <NavLink to={"/profile"}>
+              <NavLink to={`/profile/${userProfile._id}`}>
                 <MenuItem>
                   <Icon as={BiUser} mr="2" />
                   Profile
