@@ -24,7 +24,7 @@ function App() {
         <Route path="/signup" element={<SignUpView />} />
         <Route path="/login" element={<LoginView />} />
         <Route
-          path="/profile"
+          path="/profile/:_id"
           element={
             <ProtectedRoute>
               <ProfileView />
@@ -32,7 +32,7 @@ function App() {
           }
         />
         <Route path="/playlists/all" element={<PlaylistView />} />
-        <Route path="/playlists/:id" element={<DetailView />} />
+        <Route path="/playlists/:_id" element={<DetailView />} />
         <Route
           path="/create-playlist"
           element={
