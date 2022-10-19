@@ -20,18 +20,24 @@ import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/layoutRelated/Spinner.js";
 import { ErrorAlert } from "../components/layoutRelated/Alerts.js";
 
-function PlaylistView() {
-  const { id } = useParams();
-  const { playlist, error, loading } = useFetchPlaylistById(id);
+function DetailView() {
+  const { _id } = useParams();
+  const { playlist, error, loading } = useFetchPlaylistById(_id);
   console.log(playlist);
   return (
     <Center>
       <VStack>
-        <Heading>Playlist:</Heading>
+        {loading && <LoadingSpinner />}
+        {error && <ErrorAlert message={error.message} />}
         {playlist && (
           <>
             <Heading>{playlist.title}</Heading>
-            <Image src="https://freepngstock.com/assets/img/uploads/owl-ga52a8029e_640.png" />
+            <Image
+              src={playlist.img_url}
+              alt="playlist picture"
+              boxSize={["max-content", "lg"]}
+              borderRadius="lg"
+            />
             <Tag>{playlist.mood}</Tag>
             <Text>{playlist.description}</Text>
             <Box borderRadius="md" bg="red.100">
@@ -43,7 +49,7 @@ function PlaylistView() {
                       <Th>Title</Th>
                     </Tr>
                   </Thead>
-                  {playlist.songs.map((song, index) => {
+                  {playlist.songs?.map((song, index) => {
                     return (
                       <Tbody>
                         <Tr key={index}>
@@ -58,11 +64,9 @@ function PlaylistView() {
             </Box>
           </>
         )}
-        {loading && <LoadingSpinner />}
-        {error && <ErrorAlert message={error.message} />}
       </VStack>
     </Center>
   );
 }
 
-export default PlaylistView;
+export default DetailView;
