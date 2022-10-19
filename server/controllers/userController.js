@@ -9,7 +9,7 @@ const getAllUsers = async (request, response) => {
   const allUsers = await User.find({})
     .populate({
       path: "playlists",
-      select: ["_id", "title"],
+      select: ["_id", "title", "img_url"],
     })
     .exec();
   console.log("Logging all users:", allUsers);
@@ -110,7 +110,12 @@ const signUp = async (request, response) => {
 const login = async (request, response) => {
   console.log("Request.body from login:", request.body);
   try {
-    const existingUser = await User.findOne({ email: request.body.email });
+    const existingUser = await User.findOne({ email: request.body.email })
+      .populate({
+        path: "playlists",
+        select: ["title", "img_url", "songs"],
+      })
+      .exec();
     if (!existingUser) {
       response.status(401).json({ message: "No such user found" });
     }
@@ -128,13 +133,14 @@ const login = async (request, response) => {
         const token = issueToken(existingUser._id);
         console.log("Token:", token);
         response.status(201).json({
-          message: "User is logged in",
+          message: "Login successful",
           user: {
-            // id vs _id??
             _id: existingUser._id,
             username: existingUser.username,
             email: existingUser.email,
             avatar: existingUser.avatar,
+            playlists: existingUser.playlists,
+            liked: existingUser.liked,
           },
           token,
         });
@@ -152,7 +158,39 @@ const getUserProfile = async (request, response) => {
     email: request.user.email,
     username: request.user.username,
     avatar: request.user.avatar,
+    playlists: request.user.playlists,
+    liked: request.user.liked,
   });
 };
 
-export { getAllUsers, getUserProfile, uploadUserPicture, signUp, login };
+const getMyUser = async (request, response) => {
+  const userId = request.params._id;
+  const myUser = await User.findOne({ _id: userId })
+    .populate({
+      path: "playlists",
+      select: ["title", "img_url", "songs"],
+    })
+    .exec();
+  console.log("myUser in getMyUser:", myUser);
+  try {
+    if (myUser === null || myUser === undefined) {
+      response.status(200).json({ msg: "Nothing found" });
+    } else {
+      response.status(200).json(myUser);
+    }
+  } catch (error) {
+    response.status(500).json({
+      msg: "Server failed",
+      error: error,
+    });
+  }
+};
+
+export {
+  getAllUsers,
+  getUserProfile,
+  uploadUserPicture,
+  signUp,
+  login,
+  getMyUser,
+};
