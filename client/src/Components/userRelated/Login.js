@@ -5,7 +5,7 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
-  InputLeftElement,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { isValidEmail, isValidPassword } from "../../utils/validators.js";
@@ -22,6 +22,8 @@ function Login() {
   const [credentialsError, setCredentialsError] = useState(null);
 
   const redirect = useNavigate();
+
+  const toast = useToast();
 
   const handleChangeHandler = (event) => {
     setUserLogin({ ...userLogin, [event.target.name]: event.target.value });
@@ -61,10 +63,16 @@ function Login() {
         );
         const result = await response.json();
         const token = result.token;
-
         if (token) {
           localStorage.setItem("token", token);
-          redirect("/");
+          toast({
+            title: "Login successful",
+            status: "success",
+            variant: "subtle",
+            duration: 1500,
+            isClosable: true,
+          });
+          redirect(`/`);
           checkUserStatus();
         }
         console.log("Result:", result);
