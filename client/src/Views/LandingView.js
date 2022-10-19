@@ -3,7 +3,6 @@ import { Button, Center, Heading, VStack } from "@chakra-ui/react";
 import useFetch from "../hooks/useFetch";
 import SignUp from "../components/userRelated/SignUp.js";
 import Login from "../components/userRelated/Login.js";
-import Profile from "../components/userRelated/Profile.js";
 import PostPlaylist from "../components/userRelated/PostPlaylist";
 import { AuthContext } from "../context/AuthContext.js";
 
