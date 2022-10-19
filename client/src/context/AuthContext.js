@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import getToken from "../utils/getToken";
@@ -8,6 +9,8 @@ export const AuthContextProvider = (props) => {
   const [user, setUser] = useState(null);
   const [userProfile, setUserProfile] = useState({});
   const [error, setError] = useState(null);
+
+  const toast = useToast();
 
   const redirect = useNavigate();
 
@@ -27,6 +30,13 @@ export const AuthContextProvider = (props) => {
     localStorage.removeItem("token");
     checkUserStatus();
     redirect("/", { replace: true });
+    toast({
+      title: "Logout successful",
+      status: "success",
+      variant: "subtle",
+      duration: 1500,
+      isClosable: true,
+    });
     console.log("User logged out successfully");
   };
 
@@ -45,7 +55,7 @@ export const AuthContextProvider = (props) => {
 
       try {
         const response = await fetch(
-          "http://localhost:5000/api/users/profile",
+          "http://localhost:5000/api/users/profile/",
           requestOptions
         );
 
@@ -56,6 +66,8 @@ export const AuthContextProvider = (props) => {
           username: result.username,
           email: result.email,
           avatar: result.avatar,
+          playlists: result.playlists,
+          liked: result.liked,
         });
       } catch (error) {
         console.log("Error accessing user's profile", error);
@@ -65,31 +77,6 @@ export const AuthContextProvider = (props) => {
       console.log("No token for this user");
     }
   };
-
-  /* const getUserProfile = async () => {
-    const token = localStorage.getItem("token");
-    const myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer" + token);
-    const requestOptions = {
-      method: "GET",
-      headers: myHeaders,
-    };
-    try {
-      const response = await fetch(
-        "http://localhost:5000/users/profile",
-        requestOptions
-      );
-      const result = await response.json();
-      console.log(result);
-      setUserProfile({
-        username: result.username,
-        email: result.email,
-        avatar: result.avatar,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }; */
 
   useEffect(() => {
     checkUserStatus();
