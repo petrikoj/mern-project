@@ -6,25 +6,24 @@ const playlistSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  author: {
-    required: true,
-    type: mongoose.Schema.Types.String,
-    ref: "user",
-  },
-  author_id: {
+  creator: {
     required: true,
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
-
+  /*  author: {
+    required: true,
+    type: mongoose.Schema.Types.String,
+    ref: "user",
+  }, */
   description: {
     type: String,
     required: true,
   },
   img_url: {
     type: String,
-    required: false,
-    // unique: true,
+    required: true,
+    unique: true,
   },
   mood: {
     type: String,
@@ -44,7 +43,17 @@ const playlistSchema = new mongoose.Schema({
     },
   },
   date: { type: Date, default: Date.now },
-  likes: { type: Number },
+  liked_by: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+  comments: {
+    type: Array,
+    comment: {
+      type: Object,
+      comment_authorId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+      comment_author: { type: String },
+      comment_text: { type: String },
+      comment_date: { type: Date, default: Date.now },
+    },
+  },
 });
 
 const Playlist = mongoose.model("playlist", playlistSchema);
