@@ -18,8 +18,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
   playlists: [{ type: mongoose.Schema.Types.ObjectId, ref: "playlist" }],
+  liked: [{ type: mongoose.Schema.Types.ObjectId, ref: "playlist" }],
 });
 
 const User = mongoose.model("user", userSchema);
