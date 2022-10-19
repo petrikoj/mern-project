@@ -1,8 +1,12 @@
 import React from "react";
-import { Spinner } from "@chakra-ui/react";
+import { Spinner, Center } from "@chakra-ui/react";
 
 function LoadingSpinner() {
-  return <Spinner size="xl" speed="0.65s" mt="16" />;
+  return (
+    <Center>
+      <Spinner size="xl" speed="0.65s" mt="16" />
+    </Center>
+  );
 }
 
 export default LoadingSpinner;
