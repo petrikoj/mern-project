@@ -171,6 +171,10 @@ const getMyUser = async (request, response) => {
       path: "playlists",
       select: ["title", "img_url", "songs"],
     })
+    .populate({
+      path: "liked",
+      select: ["title", "img_url", "songs"],
+    })
     .exec();
   console.log("myUser in getMyUser:", myUser);
   try {
@@ -202,7 +206,7 @@ const likePlaylist = async (request, response) => {
         { new: true }
       );
     } catch (error) {
-      response.status(409).json({ message: "Couldn't save your like" });
+      response.status(409).json({ message: "Couldn't save" });
       console.log("User.findOneAndUpdate in likePlaylist:", error);
     }
     try {
@@ -215,9 +219,9 @@ const likePlaylist = async (request, response) => {
       response.status(409).json({ message: "Playlist couldn't be liked" });
       console.log("Playlist.findOneAndUpdate in likePlaylist:", error);
     }
-    response.status(200).json({ message: "Saved your like" });
+    response.status(200).json({ message: "Added to Favourites" });
   } else {
-    response.status(400).json({ message: "Cannot like more than once" });
+    response.status(400).json({ message: "Already added" });
   }
 };
 
@@ -236,7 +240,7 @@ const removeLikePlaylist = async (request, response) => {
         { new: true }
       );
     } catch (error) {
-      response.status(409).json({ message: "Unlike not possible" });
+      response.status(409).json({ message: "Error removing this item" });
       console.log("Error in removeLikePlaylist:", error);
     }
     try {
@@ -249,7 +253,7 @@ const removeLikePlaylist = async (request, response) => {
       response.status(409).json({ message: "Error" });
       console.log("Error while unliking the playlist:", error);
     }
-    response.status(200).json({ message: "Playlist unliked" });
+    response.status(200).json({ message: "Removed from Favorites" });
   } else {
     response
       .status(400)
