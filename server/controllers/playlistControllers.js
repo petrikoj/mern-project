@@ -119,7 +119,7 @@ const postNewPlaylist = async (request, response) => {
   }
 }; */
 
-// Upload playlist img
+// POST playlist img
 
 const uploadPlaylistPicture = async (request, response) => {
   console.log("Playlist picture request.body:", request.body);
@@ -142,9 +142,28 @@ const uploadPlaylistPicture = async (request, response) => {
   }
 };
 
+// PATCH update playlist
+
+const updatePlaylist = async (request, response) => {
+  const playlistId = request.params._id;
+  try {
+    const myPlaylist = await Playlist.findOneAndUpdate(
+      { _id: playlistId },
+      { ...request.body },
+      { new: true }
+    );
+    if (!myPlaylist) {
+      return response.status(404).json({ message: "Couldn't find ID" });
+    }
+  } catch (error) {
+    return response.status(500).json({ error: error.message });
+  }
+};
+
 export {
   getAllPlaylists,
   getPlaylistById,
   uploadPlaylistPicture,
   postNewPlaylist,
+  updatePlaylist,
 };
