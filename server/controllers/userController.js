@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import Playlist from "../models/playlistModel.js";
 import { v2 as cloudinary } from "cloudinary";
 import { encryptPassword, verifyPassword } from "../utils/bcrypt.js";
 import { issueToken } from "../utils/jwt.js";
@@ -186,6 +187,76 @@ const getMyUser = async (request, response) => {
   }
 };
 
+// PUT Like a Playlist
+
+const likePlaylist = async (request, response) => {
+  const user_id = request.body.user_id;
+  const playlist_id = request.body.playlist_id;
+  const alreadyLiked = await User.exists({ liked: playlist_id });
+
+  if (!alreadyLiked) {
+    try {
+      await User.findOneAndUpdate(
+        { _id: user_id },
+        { $push: { liked: playlist_id } },
+        { new: true }
+      );
+    } catch (error) {
+      response.status(409).json({ message: "Couldn't save your like" });
+      console.log("User.findOneAndUpdate in likePlaylist:", error);
+    }
+    try {
+      await Playlist.findOneAndUpdate(
+        { _id: playlist_id },
+        { $push: { liked_by: user_id } },
+        { new: true }
+      );
+    } catch (error) {
+      response.status(409).json({ message: "Playlist couldn't be liked" });
+      console.log("Playlist.findOneAndUpdate in likePlaylist:", error);
+    }
+    response.status(200).json({ message: "Saved your like" });
+  } else {
+    response.status(400).json({ message: "Cannot like more than once" });
+  }
+};
+
+// PUT UNLIKE a Playlist
+
+const removeLikePlaylist = async (request, response) => {
+  const user_id = request.body.user_id;
+  const playlist_id = request.body.playlist_id;
+  const alreadyLiked = await User.exists({ liked: playlist_id });
+
+  if (alreadyLiked) {
+    try {
+      await User.findOneAndUpdate(
+        { _id: user_id },
+        { $pull: { liked: playlist_id } },
+        { new: true }
+      );
+    } catch (error) {
+      response.status(409).json({ message: "Unlike not possible" });
+      console.log("Error in removeLikePlaylist:", error);
+    }
+    try {
+      await Playlist.findOneAndUpdate(
+        { _id: playlist_id },
+        { $pull: { liked_by: user_id } },
+        { new: true }
+      );
+    } catch (error) {
+      response.status(409).json({ message: "Error" });
+      console.log("Error while unliking the playlist:", error);
+    }
+    response.status(200).json({ message: "Playlist unliked" });
+  } else {
+    response
+      .status(400)
+      .json({ message: "There seems to be no like to removed" });
+  }
+};
+
 export {
   getAllUsers,
   getUserProfile,
@@ -193,4 +264,6 @@ export {
   signUp,
   login,
   getMyUser,
+  likePlaylist,
+  removeLikePlaylist,
 };
