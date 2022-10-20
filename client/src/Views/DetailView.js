@@ -15,6 +15,7 @@ import {
   VStack,
   Text,
   Tag,
+  Divider,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/layoutRelated/Spinner.js";
@@ -32,14 +33,18 @@ function DetailView() {
         {playlist && (
           <>
             <Heading>{playlist.title}</Heading>
+            <Divider />
             <Image
               src={playlist.img_url}
               alt="playlist picture"
               boxSize={["max-content", "lg"]}
               borderRadius="lg"
             />
+            <Divider />
             <Tag>{playlist.mood}</Tag>
+
             <Text>{playlist.description}</Text>
+
             <Box borderRadius="md" bg="red.100">
               <TableContainer>
                 <Table variant="unstyled">
