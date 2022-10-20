@@ -1,6 +1,8 @@
 import { useToast } from "@chakra-ui/react";
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useFetchPlaylists } from "../components/userRelated/FetchPlaylists";
+import useFetch from "../hooks/useFetch";
 import getToken from "../utils/getToken";
 
 export const AuthContext = createContext();
@@ -14,6 +16,8 @@ export const AuthContextProvider = (props) => {
 
   const redirect = useNavigate();
 
+  //
+
   const checkUserStatus = () => {
     const token = getToken();
     if (token) {
@@ -25,6 +29,8 @@ export const AuthContextProvider = (props) => {
       console.log("User NOT logged in");
     }
   };
+
+  //
 
   const logoutUser = () => {
     localStorage.removeItem("token");
@@ -39,6 +45,8 @@ export const AuthContextProvider = (props) => {
     });
     console.log("User logged out successfully");
   };
+
+  //
 
   const getUserProfile = async () => {
     const token = localStorage.getItem("token");
@@ -60,7 +68,7 @@ export const AuthContextProvider = (props) => {
         );
 
         const result = await response.json();
-        console.log(result);
+        console.log("getUserProfile:", result);
         setUserProfile({
           _id: result._id,
           username: result.username,
@@ -77,6 +85,21 @@ export const AuthContextProvider = (props) => {
       console.log("No token for this user");
     }
   };
+
+  //
+
+  /* const hasUserLikedPlaylist = () => {
+    const result = useFetchPlaylists();
+    const playlistLikes = result.playlists.liked_by;
+    console.log(playlistLikes);
+    if (playlistLikes.includes(userProfile._id)) {
+      return true;
+    } else {
+      return false;
+    }
+  }; */
+
+  //
 
   useEffect(() => {
     checkUserStatus();
