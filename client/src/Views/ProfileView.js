@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Center,
+  Divider,
   Heading,
   HStack,
   Icon,
@@ -34,6 +35,7 @@ function ProfileView() {
   return (
     <Center>
       <VStack>
+        <Divider />
         <Heading>{myUser.username}'s Profile</Heading>
         <Tabs
           isFitted
@@ -41,7 +43,7 @@ function ProfileView() {
           variant="soft-rounded"
           colorScheme="gray"
         >
-          <TabList>
+          <TabList m="3">
             <Tab>
               <VStack>
                 <Icon as={TbPlaylist} />
@@ -61,6 +63,7 @@ function ProfileView() {
               </VStack>
             </Tab>
           </TabList>
+          <Divider />
           <TabPanels>
             <TabPanel>
               <>
@@ -92,7 +95,25 @@ function ProfileView() {
               </>
             </TabPanel>
             <TabPanel>
-              <p>Favorites ...</p>
+              {myUser.liked?.map((list, index) => {
+                return (
+                  <Box key={index} border="1px" borderRadius="md" p="1.5" m="1">
+                    <Link to={`/playlists/${list._id}`}>
+                      <HStack>
+                        <Image
+                          src={list.img_url}
+                          borderRadius="md"
+                          boxSize="16"
+                        />
+                        <VStack align="start">
+                          <Text as="b">{list.title}</Text>
+                          <Badge>{list.songs.length} songs</Badge>
+                        </VStack>
+                      </HStack>
+                    </Link>
+                  </Box>
+                );
+              })}
             </TabPanel>
             <TabPanel>
               <p>Settings ...</p>
