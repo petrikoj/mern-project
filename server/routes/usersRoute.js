@@ -4,7 +4,9 @@ import {
   getAllUsers,
   getMyUser,
   getUserProfile,
+  likePlaylist,
   login,
+  removeLikePlaylist,
   signUp,
   uploadUserPicture,
 } from "../controllers/userController.js";
@@ -19,5 +21,8 @@ router.get("/profile/:_id", getMyUser);
 router.post("/image-upload", multerUploads.single("image"), uploadUserPicture);
 router.post("/signup", signUp);
 router.post("/login", login);
+
+router.put("/like", likePlaylist);
+router.put("/unlike", removeLikePlaylist);
 
 export default router;
