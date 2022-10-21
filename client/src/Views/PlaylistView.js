@@ -23,10 +23,12 @@ import { Link } from "react-router-dom";
 import LikeAndUnlikeButton from "../components/userRelated/LikeAndUnlikeButton.js";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext.js";
+import { PlaylistContext } from "../context/PlaylistContext.js";
 
 function PlaylistView() {
   const { userProfile, user } = useContext(AuthContext);
-  const { playlists, error, loading } = useFetchPlaylists();
+  //const { playlists, error, loading } = useFetchPlaylists();
+  const { myPlaylists, error, loading } = useContext(PlaylistContext);
   return (
     <Center>
       <VStack>
@@ -35,8 +37,8 @@ function PlaylistView() {
           {loading && <LoadingSpinner />}
           {error && <p>error</p>}
           <SimpleGrid columns={[2, 4]} spacing="3">
-            {playlists &&
-              playlists.map((list, index) => {
+            {myPlaylists &&
+              myPlaylists.map((list, index) => {
                 return (
                   <Box key={index} overflowX="hidden" overflowY="auto">
                     <Link to={`/playlists/${list._id}`}>
