@@ -1,7 +1,6 @@
 import { useToast } from "@chakra-ui/react";
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useFetchPlaylists } from "../components/userRelated/FetchPlaylists";
 import useFetch from "../hooks/useFetch";
 import getToken from "../utils/getToken";
 
@@ -33,17 +32,21 @@ export const AuthContextProvider = (props) => {
   //
 
   const logoutUser = () => {
-    localStorage.removeItem("token");
-    checkUserStatus();
-    redirect("/", { replace: true });
-    toast({
-      title: "Logout successful",
-      status: "success",
-      variant: "subtle",
-      duration: 1500,
-      isClosable: true,
-    });
-    console.log("User logged out successfully");
+    try {
+      localStorage.removeItem("token");
+      checkUserStatus();
+      redirect("/", { replace: true });
+      toast({
+        title: "Logout successful",
+        status: "success",
+        variant: "subtle",
+        duration: 1500,
+        isClosable: true,
+      });
+      console.log("User logged out successfully");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //
@@ -87,23 +90,58 @@ export const AuthContextProvider = (props) => {
   };
 
   //
+  /* const getUserById = async (_id) => {
+    const token = localStorage.getItem("token");
+    console.log("Token:", token);
 
-  /* const hasUserLikedPlaylist = () => {
-    const result = useFetchPlaylists();
-    const playlistLikes = result.playlists.liked_by;
-    console.log(playlistLikes);
-    if (playlistLikes.includes(userProfile._id)) {
-      return true;
+    if (token) {
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${token}`);
+
+      const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+      };
+
+      try {
+        const response = await fetch(
+          `http://localhost:5000/api/users/profile/${_id}`,
+          requestOptions
+        );
+
+        const myUser = await response.json();
+        console.log("getUserProfile:", myUser);
+        setUserProfile(myUser);
+      } catch (error) {
+        console.log("Error accessing user's profile", error);
+      }
     } else {
-      return false;
+      setError(true);
+      console.log("No token for this user");
     }
+  }; */
+
+  //
+
+  /* const HasUserLikedPlaylist = () => {
+    const result = useFetchPlaylists();
+    const playlists = result.playlists;
+    playlists.forEach((playlist) => {
+      playlist.liked_by.forEach((like) => {
+        if (like === userProfile._id) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    });
   }; */
 
   //
 
   useEffect(() => {
     checkUserStatus();
-    console.log("useEffect ran");
+    console.log("useEffect ran in AuthContext");
   }, [user]);
 
   return (
