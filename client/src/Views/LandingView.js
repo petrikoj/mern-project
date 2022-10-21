@@ -5,6 +5,7 @@ import SignUp from "../components/userRelated/SignUp.js";
 import Login from "../components/userRelated/Login.js";
 import PostPlaylist from "../components/userRelated/PostPlaylist";
 import { AuthContext } from "../context/AuthContext.js";
+import { Link } from "react-router-dom";
 
 function LandingView() {
   // const {
@@ -14,12 +15,17 @@ function LandingView() {
   // } = useFetch("http://localhost:5000/api/all");
   // console.log(playlists);
 
-  const { logoutUser } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   return (
     <Center>
       <VStack>
         <Heading fontFamily="body">Hello World</Heading>
+        {user && (
+          <Link to={"/playlists/all"}>
+            <Button>Explore</Button>
+          </Link>
+        )}
         {/* {playlists &&
           playlists.map((playlist) => {
             return (
