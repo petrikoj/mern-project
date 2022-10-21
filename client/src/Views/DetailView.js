@@ -20,11 +20,13 @@ import {
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/layoutRelated/Spinner.js";
 import { ErrorAlert } from "../components/layoutRelated/Alerts.js";
+/* import { useContext } from "react";
+import { PlaylistContext } from "../context/PlaylistContext.js"; */
 
 function DetailView() {
   const { _id } = useParams();
   const { playlist, error, loading } = useFetchPlaylistById(_id);
-  console.log(playlist);
+  // Not Working with PlaylistContext =/
   return (
     <Center>
       <VStack>
@@ -56,8 +58,8 @@ function DetailView() {
                   </Thead>
                   {playlist.songs?.map((song, index) => {
                     return (
-                      <Tbody>
-                        <Tr key={index}>
+                      <Tbody key={index}>
+                        <Tr>
                           <Td>{song.artist}</Td>
                           <Td>"{song.song_title}"</Td>
                         </Tr>
