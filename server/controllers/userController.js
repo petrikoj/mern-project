@@ -164,7 +164,7 @@ const getUserProfile = async (request, response) => {
   });
 };
 
-const getMyUser = async (request, response) => {
+const getUserById = async (request, response) => {
   const userId = request.params._id;
   const myUser = await User.findOne({ _id: userId })
     .populate({
@@ -176,7 +176,6 @@ const getMyUser = async (request, response) => {
       select: ["title", "img_url", "songs"],
     })
     .exec();
-  console.log("myUser in getMyUser:", myUser);
   try {
     if (myUser === null || myUser === undefined) {
       response.status(200).json({ msg: "Nothing found" });
@@ -196,12 +195,18 @@ const getMyUser = async (request, response) => {
 const likePlaylist = async (request, response) => {
   const user_id = request.body.user_id;
   const playlist_id = request.body.playlist_id;
-  const alreadyLiked = await User.exists({ liked: playlist_id });
 
-  if (!alreadyLiked) {
+  const myUser = await User.findOne({ _id: user_id });
+
+  const hasMyUserLikedIt = await Playlist.findOne({ _id: playlist_id })
+    .where("liked_by")
+    .equals(`${myUser._id}`);
+  console.log("Have they liked it?", hasMyUserLikedIt);
+
+  if (!hasMyUserLikedIt) {
     try {
       await User.findOneAndUpdate(
-        { _id: user_id },
+        { _id: myUser._id },
         { $push: { liked: playlist_id } },
         { new: true }
       );
@@ -212,7 +217,7 @@ const likePlaylist = async (request, response) => {
     try {
       await Playlist.findOneAndUpdate(
         { _id: playlist_id },
-        { $push: { liked_by: user_id } },
+        { $push: { liked_by: myUser._id } },
         { new: true }
       );
     } catch (error) {
@@ -230,12 +235,18 @@ const likePlaylist = async (request, response) => {
 const removeLikePlaylist = async (request, response) => {
   const user_id = request.body.user_id;
   const playlist_id = request.body.playlist_id;
-  const alreadyLiked = await User.exists({ liked: playlist_id });
 
-  if (alreadyLiked) {
+  const myUser = await User.findOne({ _id: user_id });
+
+  const myUserLikedIt = await Playlist.findOne({ _id: playlist_id })
+    .where("liked_by")
+    .equals(`${myUser._id}`);
+  console.log("Have they liked it?", myUserLikedIt);
+
+  if (myUserLikedIt) {
     try {
       await User.findOneAndUpdate(
-        { _id: user_id },
+        { _id: myUser._id },
         { $pull: { liked: playlist_id } },
         { new: true }
       );
@@ -246,7 +257,7 @@ const removeLikePlaylist = async (request, response) => {
     try {
       await Playlist.findOneAndUpdate(
         { _id: playlist_id },
-        { $pull: { liked_by: user_id } },
+        { $pull: { liked_by: myUser._id } },
         { new: true }
       );
     } catch (error) {
@@ -267,7 +278,7 @@ export {
   uploadUserPicture,
   signUp,
   login,
-  getMyUser,
+  getUserById,
   likePlaylist,
   removeLikePlaylist,
 };
