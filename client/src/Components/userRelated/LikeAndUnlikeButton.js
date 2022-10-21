@@ -2,30 +2,42 @@ import { AuthContext } from "../../context/AuthContext";
 import { useState, useContext, useEffect } from "react";
 import { Button, Icon, useToast } from "@chakra-ui/react";
 import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
+import { useFetchPlaylists } from "./FetchPlaylists";
 
 const LikeAndUnlikeButton = ({ user_id, playlist_id }) => {
-  /*  const { getUserProfile, userProfile, user } = useContext(AuthContext);
-  const usersFavorites = userProfile.liked;
-  console.log(usersFavorites); */
+  const { userProfile, user } = useContext(AuthContext);
   const [isLiked, setIsLiked] = useState(false);
 
   const toast = useToast();
 
-  /* const hasUserLikedPlaylist = () => {
-    if (usersFavorites.includes(playlist_id)) {
-      setIsLiked(true);
-    } else {
-      setIsLiked(false);
+  /*  const hasUserLikedPlaylist = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/playlists/all`);
+      const playlists = await response.json();
+
+      try {
+        playlists.forEach((playlist) => {
+          playlist.liked_by.forEach((like) => {
+            if (like === userProfile._id) {
+              setIsLiked(true);
+            } else {
+              setIsLiked(false);
+            }
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.log(error);
     }
-    return;
   };
 
   useEffect(() => {
-    getUserProfile();
     hasUserLikedPlaylist();
   }, [user]); */
 
-  // PUSH like to db
+  // PUSH like to db */
 
   const likePlaylist = async () => {
     const myHeaders = new Headers();
