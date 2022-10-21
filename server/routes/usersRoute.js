@@ -2,7 +2,7 @@ import express from "express";
 import { multerUploads } from "../middlewares/multer.js";
 import {
   getAllUsers,
-  getMyUser,
+  getUserById,
   getUserProfile,
   likePlaylist,
   login,
@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.get("/all", getAllUsers);
 router.get("/profile", jwtAuth, getUserProfile);
-router.get("/profile/:_id", getMyUser);
+router.get("/profile/:_id", getUserById);
 
 router.post("/image-upload", multerUploads.single("image"), uploadUserPicture);
 router.post("/signup", signUp);
