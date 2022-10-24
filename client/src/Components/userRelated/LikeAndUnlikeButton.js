@@ -2,15 +2,17 @@ import { AuthContext } from "../../context/AuthContext";
 import { useState, useContext, useEffect } from "react";
 import { Button, Icon, useToast } from "@chakra-ui/react";
 import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
-import { useFetchPlaylists } from "./FetchPlaylists";
+import { useFetchUser } from "./FetchPlaylists";
+import { PlaylistContext } from "../../context/PlaylistContext";
 
-const LikeAndUnlikeButton = ({ user_id, playlist_id }) => {
-  const { userProfile, user } = useContext(AuthContext);
-  const [isLiked, setIsLiked] = useState(false);
+const LikeAndUnlikeButton = ({ user_id, playlist_id, isLiked }) => {
+  const { userProfile, setUserProfile, user } = useContext(AuthContext);
+
+  //const [isLiked, setIsLiked] = useState(false);
 
   const toast = useToast();
 
-  /*  const hasUserLikedPlaylist = async () => {
+  /* const hasUserLikedPlaylist = async () => {
     try {
       const response = await fetch(`http://localhost:5000/api/playlists/all`);
       const playlists = await response.json();
@@ -31,10 +33,17 @@ const LikeAndUnlikeButton = ({ user_id, playlist_id }) => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }; */
 
-  useEffect(() => {
-    hasUserLikedPlaylist();
+  //
+
+  /*  const CheckForLikes = (user_id) => {
+    const { myUser } = useFetchUser(user_id);
+    myUser.liked.includes(playlist_id) ? setIsLiked(true) : setIsLiked(false);
+  }; */
+
+  /* useEffect(() => {
+    CheckForLikes();
   }, [user]); */
 
   // PUSH like to db */
@@ -60,7 +69,7 @@ const LikeAndUnlikeButton = ({ user_id, playlist_id }) => {
       );
       const result = await response.json();
       console.log(result);
-      setIsLiked(true);
+      //setIsLiked(true);
       toast({
         title: `${result.message}`,
         status: "success",
@@ -101,7 +110,7 @@ const LikeAndUnlikeButton = ({ user_id, playlist_id }) => {
       );
       const result = await response.json();
       console.log(result);
-      setIsLiked(false);
+      //setIsLiked(false);
       toast({
         title: `${result.message}`,
         status: "success",
@@ -122,11 +131,21 @@ const LikeAndUnlikeButton = ({ user_id, playlist_id }) => {
   return (
     <>
       {!isLiked ? (
-        <Button variant="unstyled" size="lg" onClick={likePlaylist}>
+        <Button
+          variant="unstyled"
+          size="lg"
+          onClick={likePlaylist}
+          isLiked={false}
+        >
           <Icon as={BsBookmarkHeart} />
         </Button>
       ) : (
-        <Button variant="unstyled" size="lg" onClick={unlikePlaylist}>
+        <Button
+          variant="unstyled"
+          size="lg"
+          onClick={unlikePlaylist}
+          isLiked={true}
+        >
           <Icon as={BsBookmarkHeartFill} />
         </Button>
       )}
