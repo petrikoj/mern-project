@@ -28,7 +28,12 @@ const getAllPlaylists = async (request, response) => {
 
 const getPlaylistById = async (request, response) => {
   const wantedPlaylistId = request.params._id;
-  const playlist = await Playlist.findOne({ _id: wantedPlaylistId }).exec();
+  const playlist = await Playlist.findOne({ _id: wantedPlaylistId })
+    .populate({
+      path: "creator",
+      select: ["username", "avatar"],
+    })
+    .exec();
   try {
     if (playlist === undefined || playlist === null) {
       response.status(200).json({ msg: "Object not found" });
