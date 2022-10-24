@@ -15,13 +15,12 @@ import {
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import getToken from "../../utils/getToken";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function PostPlaylist() {
   const { userProfile } = useContext(AuthContext);
-
   const toast = useToast();
-  const navigate = useNavigate();
+  const redirect = useNavigate();
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [newPlaylist, setNewPlaylist] = useState({

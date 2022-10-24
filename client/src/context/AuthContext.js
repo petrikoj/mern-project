@@ -1,7 +1,6 @@
 import { useToast } from "@chakra-ui/react";
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useFetch from "../hooks/useFetch";
 import getToken from "../utils/getToken";
 
 export const AuthContext = createContext();
@@ -123,17 +122,15 @@ export const AuthContextProvider = (props) => {
 
   //
 
-  /* const HasUserLikedPlaylist = () => {
-    const result = useFetchPlaylists();
-    const playlists = result.playlists;
-    playlists.forEach((playlist) => {
-      playlist.liked_by.forEach((like) => {
-        if (like === userProfile._id) {
-          return true;
-        } else {
-          return false;
-        }
-      });
+  /* const checkUserLikes = () => {
+    myPlaylists.map((list) => {
+      const userLikes = list.liked_by;
+      if (userLikes.includes(userProfile._id)) {
+        setIsLikedByUser(true);
+      } else {
+        setIsLikedByUser(false);
+      }
+      return isLikedByUser;
     });
   }; */
 
@@ -150,6 +147,7 @@ export const AuthContextProvider = (props) => {
         checkUserStatus,
         getUserProfile,
         userProfile,
+        setUserProfile,
         logoutUser,
         user,
         setUser,
