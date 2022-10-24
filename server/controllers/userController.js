@@ -201,6 +201,7 @@ const likePlaylist = async (request, response) => {
   const hasMyUserLikedIt = await Playlist.findOne({ _id: playlist_id })
     .where("liked_by")
     .equals(`${myUser._id}`);
+  //.exists(`${myUser._id}`);
   console.log("Have they liked it?", hasMyUserLikedIt);
 
   if (!hasMyUserLikedIt) {
@@ -241,6 +242,7 @@ const removeLikePlaylist = async (request, response) => {
   const myUserLikedIt = await Playlist.findOne({ _id: playlist_id })
     .where("liked_by")
     .equals(`${myUser._id}`);
+  //.exists(`${myUser._id}`);
   console.log("Have they liked it?", myUserLikedIt);
 
   if (myUserLikedIt) {
