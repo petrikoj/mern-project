@@ -117,7 +117,9 @@ function Login() {
         />
       </InputGroup>
 
-      <Button onClick={handleLogin}>Login</Button>
+      <Button w={["80", "24"]} onClick={handleLogin}>
+        Login
+      </Button>
     </VStack>
   );
 }

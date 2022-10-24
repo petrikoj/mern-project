@@ -6,6 +6,9 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 
 function NoMatchView() {
   const navigate = useNavigate();
+  const handleGoBack = () => {
+    navigate(-1);
+  };
   return (
     <Center>
       <VStack>
@@ -14,7 +17,7 @@ function NoMatchView() {
         <Text as="b">This page doesn't exist.</Text>
         <IconButton
           leftIcon={<ArrowLeftIcon />}
-          onClick={() => navigate(-1)}
+          onClick={handleGoBack}
           size="lg"
           p="2"
         >

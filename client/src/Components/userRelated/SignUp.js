@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
 import {
   Button,
+  Center,
   Container,
   FormControl,
   FormLabel,
+  IconButton,
   Image,
   Input,
+  Text,
 } from "@chakra-ui/react";
+import { RiUploadCloud2Line } from "react-icons/ri";
 import { isValidEmail, isValidPassword } from "../../utils/validators";
 
 function SignUp() {
@@ -16,6 +20,20 @@ function SignUp() {
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
   const [credentialsError, setCredentialsError] = useState(null);
+
+  /*  const email = useRef();
+  const password = useRef();
+  const username = useRef();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setNewUser({
+      ...newUser,
+      email: email.current.value,
+      password: password.current.value,
+      username: username.current.value,
+    });
+    console.log(newUser);
+  }; */
 
   const handleChangeHandler = (event) => {
     setNewUser({ ...newUser, [event.target.name]: event.target.value });
@@ -98,38 +116,58 @@ function SignUp() {
   }, [credentialsError, emailError, passwordError]);
 
   return (
-    <Container>
-      <FormLabel>Username</FormLabel>
-      <Input
-        id="username"
-        type="text"
-        value={newUser.username ? newUser.username : ""}
-        name="username"
-        placeholder="e. g. musiclover030"
-        onChange={handleChangeHandler}
-      />
-      <FormLabel>E-Mail</FormLabel>
-      <Input
-        type="text"
-        name="email"
-        id="email"
-        placeholder="e. g. this@that.okay"
-        value={newUser.email ? newUser.email : ""}
-        onChange={handleChangeHandler}
-      />
-      <FormLabel>Password</FormLabel>
-      <Input
-        type="password"
-        name="password"
-        id="password"
-        placeholder="At least 6 characters"
-        value={newUser.password ? newUser.password : ""}
-        onChange={handleChangeHandler}
-      />
-      <FormControl>
+    <Container mb="3">
+      <FormControl mb="2">
+        <FormLabel>Username</FormLabel>
+        <Input
+          id="username"
+          type="text"
+          //ref="username"
+          name="username"
+          placeholder="e. g. musiclover030"
+          value={newUser.username ? newUser.username : ""}
+          onChange={handleChangeHandler}
+        />
+      </FormControl>
+
+      <FormControl mb="2">
+        <FormLabel>E-Mail</FormLabel>
+        <Input
+          type="text"
+          name="email"
+          id="email"
+          placeholder="e. g. this@that.okay"
+          //ref="email"
+          value={newUser.email ? newUser.email : ""}
+          onChange={handleChangeHandler}
+        />
+      </FormControl>
+
+      <FormControl mb="2">
+        <FormLabel>Password</FormLabel>
+        <Input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="At least 6 characters"
+          //ref="password"
+          value={newUser.password ? newUser.password : ""}
+          onChange={handleChangeHandler}
+        />
+      </FormControl>
+
+      <FormControl mb="2">
         <FormLabel>Profile Picture</FormLabel>
         <Input type="file" name="image" onChange={attachFileHandler} />
-        <Button onClick={submitForm}>Upload img</Button>
+        {!newUser.avatar && (
+          <IconButton
+            rightIcon={<RiUploadCloud2Line />}
+            p="2"
+            onClick={submitForm}
+          >
+            <Text>Upload img</Text>
+          </IconButton>
+        )}
       </FormControl>
       {newUser.avatar && (
         <Image
@@ -140,7 +178,11 @@ function SignUp() {
           alt="user pic"
         />
       )}
-      <Button onClick={registerNewUser}>Sign up</Button>
+      <Center>
+        <Button w={["80", "24"]} onClick={registerNewUser}>
+          Register
+        </Button>
+      </Center>
     </Container>
   );
 }
