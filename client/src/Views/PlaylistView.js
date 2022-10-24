@@ -1,42 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFetchPlaylists } from "../components/userRelated/FetchPlaylists.js";
 import {
   Badge,
   Box,
-  Button,
   Center,
-  Divider,
   Heading,
-  Icon,
-  IconButton,
   Image,
   SimpleGrid,
-  Tag,
-  TagLabel,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
-import { AddIcon, CheckIcon } from "@chakra-ui/icons";
 import LoadingSpinner from "../components/layoutRelated/Spinner.js";
 import { Link } from "react-router-dom";
-import LikeAndUnlikeButton from "../components/userRelated/LikeAndUnlikeButton.js";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext.js";
 import { PlaylistContext } from "../context/PlaylistContext.js";
+import LikeButton from "../components/userRelated/LikeButton.js";
+import UnlikeButton from "../components/userRelated/UnlikeButton.js";
 
 function PlaylistView() {
   const { userProfile, user } = useContext(AuthContext);
-  //const { playlists, error, loading } = useFetchPlaylists();
   const { myPlaylists, error, loading } = useContext(PlaylistContext);
+
   return (
-    <Center>
+    <Center mx={["2", "6", "10"]}>
       <VStack>
         <Heading>Playlists</Heading>
         <Box>
           {loading && <LoadingSpinner />}
           {error && <p>error</p>}
-          <SimpleGrid columns={[2, 4]} spacing="3">
+          <SimpleGrid columns={[2, 4, 6]} spacing={["3", "10"]}>
             {myPlaylists &&
               myPlaylists.map((list, index) => {
                 return (
@@ -44,10 +37,13 @@ function PlaylistView() {
                     <Link to={`/playlists/${list._id}`}>
                       <Center>
                         <Image
-                          boxSize="36"
+                          //boxSize={["36"]}
+                          width={["36", "44", "52"]}
+                          height={["36", "44", "52"]}
                           src={list.img_url}
-                          fit="cover"
+                          fit={["cover"]}
                           borderRadius="md"
+                          boxShadow="md"
                         />
                       </Center>
                       <Center>
@@ -67,13 +63,17 @@ function PlaylistView() {
                     </Link>
                     <Badge>{list.songs.length} songs</Badge>
                     <Badge>{list.mood}</Badge>
-                    {/* <Button variant="unstlyed" size="lg">
-                      <Icon as={BsBookmarkHeart} />
-                    </Button> */}
-                    <LikeAndUnlikeButton
-                      playlist_id={list._id}
-                      user_id={userProfile._id}
-                    />
+                    {list.liked_by?.includes(userProfile._id) ? (
+                      <UnlikeButton
+                        playlist_id={list._id}
+                        user_id={userProfile._id}
+                      />
+                    ) : (
+                      <LikeButton
+                        playlist_id={list._id}
+                        user_id={userProfile._id}
+                      />
+                    )}
                   </Box>
                 );
               })}
