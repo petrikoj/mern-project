@@ -44,7 +44,12 @@ function Navbar() {
     >
       {user ? (
         <Flex justify="space-around" align="center" p="5">
-          <Image src={userProfile.avatar} boxSize="8" borderRadius="full" />
+          <Image
+            src={userProfile.avatar}
+            boxSize={["10", "14", "20"]}
+            borderRadius="full"
+            border="1px"
+          />
           <NavLink to={"/"}>
             <Heading>playlist.</Heading>
           </NavLink>
@@ -54,6 +59,7 @@ function Navbar() {
               aria-label="Options"
               icon={<HamburgerIcon />}
               variant="ghost"
+              fontSize={["lg", "x-large", "2xl"]}
             />
             <MenuList>
               <NavLink to={`/profile/${userProfile._id}`}>
