@@ -4,6 +4,7 @@ import {
   getAllUsers,
   getUserById,
   getUserProfile,
+  likeOrUnlikePlaylist,
   likePlaylist,
   login,
   removeLikePlaylist,
@@ -22,6 +23,7 @@ router.post("/image-upload", multerUploads.single("image"), uploadUserPicture);
 router.post("/signup", signUp);
 router.post("/login", login);
 
+router.put("/likehandling", likeOrUnlikePlaylist);
 router.put("/like", likePlaylist);
 router.put("/unlike", removeLikePlaylist);
 
