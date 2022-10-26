@@ -1,4 +1,5 @@
-import { Button, Icon, useToast } from "@chakra-ui/react";
+import { CheckIcon, StarIcon } from "@chakra-ui/icons";
+import { Button, Icon, Text, useToast } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
 import { BsBookmarkHeartFill } from "react-icons/bs";
 import { AuthContext } from "../../context/AuthContext";
@@ -54,9 +55,13 @@ const UnlikeButton = ({ user_id, playlist_id }) => {
   }, [userProfile]); */
 
   return (
-    <Button variant="unstyled" size="lg" onClick={unlikePlaylist}>
-      <Icon as={BsBookmarkHeartFill} />
-    </Button>
+    <Button
+      leftIcon={<BsBookmarkHeartFill />}
+      variant="unstyled"
+      size="lg"
+      onClick={unlikePlaylist}
+      mr="-3.5"
+    />
   );
 };
 
