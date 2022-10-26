@@ -19,7 +19,7 @@ import { AuthContext } from "../context/AuthContext.js";
 import { PlaylistContext } from "../context/PlaylistContext.js";
 import LikeButton from "../components/userRelated/LikeButton.js";
 import UnlikeButton from "../components/userRelated/UnlikeButton.js";
-import LikeAndUnlikeButton from "../components/userRelated/LikeAndUnlikeButton.js";
+//import LikeAndUnlikeButton from "../components/userRelated/LikeAndUnlikeButton.js";
 
 function PlaylistView() {
   const { userProfile, user } = useContext(AuthContext);
@@ -84,14 +84,14 @@ function PlaylistView() {
                     </Link>
                     <Badge>{list.songs.length} songs</Badge>
                     <Badge>{list.mood}</Badge>
-                    <LikeAndUnlikeButton
+                    {/*  <LikeAndUnlikeButton
                       playlist_id={list._id}
                       user_id={userProfile._id}
                       isLiked={
                         list.liked_by?.includes(userProfile._id) ? true : false
                       }
-                    />
-                    {/* {list.liked_by?.includes(userProfile._id) ? (
+                    /> */}
+                    {list.liked_by?.includes(userProfile._id) ? (
                       <UnlikeButton
                         playlist_id={list._id}
                         user_id={userProfile._id}
@@ -101,7 +101,7 @@ function PlaylistView() {
                         playlist_id={list._id}
                         user_id={userProfile._id}
                       />
-                    )} */}
+                    )}
                   </Box>
                 );
               })}
