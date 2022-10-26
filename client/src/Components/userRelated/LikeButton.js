@@ -6,6 +6,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { PlaylistContext } from "../../context/PlaylistContext";
 
 const LikeButton = ({ user_id, playlist_id }) => {
+  const { getAllPlaylists } = useContext(PlaylistContext);
   const toast = useToast();
 
   const likePlaylist = async () => {
@@ -29,6 +30,7 @@ const LikeButton = ({ user_id, playlist_id }) => {
       );
       const result = await response.json();
       console.log(result);
+      getAllPlaylists();
       toast({
         title: `${result.message}`,
         status: "success",
@@ -52,6 +54,7 @@ const LikeButton = ({ user_id, playlist_id }) => {
     <Button
       leftIcon={<BsBookmarkHeart />}
       variant="unstyled"
+      size="lg"
       onClick={likePlaylist}
       mr="-3.5"
     />
