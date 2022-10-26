@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { PlaylistContext } from "../../context/PlaylistContext";
 import {
@@ -19,6 +19,14 @@ import {
   Heading,
   Divider,
   IconButton,
+  Stack,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { FiSend } from "react-icons/fi";
 import { useParams } from "react-router-dom";
@@ -26,9 +34,7 @@ import { DeleteIcon } from "@chakra-ui/icons";
 
 const CommentSection = ({ playlist }) => {
   const { user, userProfile } = useContext(AuthContext);
-  const { myPlaylists, setMyPlaylists } = useContext(PlaylistContext);
   const { _id } = useParams();
-  //console.log("Logging playlist._id", _id, "and user._id", userProfile._id);
 
   const toast = useToast();
 
@@ -44,6 +50,10 @@ const CommentSection = ({ playlist }) => {
       [event.target.name]: event.target.value,
     });
   };
+
+  //
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef();
 
   // POST a new comment
 
@@ -66,12 +76,11 @@ const CommentSection = ({ playlist }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/playlists/:id/new-comment",
+        `http://localhost:5000/api/playlists/${playlist._id}/new-comment`,
         requestOptions
       );
-      setNewComment("");
-      setMyPlaylists(myPlaylists);
       const result = await response.json();
+      setNewComment("");
       console.log("Fetch result", result);
     } catch (error) {
       console.log("Error in POST a comment func", error);
@@ -80,14 +89,14 @@ const CommentSection = ({ playlist }) => {
 
   // PUT (remove) a Comment
 
-  const removeComment = async ({ commentId }) => {
+  const removeComment = async ({ currentTarget }) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
     const urlencoded = new URLSearchParams();
     urlencoded.append("playlistId", _id);
     urlencoded.append("userId", userProfile._id);
-    urlencoded.append("commentId", commentId);
+    urlencoded.append("commentId", currentTarget.value);
 
     const requestOptions = {
       method: "PUT",
@@ -97,12 +106,12 @@ const CommentSection = ({ playlist }) => {
     };
     try {
       const response = await fetch(
-        "http://localhost:5000/api/playlists/:id/delete-comment",
+        `http://localhost:5000/api/playlists/${playlist._id}/delete-comment`,
         requestOptions
       );
       const result = await response.json();
-      setMyPlaylists(myPlaylists);
       console.log(result);
+      onClose();
     } catch (error) {
       console.log(error);
     }
@@ -123,59 +132,68 @@ const CommentSection = ({ playlist }) => {
             w={["xs", "md", "lg"]}
             h="auto"
             key={comment._id}
+            justify="start"
           >
-            <Flex align="start">
-              <Avatar
-                size={["sm", "md"]}
-                src={comment.userphoto}
-                border="1px"
-              />
-              <Box ml="3">
-                <Text fontWeight="light" fontSize="xs">
-                  {comment.createdAt}
-                </Text>
-                <Text fontWeight="semibold">
-                  {comment.author === userProfile._id
-                    ? "You"
-                    : comment.username}
-                </Text>
-                <Text
-                  fontWeight="light"
-                  letterSpacing="wide"
-                  fontSize={["md", "lg"]}
-                >
-                  {comment.text}
-                </Text>
-              </Box>
-            </Flex>
-            {/* <VStack align="stretch">
-              <HStack align="center" mb="1">
+            <Box>
+              <HStack pb="1.5" px="1">
                 <Avatar
                   size={["sm", "md"]}
                   src={comment.userphoto}
                   border="1px"
                 />
-                <VStack align="start">
-                  <Text fontWeight="light" fontSize="xs">
-                    {comment.createdAt}
-                  </Text>
+                <Stack direction="row" align="center">
                   <Text fontWeight="semibold">
-                    {comment.author === userProfile._id
-                      ? "You"
-                      : comment.username}
+                    {comment.author !== userProfile._id && comment.username}
                   </Text>
-                </VStack> */}
-            {comment.author === userProfile._id && (
-              <IconButton
-                pl="16"
-                icon={<DeleteIcon />}
-                variant="unstyled"
-                size="sm"
-                onClick={removeComment}
-                commentid={comment._id}
-              />
-            )}
-            {/* </HStack>
+                  <Text fontWeight="light" fontSize="xs">
+                    {new Date(comment.createdAt).toLocaleDateString()}
+                  </Text>
+                </Stack>
+
+                {comment.author === userProfile._id && (
+                  <>
+                    <IconButton
+                      icon={<DeleteIcon />}
+                      variant="unstyled"
+                      size="sm"
+                      onClick={onOpen}
+                      value={comment._id}
+                    />
+
+                    <AlertDialog
+                      isOpen={isOpen}
+                      leastDestructiveRef={cancelRef}
+                      onClose={onClose}
+                    >
+                      <AlertDialogOverlay>
+                        <AlertDialogContent>
+                          <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                            Delete Comment
+                          </AlertDialogHeader>
+
+                          <AlertDialogBody>
+                            Are you sure? You can't undo this action afterwards.
+                          </AlertDialogBody>
+
+                          <AlertDialogFooter>
+                            <Button ref={cancelRef} onClick={onClose}>
+                              Cancel
+                            </Button>
+                            <Button
+                              colorScheme="red"
+                              onClick={removeComment}
+                              value={comment._id}
+                              ml={3}
+                            >
+                              Delete
+                            </Button>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialogOverlay>
+                    </AlertDialog>
+                  </>
+                )}
+              </HStack>
               <Text
                 fontWeight="light"
                 letterSpacing="wide"
@@ -183,34 +201,36 @@ const CommentSection = ({ playlist }) => {
               >
                 {comment.text}
               </Text>
-            </VStack> */}
+            </Box>
           </Flex>
         );
       })}
-      <HStack my={"5"}>
-        <FormControl>
-          <InputGroup size="md">
-            <Input
-              placeholder={"Write a comment ..."}
-              focusBorderColor="blackAlpha.900"
-              variant="filled"
-              bgColor="red.100"
-              borderRadius="full"
-              type="text"
-              name="text"
-              id="text"
-              w={["xs", "md", "lg"]}
-              value={newComment.text ? newComment.text : ""}
-              onChange={handleChangeHandler}
-            />
-            <InputRightElement>
-              <Button variant={"unstyled"} onClick={postComment}>
-                <Icon as={FiSend} color={"blackAlpha.900"} />
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-        </FormControl>
-      </HStack>
+      {user && (
+        <HStack my={"5"}>
+          <FormControl>
+            <InputGroup size="md">
+              <Input
+                placeholder={"Write a comment ..."}
+                focusBorderColor="blackAlpha.900"
+                variant="filled"
+                bgColor="red.100"
+                borderRadius="full"
+                type="text"
+                name="text"
+                id="text"
+                w={["xs", "md", "lg"]}
+                value={newComment.text ? newComment.text : ""}
+                onChange={handleChangeHandler}
+              />
+              <InputRightElement>
+                <Button variant={"unstyled"} onClick={postComment}>
+                  <Icon as={FiSend} color={"blackAlpha.900"} />
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+          </FormControl>
+        </HStack>
+      )}
     </>
   );
 };
