@@ -1,3 +1,4 @@
+import { AddIcon } from "@chakra-ui/icons";
 import { Button, Icon, useToast } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
 import { BsBookmarkHeart } from "react-icons/bs";
@@ -48,9 +49,12 @@ const LikeButton = ({ user_id, playlist_id }) => {
   };
 
   return (
-    <Button variant="unstyled" size="lg" onClick={likePlaylist}>
-      <Icon as={BsBookmarkHeart} />
-    </Button>
+    <Button
+      leftIcon={<BsBookmarkHeart />}
+      variant="unstyled"
+      onClick={likePlaylist}
+      mr="-3.5"
+    />
   );
 };
 
