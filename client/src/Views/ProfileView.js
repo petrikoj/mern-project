@@ -27,6 +27,7 @@ import { useFetchUser } from "../components/userRelated/FetchPlaylists";
 import LoadingSpinner from "../components/layoutRelated/Spinner";
 //import LikeAndUnlikeButton from "../components/userRelated/LikeAndUnlikeButton";
 import UnlikeButton from "../components/userRelated/UnlikeButton";
+import LikeButton from "../components/userRelated/LikeButton";
 
 function ProfileView() {
   const { _id } = useParams();
@@ -131,10 +132,17 @@ function ProfileView() {
                             </HStack>
                           </Link>
                         </Box>
-                        <UnlikeButton
-                          playlist_id={list._id}
-                          user_id={myUser._id}
-                        />
+                        {list.liked_by?.includes(myUser._id) ? (
+                          <UnlikeButton
+                            user_id={myUser._id}
+                            playlist_id={list._id}
+                          />
+                        ) : (
+                          <LikeButton
+                            user_id={myUser._id}
+                            playlist_id={list._id}
+                          />
+                        )}
                       </HStack>
                     );
                   })}
