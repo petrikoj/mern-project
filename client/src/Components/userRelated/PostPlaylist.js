@@ -184,7 +184,7 @@ function PostPlaylist() {
       <Container>
         <FormControl isRequired={true}>
           <FormLabel>Playlist Picture</FormLabel>
-          <Input type="file" name="image" onChange={attachFileHandler} />
+          <Input type="file" name="image" onChange={attachFileHandler} p="2" />
           {newPlaylist.img_url && (
             <Center>
               <Image
@@ -276,7 +276,9 @@ function PostPlaylist() {
           </Stack>
         </FormControl>
       </Container>
-      <Button onClick={uploadPlaylist}>Submit</Button>
+      <Button w={["80", "24"]} onClick={uploadPlaylist}>
+        Submit
+      </Button>
     </>
   );
 }
