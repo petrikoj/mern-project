@@ -1,5 +1,20 @@
 import mongoose from "mongoose";
 
+const commentSchema = new mongoose.Schema(
+  {
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+    text: { type: String, required: true },
+
+    username: { type: String },
+    userphoto: { type: String },
+  },
+  { timestamps: true }
+);
+
 const playlistSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -44,16 +59,20 @@ const playlistSchema = new mongoose.Schema({
   },
   date: { type: Date, default: Date.now },
   liked_by: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
-  comments: {
+  /* comments: {
     type: Array,
     comment: {
       type: Object,
-      comment_authorId: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-      comment_author: { type: String },
-      comment_text: { type: String },
-      comment_date: { type: Date, default: Date.now },
+      user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user",
+        required: true,
+      },
+      text: { type: String, required: true },
+      date: { type: Date, default: Date.now },
     },
-  },
+  }, */
+  comments: [commentSchema],
 });
 
 const Playlist = mongoose.model("playlist", playlistSchema);
