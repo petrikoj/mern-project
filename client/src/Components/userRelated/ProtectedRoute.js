@@ -7,6 +7,7 @@ import {
   AlertTitle,
   AlertDescription,
   Button,
+  VStack,
 } from "@chakra-ui/react";
 
 function ProtectedRoute({ children }) {
@@ -24,14 +25,16 @@ function ProtectedRoute({ children }) {
       {user ? (
         children
       ) : (
-        <Alert status="error">
-          <AlertIcon />
-          <AlertTitle>Login required</AlertTitle>
-          <AlertDescription>
-            You need to be logged in to access this area.
-          </AlertDescription>
-          <Button onClick={handleGoToLogin}>Login</Button>
-          <Button onClick={handleGoBack}>Go back</Button>
+        <Alert status="error" p="3">
+          <VStack>
+            <AlertIcon />
+            <AlertTitle>Login required</AlertTitle>
+            <AlertDescription>
+              You need to be logged in to access this area.
+            </AlertDescription>
+            <Button onClick={handleGoToLogin}>Login</Button>
+            <Button onClick={handleGoBack}>Go back</Button>
+          </VStack>
         </Alert>
       )}
     </>
