@@ -71,7 +71,7 @@ const signUp = async (request, response) => {
   try {
     const existingUser = await User.findOne({ email: request.body.email });
     if (existingUser) {
-      response.status(409).json({ message: "User already exists" });
+      response.status(409).json({ message: "E-Mail already exists" });
     } else {
       const hashedPassword = await encryptPassword(request.body.password);
 
@@ -166,27 +166,26 @@ const getUserProfile = async (request, response) => {
 
 const getUserById = async (request, response) => {
   const userId = request.params._id;
-  const myUser = await User.findOne({ _id: userId })
-    .populate({
-      path: "playlists",
-      select: ["title", "img_url", "songs"],
-    })
-    .populate({
-      path: "liked",
-      select: ["title", "img_url", "songs"],
-    })
-    .exec();
   try {
-    if (myUser === null || myUser === undefined) {
-      response.status(200).json({ msg: "Nothing found" });
-    } else {
+    const myUser = await User.findOne({ _id: userId })
+      .populate({
+        path: "playlists",
+        select: ["title", "img_url", "songs", "liked_by"],
+      })
+      .populate({
+        path: "liked",
+        select: ["title", "img_url", "songs", "liked_by"],
+      })
+      .exec();
+    if (myUser) {
       response.status(200).json(myUser);
     }
   } catch (error) {
-    response.status(500).json({
-      msg: "Server failed",
+    response.status(400).json({
+      message: "Invalid URL",
       error: error,
     });
+    console.log(error);
   }
 };
 
