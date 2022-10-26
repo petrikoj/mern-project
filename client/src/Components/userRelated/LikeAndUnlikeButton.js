@@ -5,11 +5,11 @@ import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
 import { useFetchUser } from "./FetchPlaylists";
 import { PlaylistContext } from "../../context/PlaylistContext";
 
-const LikeAndUnlikeButton = ({ user_id, playlist_id }) => {
+const LikeAndUnlikeButton = ({ user_id, playlist_id, isLiked }) => {
   const { userProfile, setUserProfile, user } = useContext(AuthContext);
   const { myPlaylists } = useContext(PlaylistContext);
 
-  const [isLiked, setIsLiked] = useState(false);
+  //const [isLiked, setIsLiked] = useState(false);
 
   const toast = useToast();
 
