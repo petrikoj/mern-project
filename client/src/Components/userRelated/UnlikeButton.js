@@ -1,15 +1,13 @@
 import { CheckIcon, StarIcon } from "@chakra-ui/icons";
 import { Button, Icon, Text, useToast } from "@chakra-ui/react";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BsBookmarkHeartFill } from "react-icons/bs";
 import { AuthContext } from "../../context/AuthContext";
+import { PlaylistContext } from "../../context/PlaylistContext";
 
 const UnlikeButton = ({ user_id, playlist_id }) => {
-  const { getUserProfile, userProfile, setUserProfile } =
-    useContext(AuthContext);
-
+  const { getAllPlaylists } = useContext(PlaylistContext);
   const toast = useToast();
-
   const unlikePlaylist = async () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -31,7 +29,7 @@ const UnlikeButton = ({ user_id, playlist_id }) => {
       );
       const result = await response.json();
       console.log(result);
-      setUserProfile(userProfile);
+      getAllPlaylists();
       toast({
         title: `${result.message}`,
         status: "success",
@@ -50,9 +48,6 @@ const UnlikeButton = ({ user_id, playlist_id }) => {
       console.log(error);
     }
   };
-  /* useEffect(() => {
-    getUserProfile();
-  }, [userProfile]); */
 
   return (
     <Button
