@@ -147,9 +147,71 @@ const uploadPlaylistPicture = async (request, response) => {
   }
 };
 
+// POST new comment
+
+const postNewComment = async (request, response) => {
+  const doesUserExist = await User.findOne({ _id: request.body.userId });
+  console.log(request.body.userId);
+  if (doesUserExist) {
+    try {
+      await Playlist.findOneAndUpdate(
+        { _id: request.body.playlistId },
+        {
+          $push: {
+            comments: {
+              ...request.body,
+              author: request.body.userId,
+              text: request.body.text,
+              username: request.body.username,
+              userphoto: request.body.userphoto,
+            },
+          },
+        },
+        { new: true }
+      ).exec();
+      response.status(200).json({ message: "Comment posted" });
+    } catch (error) {
+      response
+        .status(409)
+        .json({ message: "Comment couldn't be posted", error: error.message });
+    }
+    try {
+      await User.findOneAndUpdate(
+        { _id: request.body.userId },
+        { $push: { commented: request.body.playlistId } },
+        { new: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  } else {
+    response.status(400).json({ message: "User not found" });
+  }
+};
+
+// PUT/delete a comment
+
+const removeComment = async (request, response) => {
+  try {
+    await Playlist.findOneAndUpdate(
+      { _id: request.body.playlistId },
+      {
+        $pull: {
+          comments: { _id: request.body.commentId },
+        },
+      },
+      { new: true }
+    ).exec();
+    response.status(200).json({ message: "Comment removed" });
+  } catch (error) {
+    console.log(error);
+    response.status(400).json({ message: "Could't remove comment" });
+  }
+};
+
 // PATCH update playlist
 
-const updatePlaylist = async (request, response) => {
+/* const updatePlaylist = async (request, response) => {
   const playlistId = request.params._id;
   try {
     const myPlaylist = await Playlist.findOneAndUpdate(
@@ -163,12 +225,14 @@ const updatePlaylist = async (request, response) => {
   } catch (error) {
     return response.status(500).json({ error: error.message });
   }
-};
+}; */
 
 export {
   getAllPlaylists,
   getPlaylistById,
   uploadPlaylistPicture,
   postNewPlaylist,
-  updatePlaylist,
+  postNewComment,
+  removeComment,
+  //updatePlaylist,
 };
