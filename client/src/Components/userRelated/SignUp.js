@@ -9,9 +9,11 @@ import {
   Image,
   Input,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { RiUploadCloud2Line } from "react-icons/ri";
 import { isValidEmail, isValidPassword } from "../../utils/validators";
+import { useNavigate } from "react-router-dom";
 
 function SignUp() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -20,6 +22,8 @@ function SignUp() {
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
   const [credentialsError, setCredentialsError] = useState(null);
+  const redirect = useNavigate();
+  const toast = useToast();
 
   /*  const email = useRef();
   const password = useRef();
@@ -103,6 +107,14 @@ function SignUp() {
         );
         const results = await response.json();
         console.log("Result:", results);
+        toast({
+          title: "Registration successful",
+          status: "success",
+          variant: "subtle",
+          duration: 1500,
+          isClosable: true,
+        });
+        redirect("/login");
       } catch (error) {
         console.log("Fetch error", error);
       }
@@ -158,7 +170,7 @@ function SignUp() {
 
       <FormControl mb="2">
         <FormLabel>Profile Picture</FormLabel>
-        <Input type="file" name="image" onChange={attachFileHandler} />
+        <Input type="file" name="image" onChange={attachFileHandler} p="1" />
         {!newUser.avatar && (
           <IconButton
             rightIcon={<RiUploadCloud2Line />}
@@ -170,16 +182,20 @@ function SignUp() {
         )}
       </FormControl>
       {newUser.avatar && (
-        <Image
-          borderRadius="full"
-          fit="fill"
-          boxSize="36"
-          src={newUser.avatar}
-          alt="user pic"
-        />
+        <Center>
+          <Image
+            borderRadius="full"
+            border="1px"
+            fit="fill"
+            boxSize="32"
+            src={newUser.avatar}
+            alt="user pic"
+            my="2"
+          />
+        </Center>
       )}
       <Center>
-        <Button w={["80", "24"]} onClick={registerNewUser}>
+        <Button w={["80", "24"]} mt="4" mb="8" onClick={registerNewUser}>
           Register
         </Button>
       </Center>
