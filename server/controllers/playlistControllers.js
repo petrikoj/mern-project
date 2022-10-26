@@ -28,23 +28,19 @@ const getAllPlaylists = async (request, response) => {
 
 const getPlaylistById = async (request, response) => {
   const wantedPlaylistId = request.params._id;
-  const playlist = await Playlist.findOne({ _id: wantedPlaylistId })
-    .populate({
-      path: "creator",
-      select: ["username", "avatar"],
-    })
-    .exec();
   try {
-    if (playlist === undefined || playlist === null) {
-      response.status(200).json({ msg: "Object not found" });
-      console.log("Object not found");
-    } else {
+    const playlist = await Playlist.findOne({ _id: wantedPlaylistId })
+      .populate({
+        path: "creator",
+        select: ["username", "avatar"],
+      })
+      .exec();
+    if (playlist) {
       response.status(200).json(playlist);
-      console.log("Server/getPlaylistbyId:", playlist);
     }
   } catch (error) {
-    response.status(500).json({
-      message: "Server failed",
+    response.status(400).json({
+      message: "Invalid URL",
       error: error,
     });
   }
