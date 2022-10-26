@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Button, Center, Heading, VStack } from "@chakra-ui/react";
+import { Box, Button, Center, Heading, VStack } from "@chakra-ui/react";
 import useFetch from "../hooks/useFetch";
 import SignUp from "../components/userRelated/SignUp.js";
 import Login from "../components/userRelated/Login.js";
@@ -15,12 +15,19 @@ function LandingView() {
   // } = useFetch("http://localhost:5000/api/all");
   // console.log(playlists);
 
-  const { user } = useContext(AuthContext);
+  const { user, userProfile } = useContext(AuthContext);
 
   return (
     <Center>
       <VStack>
-        <Heading fontFamily="body">Hello World</Heading>
+        <Box mb="6">
+          {user ? (
+            <Heading fontFamily="body">Hello {userProfile.username}</Heading>
+          ) : (
+            <Heading fontFamily="body">Hello World</Heading>
+          )}
+        </Box>
+
         {user && (
           <Link to={"/playlists/all"}>
             <Button>Explore</Button>
