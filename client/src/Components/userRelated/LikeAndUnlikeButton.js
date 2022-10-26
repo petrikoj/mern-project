@@ -5,50 +5,15 @@ import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
 import { useFetchUser } from "./FetchPlaylists";
 import { PlaylistContext } from "../../context/PlaylistContext";
 
-const LikeAndUnlikeButton = ({ user_id, playlist_id, isLiked }) => {
+const LikeAndUnlikeButton = ({ user_id, playlist_id }) => {
   const { userProfile, setUserProfile, user } = useContext(AuthContext);
+  const { myPlaylists } = useContext(PlaylistContext);
 
-  //const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
   const toast = useToast();
 
-  /* const hasUserLikedPlaylist = async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/playlists/all`);
-      const playlists = await response.json();
-
-      try {
-        playlists.forEach((playlist) => {
-          playlist.liked_by.forEach((like) => {
-            if (like === userProfile._id) {
-              setIsLiked(true);
-            } else {
-              setIsLiked(false);
-            }
-          });
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }; */
-
-  //
-
-  /*  const CheckForLikes = (user_id) => {
-    const { myUser } = useFetchUser(user_id);
-    myUser.liked.includes(playlist_id) ? setIsLiked(true) : setIsLiked(false);
-  }; */
-
-  /* useEffect(() => {
-    CheckForLikes();
-  }, [user]); */
-
-  // PUSH like to db */
-
-  const likePlaylist = async () => {
+  const likeOrUnlikePlaylist = async () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -64,53 +29,12 @@ const LikeAndUnlikeButton = ({ user_id, playlist_id, isLiked }) => {
     };
     try {
       const response = await fetch(
-        "http://localhost:5000/api/users/like",
+        "http://localhost:5000/api/users/likehandling",
         requestOptions
       );
       const result = await response.json();
       console.log(result);
-      //setIsLiked(true);
-      toast({
-        title: `${result.message}`,
-        status: "success",
-        duration: 1500,
-        isClosable: true,
-      });
-    } catch (error) {
-      toast({
-        description: `${error.message}`,
-        status: "error",
-        duration: 1500,
-        isClosable: true,
-      });
-      console.log(error);
-    }
-  };
-
-  // PULL like from db
-
-  const unlikePlaylist = async () => {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
-    const urlencoded = new URLSearchParams();
-    urlencoded.append("user_id", user_id);
-    urlencoded.append("playlist_id", playlist_id);
-
-    const requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: urlencoded,
-      redirect: "follow",
-    };
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/users/unlike",
-        requestOptions
-      );
-      const result = await response.json();
-      console.log(result);
-      //setIsLiked(false);
+      setIsLiked(!isLiked);
       toast({
         title: `${result.message}`,
         status: "success",
@@ -130,25 +54,9 @@ const LikeAndUnlikeButton = ({ user_id, playlist_id, isLiked }) => {
 
   return (
     <>
-      {!isLiked ? (
-        <Button
-          variant="unstyled"
-          size="lg"
-          onClick={likePlaylist}
-          isLiked={false}
-        >
-          <Icon as={BsBookmarkHeart} />
-        </Button>
-      ) : (
-        <Button
-          variant="unstyled"
-          size="lg"
-          onClick={unlikePlaylist}
-          isLiked={true}
-        >
-          <Icon as={BsBookmarkHeartFill} />
-        </Button>
-      )}
+      <Button variant="unstyled" size="lg" onClick={likeOrUnlikePlaylist}>
+        <Icon as={!isLiked ? BsBookmarkHeart : BsBookmarkHeartFill} />
+      </Button>
     </>
   );
 };
