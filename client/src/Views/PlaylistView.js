@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useFetchPlaylists } from "../components/userRelated/FetchPlaylists.js";
 import {
+  Avatar,
   Badge,
   Box,
   Center,
   Heading,
+  HStack,
   Image,
   SimpleGrid,
   Text,
@@ -17,15 +19,17 @@ import { AuthContext } from "../context/AuthContext.js";
 import { PlaylistContext } from "../context/PlaylistContext.js";
 import LikeButton from "../components/userRelated/LikeButton.js";
 import UnlikeButton from "../components/userRelated/UnlikeButton.js";
+import LikeAndUnlikeButton from "../components/userRelated/LikeAndUnlikeButton.js";
 
 function PlaylistView() {
   const { userProfile, user } = useContext(AuthContext);
   const { myPlaylists, error, loading } = useContext(PlaylistContext);
+  const [isLiked, setIsLiked] = useState(false);
 
   return (
     <Center mx={["2", "6", "10"]}>
       <VStack>
-        <Heading>Playlists</Heading>
+        <Heading>All</Heading>
         <Box>
           {loading && <LoadingSpinner />}
           {error && <p>error</p>}
@@ -33,7 +37,7 @@ function PlaylistView() {
             {myPlaylists &&
               myPlaylists.map((list, index) => {
                 return (
-                  <Box key={index} overflowX="hidden" overflowY="auto">
+                  <Box key={index}>
                     <Link to={`/playlists/${list._id}`}>
                       <Center>
                         <Image
@@ -51,19 +55,43 @@ function PlaylistView() {
                           <Text as="b" align="center">
                             {list.title}
                           </Text>
-                          {user && userProfile._id === list.creator._id ? (
-                            <Text align="center" as="i">
-                              You
-                            </Text>
-                          ) : (
-                            <Text align="center">{list.creator.username}</Text>
-                          )}
+                          <HStack>
+                            <Avatar
+                              size={["xs", "md"]}
+                              src={list.creator.avatar}
+                              border="1px"
+                            />
+                            {user && userProfile._id === list.creator._id ? (
+                              <Text
+                                fontSize={["sm", "md"]}
+                                letterSpacing="wide"
+                                fontWeight="thin"
+                              >
+                                You
+                              </Text>
+                            ) : (
+                              <Text
+                                fontSize={["sm", "md"]}
+                                letterSpacing="wide"
+                                fontWeight="thin"
+                              >
+                                {list.creator.username}
+                              </Text>
+                            )}
+                          </HStack>
                         </VStack>
                       </Center>
                     </Link>
                     <Badge>{list.songs.length} songs</Badge>
                     <Badge>{list.mood}</Badge>
-                    {list.liked_by?.includes(userProfile._id) ? (
+                    <LikeAndUnlikeButton
+                      playlist_id={list._id}
+                      user_id={userProfile._id}
+                      isLiked={
+                        list.liked_by?.includes(userProfile._id) ? true : false
+                      }
+                    />
+                    {/* {list.liked_by?.includes(userProfile._id) ? (
                       <UnlikeButton
                         playlist_id={list._id}
                         user_id={userProfile._id}
@@ -73,7 +101,7 @@ function PlaylistView() {
                         playlist_id={list._id}
                         user_id={userProfile._id}
                       />
-                    )}
+                    )} */}
                   </Box>
                 );
               })}
