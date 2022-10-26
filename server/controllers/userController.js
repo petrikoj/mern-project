@@ -274,6 +274,65 @@ const removeLikePlaylist = async (request, response) => {
   }
 };
 
+// Like And Unlike
+
+// PUT Like a Playlist
+
+const likeOrUnlikePlaylist = async (request, response) => {
+  const doWeHaveALike = await Playlist.findOne({
+    _id: request.body.playlist_id,
+  })
+    .where("liked_by")
+    .equals(`${request.body.user_id}`);
+  console.log("Have they liked it?", doWeHaveALike);
+
+  if (!doWeHaveALike) {
+    try {
+      await User.findOneAndUpdate(
+        { _id: request.body.user_id },
+        { $push: { liked: request.body.playlist_id } },
+        { new: true }
+      );
+    } catch (error) {
+      response.status(409).json({ message: "Couldn't save" });
+      console.log("User.findOneAndUpdate in likePlaylist:", error);
+    }
+    try {
+      await Playlist.findOneAndUpdate(
+        { _id: request.body.playlist_id },
+        { $push: { liked_by: request.body.user_id } },
+        { new: true }
+      );
+      response.status(200).json({ message: "Added to Favourites" });
+    } catch (error) {
+      response.status(409).json({ message: "Playlist couldn't be liked" });
+      console.log("Playlist.findOneAndUpdate in likePlaylist:", error);
+    }
+  } else {
+    try {
+      await User.findOneAndUpdate(
+        { _id: request.body.user_id },
+        { $pull: { liked: request.body.playlist_id } },
+        { new: true }
+      );
+    } catch (error) {
+      response.status(409).json({ message: "Couldn't remove like" });
+      console.log("User.findOneAndUpdate in likeAndUnlikePlaylist:", error);
+    }
+    try {
+      await Playlist.findOneAndUpdate(
+        { _id: request.body.playlist_id },
+        { $pull: { liked_by: request.body.user_id } },
+        { new: true }
+      );
+      response.status(200).json({ message: "Removed from Favourites" });
+    } catch (error) {
+      response.status(409).json({ message: "Couldn't unlike playlist" });
+      console.log("Playlist.findOneAndUpdate in likePlaylist:", error);
+    }
+  }
+};
+
 export {
   getAllUsers,
   getUserProfile,
@@ -283,4 +342,5 @@ export {
   getUserById,
   likePlaylist,
   removeLikePlaylist,
+  likeOrUnlikePlaylist,
 };
