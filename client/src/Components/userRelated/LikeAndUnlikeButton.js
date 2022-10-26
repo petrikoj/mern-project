@@ -1,15 +1,15 @@
-import { AuthContext } from "../../context/AuthContext";
+/* import { AuthContext } from "../../context/AuthContext";
 import { useState, useContext, useEffect } from "react";
 import { Button, Icon, useToast } from "@chakra-ui/react";
 import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
 import { useFetchUser } from "./FetchPlaylists";
 import { PlaylistContext } from "../../context/PlaylistContext";
 
-const LikeAndUnlikeButton = ({ user_id, playlist_id, isLiked }) => {
+const LikeAndUnlikeButton = ({ user_id, playlist_id }) => {
   const { userProfile, setUserProfile, user } = useContext(AuthContext);
   const { myPlaylists } = useContext(PlaylistContext);
 
-  //const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
   const toast = useToast();
 
@@ -33,8 +33,8 @@ const LikeAndUnlikeButton = ({ user_id, playlist_id, isLiked }) => {
         requestOptions
       );
       const result = await response.json();
-      console.log(result);
       setIsLiked(!isLiked);
+      console.log(result);
       toast({
         title: `${result.message}`,
         status: "success",
@@ -62,3 +62,4 @@ const LikeAndUnlikeButton = ({ user_id, playlist_id, isLiked }) => {
 };
 
 export default LikeAndUnlikeButton;
+ */
