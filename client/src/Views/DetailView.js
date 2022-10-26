@@ -35,17 +35,16 @@ import UnlikeButton from "../components/userRelated/UnlikeButton.js";
 import LikeButton from "../components/userRelated/LikeButton.js";
 import { PlaylistContext } from "../context/PlaylistContext.js";
 import CommentSection from "../components/userRelated/CommentSection.js";
-import LikeAndUnlikeButton from "../components/userRelated/LikeAndUnlikeButton.js";
+//import LikeAndUnlikeButton from "../components/userRelated/LikeAndUnlikeButton.js";
 /* import { useContext } from "react";
 import { PlaylistContext } from "../context/PlaylistContext.js"; */
 
 function DetailView() {
-  const { _id } = useParams();
-  //const myCommentSection = useRef(null);
-  const { playlist, error, loading } = useFetchPlaylistById(_id);
   const { userProfile, user } = useContext(AuthContext);
+  const { _id } = useParams();
+  const { playlist, error, loading } = useFetchPlaylistById(_id);
 
-  const [likeCount, setLikeCount] = useState(null);
+  //const myCommentSection = useRef(null);
 
   /* const scrollToComments = () => {
     window.scrollTo({
@@ -54,7 +53,6 @@ function DetailView() {
     });
   }; */
 
-  // Not Working with PlaylistContext =/
   return (
     <Center overflowY="scroll" m="2" w="auto" h="auto">
       <VStack>
@@ -85,11 +83,11 @@ function DetailView() {
                 </Text>
               </Button>
               <HStack>
-                <LikeAndUnlikeButton
+                {/*  <LikeAndUnlikeButton
                   playlist_id={playlist._id}
                   user_id={userProfile._id}
-                />
-                {/* {playlist.liked_by?.includes(userProfile._id) ? (
+                /> */}
+                {playlist.liked_by?.includes(userProfile._id) ? (
                   <UnlikeButton
                     playlist_id={playlist._id}
                     user_id={userProfile._id}
@@ -99,7 +97,7 @@ function DetailView() {
                     playlist_id={playlist._id}
                     user_id={userProfile._id}
                   />
-                )} */}
+                )}
                 <Text fontSize="md" fontWeight="semibold">
                   {playlist.liked_by?.length}
                 </Text>
