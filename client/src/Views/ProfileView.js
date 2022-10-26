@@ -6,7 +6,6 @@ import {
   Heading,
   HStack,
   Icon,
-  IconButton,
   Image,
   Tab,
   TabList,
@@ -18,7 +17,6 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { EditIcon } from "@chakra-ui/icons";
 import { TbPlaylist } from "react-icons/tb";
 import { HiHeart } from "react-icons/hi";
 import { IoMdSettings } from "react-icons/io";
@@ -101,7 +99,6 @@ function ProfileView() {
                               </HStack>
                             </Link>
                           </Box>
-                          <IconButton icon={<EditIcon />} variant="ghost" />
                         </HStack>
                       );
                     })}

@@ -46,7 +46,7 @@ function Navbar() {
         <Flex justify="space-around" align="center" p="5">
           <Image
             src={userProfile.avatar}
-            boxSize={["10", "14", "20"]}
+            boxSize={["10", "14"]}
             borderRadius="full"
             border="1px"
           />
