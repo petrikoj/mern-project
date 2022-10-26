@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Center,
+  Container,
   FormControl,
   FormLabel,
   Image,
@@ -180,34 +181,35 @@ function PostPlaylist() {
 
   return (
     <>
-      <FormControl isRequired={true}>
-        <FormLabel>Playlist Picture</FormLabel>
-        <Input type="file" name="image" onChange={attachFileHandler} />
-        {newPlaylist.img_url && (
-          <Center>
-            <Image
-              boxSize="36"
-              src={newPlaylist.img_url}
-              alt="playlist picture"
-            />
-          </Center>
-        )}
-        <Button onClick={submitForm}>Upload img</Button>
-        <FormLabel>Playlist Title</FormLabel>
-        <Input
-          name="title"
-          type="text"
-          value={newPlaylist.title ? newPlaylist.title : ""}
-          onChange={handleChangeHandler}
-        />
-        <FormLabel>Description</FormLabel>
-        <Input
-          name="description"
-          type="text"
-          value={newPlaylist.description ? newPlaylist.description : ""}
-          onChange={handleChangeHandler}
-        />
-        {/* <FormLabel>Author</FormLabel>
+      <Container>
+        <FormControl isRequired={true}>
+          <FormLabel>Playlist Picture</FormLabel>
+          <Input type="file" name="image" onChange={attachFileHandler} />
+          {newPlaylist.img_url && (
+            <Center>
+              <Image
+                boxSize="36"
+                src={newPlaylist.img_url}
+                alt="playlist picture"
+              />
+            </Center>
+          )}
+          <Button onClick={submitForm}>Upload img</Button>
+          <FormLabel>Playlist Title</FormLabel>
+          <Input
+            name="title"
+            type="text"
+            value={newPlaylist.title ? newPlaylist.title : ""}
+            onChange={handleChangeHandler}
+          />
+          <FormLabel>Description</FormLabel>
+          <Input
+            name="description"
+            type="text"
+            value={newPlaylist.description ? newPlaylist.description : ""}
+            onChange={handleChangeHandler}
+          />
+          {/* <FormLabel>Author</FormLabel>
         <Input
           name="author"
           type="text"
@@ -216,63 +218,64 @@ function PostPlaylist() {
           isReadOnly={true}
           onChange={handleChangeHandler}
         /> */}
-        <FormLabel>Mood</FormLabel>
-        <Select
-          name="mood"
-          type="text"
-          placeholder="What's the vibe?"
-          value={newPlaylist.mood ? newPlaylist.mood : ""}
-          onChange={handleChangeHandler}
-        >
-          <option>party</option>
-          <option>mellow</option>
-          <option>dinner</option>
-          <option>workout</option>
-          <option>melancholic</option>
-          <option>thinking</option>
-          <option>focus</option>
-        </Select>
-        <FormLabel>Songs</FormLabel>
-        {songArray.map((single, i) => {
-          return (
-            <Box key={i}>
-              <Stack direction="row">
-                <InputGroup name="single">
-                  <Input
-                    name="artist"
-                    type="text"
-                    placeholder="Artist"
-                    value={single.artist ? single.artist : ""}
-                    onChange={(e) => handleSongInputHandler(e, i)}
-                  />
-                  <Input
-                    name="song_title"
-                    type="text"
-                    placeholder="Song Title"
-                    value={single.song_title ? single.song_title : ""}
-                    onChange={(e) => handleSongInputHandler(e, i)}
-                  />
-                  <Input
+          <FormLabel>Mood</FormLabel>
+          <Select
+            name="mood"
+            type="text"
+            placeholder="What's the vibe?"
+            value={newPlaylist.mood ? newPlaylist.mood : ""}
+            onChange={handleChangeHandler}
+          >
+            <option>party</option>
+            <option>mellow</option>
+            <option>dinner</option>
+            <option>workout</option>
+            <option>melancholic</option>
+            <option>thinking</option>
+            <option>focus</option>
+          </Select>
+          <FormLabel>Songs</FormLabel>
+          {songArray.map((single, i) => {
+            return (
+              <Box key={i}>
+                <Stack direction="row">
+                  <InputGroup name="single">
+                    <Input
+                      name="artist"
+                      type="text"
+                      placeholder="Artist"
+                      value={single.artist ? single.artist : ""}
+                      onChange={(e) => handleSongInputHandler(e, i)}
+                    />
+                    <Input
+                      name="song_title"
+                      type="text"
+                      placeholder="Song Title"
+                      value={single.song_title ? single.song_title : ""}
+                      onChange={(e) => handleSongInputHandler(e, i)}
+                    />
+                    {/*  <Input
                     name="album"
                     type="text"
                     placeholder="Album"
                     value={single.album ? single.album : ""}
                     onChange={(e) => handleSongInputHandler(e, i)}
-                  />
-                  {/* <Input placeholder="Release Year" /> */}
-                </InputGroup>
-              </Stack>
-            </Box>
-          );
-        })}
+                  /> */}
+                    {/* <Input placeholder="Release Year" /> */}
+                  </InputGroup>
+                </Stack>
+              </Box>
+            );
+          })}
 
-        <Stack direction="row">
-          <Button onClick={handleAddSongInputField}>Add Song</Button>
-          {songArray.length > 3 && (
-            <Button onClick={handleRemoveSongInputField}>Remove song</Button>
-          )}
-        </Stack>
-      </FormControl>
+          <Stack direction="row">
+            <Button onClick={handleAddSongInputField}>Add Song</Button>
+            {songArray.length > 3 && (
+              <Button onClick={handleRemoveSongInputField}>Remove song</Button>
+            )}
+          </Stack>
+        </FormControl>
+      </Container>
       <Button onClick={uploadPlaylist}>Submit</Button>
     </>
   );
