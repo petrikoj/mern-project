@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
   },
   playlists: [{ type: mongoose.Schema.Types.ObjectId, ref: "playlist" }],
   liked: [{ type: mongoose.Schema.Types.ObjectId, ref: "playlist" }],
+  commented: [{ type: mongoose.Schema.Types.ObjectId, ref: "playlist" }],
 });
 
 const User = mongoose.model("user", userSchema);
