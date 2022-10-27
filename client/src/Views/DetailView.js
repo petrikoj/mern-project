@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useFetchPlaylistById } from "../components/userRelated/FetchPlaylists.js";
 import {
   Box,
@@ -16,15 +16,12 @@ import {
   Text,
   Tag,
   Divider,
-  Stat,
-  StatLabel,
-  StatNumber,
-  Icon,
   HStack,
-  Flex,
   IconButton,
   Button,
   ButtonGroup,
+  Container,
+  Flex,
 } from "@chakra-ui/react";
 import { ChatIcon, EditIcon } from "@chakra-ui/icons";
 import { useParams } from "react-router-dom";
@@ -42,8 +39,8 @@ import { PlaylistContext } from "../context/PlaylistContext.js"; */
 function DetailView() {
   const { userProfile, user } = useContext(AuthContext);
   const { _id } = useParams();
-  const { playlist, error, loading } = useFetchPlaylistById(_id);
-
+  const { playlist, comments, setComments, error, loading, getPlaylist } =
+    useFetchPlaylistById(_id);
   //const myCommentSection = useRef(null);
 
   /* const scrollToComments = () => {
@@ -53,8 +50,12 @@ function DetailView() {
     });
   }; */
 
+  useEffect(() => {
+    getPlaylist(_id);
+  }, [comments]);
+
   return (
-    <Center overflowY="scroll" m="2" w="auto" h="auto">
+    <Center m="2" w="auto" h="auto">
       <VStack>
         {loading && <LoadingSpinner />}
         {error && <ErrorAlert message={error.message} />}
@@ -104,30 +105,27 @@ function DetailView() {
               </HStack>
             </ButtonGroup>
 
-            <Box borderRadius="md" bg="red.100" w="xs" overflowY="scroll">
-              <TableContainer>
-                <Table variant="unstyled">
-                  <Thead>
-                    <Tr>
-                      <Th>Artist</Th>
-                      <Th>Title</Th>
-                    </Tr>
-                  </Thead>
-                  {playlist.songs?.map((song, index) => {
-                    return (
-                      <Tbody key={index}>
-                        <Tr>
-                          <Td>{song.artist}</Td>
-                          <Td>"{song.song_title}"</Td>
-                        </Tr>
-                      </Tbody>
-                    );
-                  })}
-                </Table>
-              </TableContainer>
-            </Box>
+            <Container>
+              {playlist.songs?.map((song) => {
+                return (
+                  <Box key={song._id} ml="2" p="1" my="1">
+                    <Text fontSize="md" fontWeight="semibold">
+                      {song.song_title}
+                    </Text>
+                    <Text fontSize="sm" fontWeight="thin">
+                      {song.artist}
+                    </Text>
+                    <Divider borderColor="gray.200" />
+                  </Box>
+                );
+              })}
+            </Container>
             <Divider borderColor="blackAlpha.900" />
-            <CommentSection playlist={playlist} />
+            <CommentSection
+              playlist={playlist}
+              comments={comments}
+              setComments={setComments}
+            />
           </>
         )}
       </VStack>
