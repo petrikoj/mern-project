@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
-import { PlaylistContext } from "../../context/PlaylistContext";
 import {
   Input,
   InputGroup,
@@ -12,12 +12,9 @@ import {
   Icon,
   Text,
   Avatar,
-  Spacer,
   useToast,
   FormControl,
   VStack,
-  Heading,
-  Divider,
   IconButton,
   Stack,
   AlertDialog,
@@ -28,15 +25,16 @@ import {
   AlertDialogOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
+import { DeleteIcon, WarningIcon } from "@chakra-ui/icons";
 import { FiSend } from "react-icons/fi";
-import { useParams } from "react-router-dom";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { PlaylistContext } from "../../context/PlaylistContext";
 
-const CommentSection = ({ playlist }) => {
+const CommentSection = ({ playlist, comments, setComments }) => {
   const { user, userProfile } = useContext(AuthContext);
   const { _id } = useParams();
-
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef();
 
   const [newComment, setNewComment] = useState({
     userId: "",
@@ -51,13 +49,10 @@ const CommentSection = ({ playlist }) => {
     });
   };
 
-  //
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const cancelRef = useRef();
-
   // POST a new comment
 
-  const postComment = async () => {
+  const postComment = async (event) => {
+    event.preventDefault();
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
     const urlencoded = new URLSearchParams();
@@ -80,8 +75,9 @@ const CommentSection = ({ playlist }) => {
         requestOptions
       );
       const result = await response.json();
-      setNewComment("");
       console.log("Fetch result", result);
+      setNewComment("");
+      setComments(comments);
     } catch (error) {
       console.log("Error in POST a comment func", error);
     }
@@ -112,6 +108,15 @@ const CommentSection = ({ playlist }) => {
       const result = await response.json();
       console.log(result);
       onClose();
+      setComments(comments);
+      toast({
+        title: `${result.message}`,
+        status: "success",
+        variant: "subtle",
+        duration: 1500,
+        isClosable: true,
+        position: "top",
+      });
     } catch (error) {
       console.log(error);
     }
@@ -125,9 +130,11 @@ const CommentSection = ({ playlist }) => {
           <Flex
             boxShadow="sm"
             bgColor={
-              comment.author === userProfile._id ? "red.100" : "gray.100"
+              comment.author === userProfile._id ? "green.50" : "gray.50"
             }
             borderRadius="xl"
+            border="1px"
+            borderColor="gray.100"
             p="3"
             w={["xs", "md", "lg"]}
             h="auto"
@@ -166,28 +173,39 @@ const CommentSection = ({ playlist }) => {
                       onClose={onClose}
                     >
                       <AlertDialogOverlay>
-                        <AlertDialogContent>
-                          <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                            Delete Comment
-                          </AlertDialogHeader>
+                        <AlertDialogContent
+                          boxSize="2xs"
+                          backgroundColor="white"
+                          textAlign="center"
+                          fontSize="large"
+                          fontWeight="thin"
+                          lineHeight="tall"
+                        >
+                          <VStack>
+                            <AlertDialogHeader>
+                              <WarningIcon boxSize="2em" color="red.400" />
+                            </AlertDialogHeader>
 
-                          <AlertDialogBody>
-                            Are you sure? You can't undo this action afterwards.
-                          </AlertDialogBody>
+                            <AlertDialogBody>
+                              Do you really want to delete your comment?
+                              {/*   <br />
+                              This action cannot be undone. */}
+                            </AlertDialogBody>
 
-                          <AlertDialogFooter>
-                            <Button ref={cancelRef} onClick={onClose}>
-                              Cancel
-                            </Button>
-                            <Button
-                              colorScheme="red"
-                              onClick={removeComment}
-                              value={comment._id}
-                              ml={3}
-                            >
-                              Delete
-                            </Button>
-                          </AlertDialogFooter>
+                            <AlertDialogFooter>
+                              <Button ref={cancelRef} onClick={onClose}>
+                                Cancel
+                              </Button>
+                              <Button
+                                bgColor="red.400"
+                                onClick={removeComment}
+                                value={comment._id}
+                                ml={3}
+                              >
+                                Delete
+                              </Button>
+                            </AlertDialogFooter>
+                          </VStack>
                         </AlertDialogContent>
                       </AlertDialogOverlay>
                     </AlertDialog>
@@ -208,12 +226,12 @@ const CommentSection = ({ playlist }) => {
       {user && (
         <HStack my={"5"}>
           <FormControl>
-            <InputGroup size="md">
+            <InputGroup size="md" my="3">
               <Input
                 placeholder={"Write a comment ..."}
                 focusBorderColor="blackAlpha.900"
                 variant="filled"
-                bgColor="red.100"
+                bgColor="gray.50"
                 borderRadius="full"
                 type="text"
                 name="text"
@@ -224,7 +242,7 @@ const CommentSection = ({ playlist }) => {
               />
               <InputRightElement>
                 <Button variant={"unstyled"} onClick={postComment}>
-                  <Icon as={FiSend} color={"blackAlpha.900"} />
+                  <Icon as={FiSend} />
                 </Button>
               </InputRightElement>
             </InputGroup>
