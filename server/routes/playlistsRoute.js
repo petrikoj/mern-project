@@ -7,6 +7,7 @@ import {
   postNewComment,
   uploadPlaylistPicture,
   removeComment,
+  deletePlaylist,
 } from "../controllers/playlistControllers.js";
 import jwtAuth from "../utils/jwtAuth.js";
 
@@ -21,7 +22,7 @@ router.post(
 );
 router.post("/create", postNewPlaylist);
 router.post("/:id/new-comment", postNewComment);
-
-router.put("/:id/delete-comment", removeComment);
+router.put("/:id/delete-comment", jwtAuth, removeComment);
+router.delete("/:id/delete-playlist", jwtAuth, deletePlaylist);
 
 export default router;
