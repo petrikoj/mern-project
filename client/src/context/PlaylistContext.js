@@ -52,6 +52,48 @@ export const PlaylistContextProvider = (props) => {
     return { myPlaylists, error, loading };
   };
 
+  // DELETE playlist
+
+  const deletePlaylist = async ({ currentTarget }) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${token}`);
+      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+      const urlencoded = new URLSearchParams();
+      urlencoded.append("_id", currentTarget.value);
+      urlencoded.append("creator", userProfile._id);
+
+      const requestOptions = {
+        method: "DELETE",
+        headers: myHeaders,
+        body: urlencoded,
+        redirect: "follow",
+      };
+
+      try {
+        const response = await fetch(
+          "http://localhost:5000/api/playlists/:id/delete-playlist",
+          requestOptions
+        );
+        const result = await response.json();
+        console.log(result);
+        setMyPlaylists(myPlaylists);
+        toast({
+          title: `${result.message}`,
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert("No token for this user");
+    }
+  };
+
   // Like + Unlike a Playlist (PUSH and PULL)
 
   // PUSH like to db
@@ -148,6 +190,7 @@ export const PlaylistContextProvider = (props) => {
       value={{
         getAllPlaylists,
         getPlaylistById,
+        deletePlaylist,
         myPlaylists,
         setMyPlaylists,
         loading,
