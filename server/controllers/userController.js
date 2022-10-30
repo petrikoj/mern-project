@@ -332,6 +332,24 @@ const likeOrUnlikePlaylist = async (request, response) => {
   }
 };
 
+// PATCH update user profile
+
+/* const updateUser = async (request, response) => {
+  const userId = request.params._id;
+  try {
+    const myUser = await User.findOneAndUpdate(
+      { _id: userId },
+      { ...request.body },
+      { new: true }
+    );
+    if (!myUser) {
+      return response.status(404).json({ message: "Couldn't find ID" });
+    }
+  } catch (error) {
+    return response.status(500).json({ message: "Something went wrong", error: error.message });
+  }
+}; */
+
 export {
   getAllUsers,
   getUserProfile,
@@ -342,4 +360,5 @@ export {
   likePlaylist,
   removeLikePlaylist,
   likeOrUnlikePlaylist,
+  //updateUser,
 };
