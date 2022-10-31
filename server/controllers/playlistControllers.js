@@ -150,22 +150,23 @@ const postNewComment = async (request, response) => {
   console.log(request.body.userId);
   if (doesUserExist) {
     try {
-      await Playlist.findOneAndUpdate(
+      const myPlaylist = await Playlist.findOneAndUpdate(
         { _id: request.body.playlistId },
         {
           $push: {
             comments: {
               ...request.body,
               author: request.body.userId,
-              text: request.body.text,
               username: request.body.username,
               userphoto: request.body.userphoto,
+              text: request.body.text,
             },
           },
         },
         { new: true }
       ).exec();
-      response.status(200).json({ message: "Comment posted" });
+      const comments = myPlaylist.comments;
+      response.status(200).json({ message: "Comment posted", comments });
     } catch (error) {
       response
         .status(409)
@@ -181,11 +182,13 @@ const postNewComment = async (request, response) => {
       console.log(error);
     }
   } else {
-    response.status(400).json({ message: "User not found" });
+    response
+      .status(400)
+      .json({ message: "Error saving comment in user profile" });
   }
 };
 
-// PUT/delete a comment
+// PUT/delete a comment (to do: remove comment from user profile)
 
 const removeComment = async (request, response) => {
   try {
@@ -202,6 +205,41 @@ const removeComment = async (request, response) => {
   } catch (error) {
     console.log(error);
     response.status(400).json({ message: "Could't remove comment" });
+  }
+};
+
+// DELETE playlist
+
+const deletePlaylist = async (request, response) => {
+  try {
+    const myPlaylist = await Playlist.findOneAndDelete({
+      _id: request.body._id,
+    }).exec();
+    if (!myPlaylist) {
+      return response.status(404).json({ message: "Paylist ID not found" });
+    }
+    const myUser = await User.updateOne(
+      { _id: request.body.creator },
+      {
+        $pull: { playlists: myPlaylist._id },
+      }
+    );
+    if (!myUser) {
+      return response.status(206).json({
+        message: "Error updating user profile after deleting playlist",
+      });
+    }
+    myPlaylist.liked_by.forEach(async (event) => {
+      await User.updateOne(
+        { _id: event },
+        {
+          $pull: { liked: myPlaylist._id },
+        }
+      );
+    });
+    return response.status(200).json({ message: "Playlist deleted" });
+  } catch (error) {
+    response.status(500).json({ error: error.message });
   }
 };
 
@@ -228,6 +266,7 @@ export {
   getPlaylistById,
   uploadPlaylistPicture,
   postNewPlaylist,
+  deletePlaylist,
   postNewComment,
   removeComment,
   //updatePlaylist,
