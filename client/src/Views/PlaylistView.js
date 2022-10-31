@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useFetchPlaylists } from "../components/userRelated/FetchPlaylists.js";
 import {
   Avatar,
   Badge,
@@ -9,6 +8,7 @@ import {
   HStack,
   Image,
   SimpleGrid,
+  Skeleton,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -24,7 +24,6 @@ import UnlikeButton from "../components/userRelated/UnlikeButton.js";
 function PlaylistView() {
   const { userProfile, user } = useContext(AuthContext);
   const { myPlaylists, error, loading } = useContext(PlaylistContext);
-  const [isLiked, setIsLiked] = useState(false);
 
   return (
     <Center mx={["2", "6", "10"]}>
@@ -32,18 +31,22 @@ function PlaylistView() {
         <Heading>All</Heading>
         <Box>
           {loading && <LoadingSpinner />}
+          {/* {loading && (
+            <Skeleton>
+            </Skeleton>
+          )} */}
           {error && <p>error</p>}
-          <SimpleGrid columns={[2, 4, 6]} spacing={["3", "10"]}>
+          <SimpleGrid columns={[1, 2, 4]} spacing={["3", "10"]}>
             {myPlaylists &&
-              myPlaylists.map((list, index) => {
+              myPlaylists.map((list) => {
                 return (
-                  <Box key={index}>
+                  <Box key={list._id}>
                     <Link to={`/playlists/${list._id}`}>
                       <Center>
                         <Image
-                          //boxSize={["36"]}
-                          width={["36", "44", "52"]}
-                          height={["36", "44", "52"]}
+                          boxSize={["64", "72"]}
+                          /* width={["36", "44", "52"]}
+                          height={["36", "44", "52"]} */
                           src={list.img_url}
                           fit={["cover"]}
                           borderRadius="md"
