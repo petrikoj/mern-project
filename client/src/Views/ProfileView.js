@@ -6,6 +6,7 @@ import {
   Heading,
   HStack,
   Icon,
+  IconButton,
   Image,
   Tab,
   TabList,
@@ -28,9 +29,12 @@ import LoadingSpinner from "../components/layoutRelated/Spinner";
 //import LikeAndUnlikeButton from "../components/userRelated/LikeAndUnlikeButton";
 import UnlikeButton from "../components/userRelated/UnlikeButton";
 import LikeButton from "../components/userRelated/LikeButton";
+import { PlaylistContext } from "../context/PlaylistContext";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 function ProfileView() {
   const { _id } = useParams();
+  const { deletePlaylist } = useContext(PlaylistContext);
   const { myUser, error, loading } = useFetchUser(_id);
   console.log("Result of useFetchUser:", myUser);
 
@@ -100,6 +104,13 @@ function ProfileView() {
                               </HStack>
                             </Link>
                           </Box>
+                          <IconButton
+                            icon={<DeleteIcon />}
+                            variant="unstyled"
+                            size="sm"
+                            onClick={deletePlaylist}
+                            value={list._id}
+                          />
                         </HStack>
                       );
                     })}
