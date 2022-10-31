@@ -36,27 +36,29 @@ const useFetchPlaylistById = (_id) => {
   };
 
   useEffect(() => {
+    console.log("useEffect in useFetchPlaylistById ran");
     getPlaylist();
   }, [_id]);
 
-  return { playlist, comments, setComments, error, loading, getPlaylist };
+  return {
+    playlist,
+    setPlaylist,
+    comments,
+    setComments,
+    error,
+    loading,
+    getPlaylist,
+  };
 };
 
 // GET user by ID
 
 const useFetchUser = (_id) => {
-  const requestOptions = {
-    method: "GET",
-    redirect: "follow",
-  };
   const {
     data: myUser,
     error,
     loading,
-  } = useFetch(
-    `http://localhost:5000/api/users/profile/${_id}`,
-    requestOptions
-  );
+  } = useFetch(`http://localhost:5000/api/users/profile/${_id}`);
   return { myUser, error, loading };
 };
 
