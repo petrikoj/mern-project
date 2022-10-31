@@ -28,6 +28,7 @@ import {
 import { DeleteIcon, WarningIcon } from "@chakra-ui/icons";
 import { FiSend } from "react-icons/fi";
 import { PlaylistContext } from "../../context/PlaylistContext";
+import getToken from "../../utils/getToken";
 
 const CommentSection = ({ playlist, comments, setComments }) => {
   const { user, userProfile } = useContext(AuthContext);
@@ -38,6 +39,8 @@ const CommentSection = ({ playlist, comments, setComments }) => {
 
   const [newComment, setNewComment] = useState({
     userId: "",
+    username: "",
+    userphoto: "",
     text: "",
   });
 
@@ -45,13 +48,27 @@ const CommentSection = ({ playlist, comments, setComments }) => {
     console.log(event.target.value);
     setNewComment({
       ...newComment,
+      userId: userProfile._id,
+      username: userProfile.username,
+      userphoto: userProfile.avatar,
       [event.target.name]: event.target.value,
     });
   };
 
+  /* const updateComments = () => {
+    setComments((comments) => {
+      return [...comments, newComment];
+    });
+  }; */
+
+  useEffect(() => {
+    console.log("useEffect ran");
+  }, [comments]);
+
   // POST a new comment
 
   const postComment = async (event) => {
+    console.log(newComment);
     event.preventDefault();
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -76,8 +93,9 @@ const CommentSection = ({ playlist, comments, setComments }) => {
       );
       const result = await response.json();
       console.log("Fetch result", result);
+      const myNewComment = result.comments[result.comments.length - 1];
+      setComments([...comments, myNewComment]);
       setNewComment("");
-      setComments(comments);
     } catch (error) {
       console.log("Error in POST a comment func", error);
     }
@@ -163,10 +181,10 @@ const CommentSection = ({ playlist, comments, setComments }) => {
                       icon={<DeleteIcon />}
                       variant="unstyled"
                       size="sm"
-                      onClick={onOpen}
+                      onClick={removeComment}
                       value={comment._id}
                     />
-
+                    {/* 
                     <AlertDialog
                       isOpen={isOpen}
                       leastDestructiveRef={cancelRef}
@@ -188,8 +206,6 @@ const CommentSection = ({ playlist, comments, setComments }) => {
 
                             <AlertDialogBody>
                               Do you really want to delete your comment?
-                              {/*   <br />
-                              This action cannot be undone. */}
                             </AlertDialogBody>
 
                             <AlertDialogFooter>
@@ -208,7 +224,7 @@ const CommentSection = ({ playlist, comments, setComments }) => {
                           </VStack>
                         </AlertDialogContent>
                       </AlertDialogOverlay>
-                    </AlertDialog>
+                    </AlertDialog> */}
                   </>
                 )}
               </HStack>
