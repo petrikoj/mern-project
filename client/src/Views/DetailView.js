@@ -35,6 +35,7 @@ import UnlikeButton from "../components/userRelated/UnlikeButton.js";
 import LikeButton from "../components/userRelated/LikeButton.js";
 import { PlaylistContext } from "../context/PlaylistContext.js";
 import CommentSection from "../components/userRelated/CommentSection.js";
+import { baseURL } from "../utils/getServerUrl";
 //import LikeAndUnlikeButton from "../components/userRelated/LikeAndUnlikeButton.js";
 /* import { useContext } from "react";
 import { PlaylistContext } from "../context/PlaylistContext.js"; */
@@ -91,7 +92,7 @@ function DetailView() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/playlists/${playlist._id}/new-comment`,
+        baseURL + `/api/playlists/${playlist._id}/new-comment`,
         requestOptions
       );
       const result = await response.json();
@@ -126,7 +127,7 @@ function DetailView() {
       };
       try {
         const response = await fetch(
-          `http://localhost:5000/api/playlists/${playlist._id}/delete-comment`,
+          baseURL + `/api/playlists/${playlist._id}/delete-comment`,
           requestOptions
         );
         const result = await response.json();

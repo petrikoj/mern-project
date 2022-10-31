@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { baseURL } from "../../utils/getServerUrl";
 import useFetch from "../../hooks/useFetch.js";
 
 const useFetchPlaylists = () => {
@@ -6,7 +7,7 @@ const useFetchPlaylists = () => {
     data: playlists,
     error,
     loading,
-  } = useFetch(`http://localhost:5000/api/playlists/all`);
+  } = useFetch(baseURL + "/api/playlists/all");
   console.log(playlists);
   return { playlists, error, loading };
 };
@@ -21,9 +22,7 @@ const useFetchPlaylistById = (_id) => {
 
   const getPlaylist = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/playlists/${_id}`
-      );
+      const response = await fetch(baseURL + `/api/playlists/${_id}`);
       const result = await response.json();
       setPlaylist(result);
       setComments(result.comments);
@@ -58,7 +57,7 @@ const useFetchUser = (_id) => {
     data: myUser,
     error,
     loading,
-  } = useFetch(`http://localhost:5000/api/users/profile/${_id}`);
+  } = useFetch(baseURL + `/api/users/profile/${_id}`);
   return { myUser, error, loading };
 };
 

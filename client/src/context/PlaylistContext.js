@@ -1,6 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import React, { createContext, useEffect, useState } from "react";
 import { useContext } from "react";
+import { baseURL } from "../utils/getServerUrl";
 import { AuthContext } from "./AuthContext";
 
 export const PlaylistContext = createContext();
@@ -18,7 +19,7 @@ export const PlaylistContextProvider = (props) => {
 
   const getAllPlaylists = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/playlists/all`);
+      const response = await fetch(baseURL + "/api/playlists/all");
       const result = await response.json();
       setMyPlaylists(result);
       setLoading(false);
@@ -39,7 +40,7 @@ export const PlaylistContextProvider = (props) => {
     };
     try {
       const response = await fetch(
-        `http://localhost:5000/api/playlists/${_id}`,
+        baseURL + `/api/playlists/${_id}`,
         requestOptions
       );
       const result = response.json();
@@ -74,7 +75,7 @@ export const PlaylistContextProvider = (props) => {
 
       try {
         const response = await fetch(
-          "http://localhost:5000/api/playlists/:id/delete-playlist",
+          "https://baseURL +/api/playlists/:id/delete-playlist",
           requestOptions
         );
         const result = await response.json();
@@ -113,10 +114,7 @@ export const PlaylistContextProvider = (props) => {
       redirect: "follow",
     };
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/users/like",
-        requestOptions
-      );
+      const response = await fetch(baseURL + "/api/users/like", requestOptions);
       const result = await response.json();
       console.log(result);
       setIsLiked(true);
@@ -155,7 +153,7 @@ export const PlaylistContextProvider = (props) => {
     };
     try {
       const response = await fetch(
-        "http://localhost:5000/api/users/unlike",
+        baseURL + "/api/users/unlike",
         requestOptions
       );
       const result = await response.json();

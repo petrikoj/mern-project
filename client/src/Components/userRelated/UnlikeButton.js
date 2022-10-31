@@ -2,6 +2,7 @@ import { CheckIcon, StarIcon } from "@chakra-ui/icons";
 import { Button, Icon, Text, useToast } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { BsBookmarkHeartFill } from "react-icons/bs";
+import { baseURL } from "../../utils/getServerUrl.js";
 import { AuthContext } from "../../context/AuthContext";
 import { PlaylistContext } from "../../context/PlaylistContext";
 
@@ -24,7 +25,7 @@ const UnlikeButton = ({ user_id, playlist_id }) => {
     };
     try {
       const response = await fetch(
-        "http://localhost:5000/api/users/unlike",
+        baseURL + "/api/users/unlike",
         requestOptions
       );
       const result = await response.json();

@@ -13,6 +13,7 @@ import { AuthContext } from "../../context/AuthContext.js";
 import { useNavigate } from "react-router-dom";
 import { FiMail } from "react-icons/fi";
 import { MdOutlinePassword } from "react-icons/md";
+import { baseURL } from "../../utils/getServerUrl.js";
 
 function Login() {
   const { checkUserStatus } = useContext(AuthContext);
@@ -58,7 +59,7 @@ function Login() {
 
       try {
         const response = await fetch(
-          "http://localhost:5000/api/users/login",
+          baseURL + "/api/users/login",
           requestOptions
         );
         const result = await response.json();

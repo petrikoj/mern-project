@@ -2,6 +2,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Button, Icon, useToast } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
 import { BsBookmarkHeart } from "react-icons/bs";
+import { baseURL } from "../../utils/getServerUrl.js";
 import { AuthContext } from "../../context/AuthContext";
 import { PlaylistContext } from "../../context/PlaylistContext";
 
@@ -24,10 +25,7 @@ const LikeButton = ({ user_id, playlist_id }) => {
       redirect: "follow",
     };
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/users/like",
-        requestOptions
-      );
+      const response = await fetch(baseURL + "/api/users/like", requestOptions);
       const result = await response.json();
       console.log(result);
       getAllPlaylists();

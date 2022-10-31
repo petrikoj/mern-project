@@ -29,6 +29,7 @@ import { DeleteIcon, WarningIcon } from "@chakra-ui/icons";
 import { FiSend } from "react-icons/fi";
 import { PlaylistContext } from "../../context/PlaylistContext";
 import getToken from "../../utils/getToken";
+import { baseURL } from "../../utils/getServerUrl.js";
 
 const CommentSection = ({ playlist, comments, setComments }) => {
   const { user, userProfile } = useContext(AuthContext);
@@ -88,7 +89,7 @@ const CommentSection = ({ playlist, comments, setComments }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/playlists/${playlist._id}/new-comment`,
+        baseURL + `/api/playlists/${playlist._id}/new-comment`,
         requestOptions
       );
       const result = await response.json();
@@ -120,7 +121,7 @@ const CommentSection = ({ playlist, comments, setComments }) => {
     };
     try {
       const response = await fetch(
-        `http://localhost:5000/api/playlists/${playlist._id}/delete-comment`,
+        baseURL + `/api/playlists/${playlist._id}/delete-comment`,
         requestOptions
       );
       const result = await response.json();

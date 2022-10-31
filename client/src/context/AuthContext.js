@@ -1,6 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../utils/getServerUrl";
 import getToken from "../utils/getToken";
 
 export const AuthContext = createContext();
@@ -65,7 +66,7 @@ export const AuthContextProvider = (props) => {
 
       try {
         const response = await fetch(
-          "http://localhost:5000/api/users/profile/",
+          baseURL + "/api/users/profile/",
           requestOptions
         );
 
@@ -104,7 +105,7 @@ export const AuthContextProvider = (props) => {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/users/profile/${_id}`,
+          baseURL + `/api/users/profile/${_id}`,
           requestOptions
         );
 

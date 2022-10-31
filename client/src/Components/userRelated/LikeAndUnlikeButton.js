@@ -29,7 +29,7 @@ const LikeAndUnlikeButton = ({ user_id, playlist_id }) => {
     };
     try {
       const response = await fetch(
-        "http://localhost:5000/api/users/likehandling",
+        baseURL + "/api/users/likehandling",
         requestOptions
       );
       const result = await response.json();

@@ -12,7 +12,7 @@ function LandingView() {
   //   data: playlists,
   //   loading,
   //   error,
-  // } = useFetch("http://localhost:5000/api/all");
+  // } = useFetch(baseURL + "/api/all");
   // console.log(playlists);
 
   const { user, userProfile } = useContext(AuthContext);

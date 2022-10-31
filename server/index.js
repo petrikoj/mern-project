@@ -12,7 +12,7 @@ import passportConfig from "./config/passportConfig.js";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = 5000;
 
 const addMiddlewares = () => {
   app.use(express.json());
@@ -28,10 +28,11 @@ const addMiddlewares = () => {
   );
 
   const corsOptions = {
-    origin: "http://localhost:3000",
+    origin: "https://playlist-blush.vercel.app",
     credentials: true,
   };
   app.use(cors(corsOptions));
+
   cloudinaryConfig();
 
   app.use(passport.initialize());

@@ -14,6 +14,7 @@ import {
 import { RiUploadCloud2Line } from "react-icons/ri";
 import { isValidEmail, isValidPassword } from "../../utils/validators";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../utils/getServerUrl.js";
 
 function SignUp() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -62,7 +63,7 @@ function SignUp() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/users/image-upload",
+        baseURL + "/api/users/image-upload",
         requestOptions
       );
       const result = await response.json();
@@ -102,7 +103,7 @@ function SignUp() {
       };
       try {
         const response = await fetch(
-          "http://localhost:5000/api/users/signup",
+          "https://baseURL +/api/users/signup",
           requestOptions
         );
         const results = await response.json();

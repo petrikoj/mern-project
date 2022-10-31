@@ -17,6 +17,7 @@ import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import getToken from "../../utils/getToken";
 import { useNavigate } from "react-router-dom";
+import { baseURL } from "../../utils/getServerUrl.js";
 
 function PostPlaylist() {
   const { userProfile } = useContext(AuthContext);
@@ -70,7 +71,7 @@ function PostPlaylist() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/playlists/image-upload",
+        baseURL + "/api/playlists/image-upload",
         requestOptions
       );
       const result = await response.json();
@@ -124,7 +125,7 @@ function PostPlaylist() {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/playlists/create",
+        baseURL + "/api/playlists/create",
         requestOptions
       );
       const results = await response.json();
@@ -161,7 +162,7 @@ function PostPlaylist() {
     console.log("requestOptions", requestOptions);
     try {
       const response = await fetch(
-        "http://localhost:5000/api/playlists/create",
+        "https://baseURL +/api/playlists/create",
         requestOptions
       );
       const result = await response.json();
