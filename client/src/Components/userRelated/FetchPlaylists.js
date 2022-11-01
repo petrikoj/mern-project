@@ -17,6 +17,7 @@ const useFetchPlaylists = () => {
 const useFetchPlaylistById = (_id) => {
   const [playlist, setPlaylist] = useState({});
   const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,6 +27,7 @@ const useFetchPlaylistById = (_id) => {
       const result = await response.json();
       setPlaylist(result);
       setComments(result.comments);
+      setLikes(result.liked_by);
       setLoading(false);
     } catch (error) {
       setError(error);
@@ -44,6 +46,8 @@ const useFetchPlaylistById = (_id) => {
     setPlaylist,
     comments,
     setComments,
+    likes,
+    setLikes,
     error,
     loading,
     getPlaylist,
