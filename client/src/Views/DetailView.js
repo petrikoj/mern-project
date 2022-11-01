@@ -43,8 +43,15 @@ import { PlaylistContext } from "../context/PlaylistContext.js"; */
 function DetailView() {
   const { userProfile, user } = useContext(AuthContext);
   const { _id } = useParams();
-  const { playlist, setPlaylist, comments, setComments, error, loading } =
-    useFetchPlaylistById(_id);
+  const {
+    playlist,
+    setPlaylist,
+    comments,
+    setComments,
+    getPlaylist,
+    error,
+    loading,
+  } = useFetchPlaylistById(_id);
   //const myCommentSection = useRef(null);
 
   const toast = useToast();
@@ -97,8 +104,9 @@ function DetailView() {
       );
       const result = await response.json();
       console.log("Fetch result", result);
-      const myNewComment = result.comments[result.comments.length - 1];
-      setComments([...comments, myNewComment]);
+      const commentsUpdated = result.comments;
+      setComments(commentsUpdated);
+      getPlaylist(_id);
       setNewComment("");
     } catch (error) {
       console.log("Error in POST a comment func", error);
@@ -133,8 +141,9 @@ function DetailView() {
         const result = await response.json();
         console.log(result);
         //onClose();
-        const newComments = result.comments;
-        setComments(newComments);
+        const commentsUpdated = result.comments;
+        setComments(commentsUpdated);
+        getPlaylist(_id);
         toast({
           title: `${result.message}`,
           status: "success",
@@ -163,7 +172,10 @@ function DetailView() {
       return { ...comments, newComment };
     });
   }; */
-
+  /* useEffect(() => {
+    console.log("useEffect in DetailView ran");
+  }, [comments]);
+ */
   return (
     <Center m="2" w="auto" h="auto">
       <VStack>
