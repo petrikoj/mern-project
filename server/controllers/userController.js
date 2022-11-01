@@ -210,6 +210,7 @@ const likePlaylist = async (request, response) => {
         { $push: { liked: playlist_id } },
         { new: true }
       );
+      response.status(200).json({ message: "Added to Favourites" });
     } catch (error) {
       response.status(409).json({ message: "Couldn't save" });
       console.log("User.findOneAndUpdate in likePlaylist:", error);
@@ -224,7 +225,6 @@ const likePlaylist = async (request, response) => {
       response.status(409).json({ message: "Playlist couldn't be liked" });
       console.log("Playlist.findOneAndUpdate in likePlaylist:", error);
     }
-    response.status(200).json({ message: "Added to Favourites" });
   } else {
     response.status(400).json({ message: "Already added" });
   }
@@ -251,6 +251,7 @@ const removeLikePlaylist = async (request, response) => {
         { $pull: { liked: playlist_id } },
         { new: true }
       );
+      response.status(200).json({ message: "Removed from Favorites" });
     } catch (error) {
       response.status(409).json({ message: "Error removing this item" });
       console.log("Error in removeLikePlaylist:", error);
@@ -265,7 +266,6 @@ const removeLikePlaylist = async (request, response) => {
       response.status(409).json({ message: "Error" });
       console.log("Error while unliking the playlist:", error);
     }
-    response.status(200).json({ message: "Removed from Favorites" });
   } else {
     response
       .status(400)
@@ -274,8 +274,6 @@ const removeLikePlaylist = async (request, response) => {
 };
 
 // Like And Unlike
-
-// PUT Like a Playlist
 
 const likeOrUnlikePlaylist = async (request, response) => {
   const doWeHaveALike = await Playlist.findOne({

@@ -48,6 +48,8 @@ function DetailView() {
     setPlaylist,
     comments,
     setComments,
+    likes,
+    setLikes,
     getPlaylist,
     error,
     loading,
@@ -210,7 +212,7 @@ function DetailView() {
                   playlist_id={playlist._id}
                   user_id={userProfile._id}
                 /> */}
-                {playlist.liked_by?.includes(userProfile._id) ? (
+                {userProfile.liked?.includes(playlist._id) ? (
                   <UnlikeButton
                     playlist_id={playlist._id}
                     user_id={userProfile._id}
