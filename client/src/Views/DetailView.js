@@ -105,10 +105,9 @@ function DetailView() {
         requestOptions
       );
       const result = await response.json();
-      console.log("Fetch result", result);
-      const commentsUpdated = result.comments;
-      setComments(commentsUpdated);
-      getPlaylist(_id);
+      console.log("PUT result", result);
+      const newPlaylist = result.playlistUpdated;
+      setPlaylist(newPlaylist);
       setNewComment("");
     } catch (error) {
       console.log("Error in POST a comment func", error);
@@ -141,11 +140,10 @@ function DetailView() {
           requestOptions
         );
         const result = await response.json();
-        console.log(result);
+        console.log("PUT result", result);
         //onClose();
-        const commentsUpdated = result.comments;
-        setComments(commentsUpdated);
-        getPlaylist(_id);
+        const newPlaylist = result.updatedPlaylist;
+        setPlaylist(newPlaylist);
         toast({
           title: `${result.message}`,
           status: "success",
@@ -169,15 +167,6 @@ function DetailView() {
     });
   }; */
 
-  /*  const updateComments = () => {
-    setComments((comments) => {
-      return { ...comments, newComment };
-    });
-  }; */
-  /* useEffect(() => {
-    console.log("useEffect in DetailView ran");
-  }, [comments]);
- */
   return (
     <Center m="2" w="auto" h="auto">
       <VStack>

@@ -5,12 +5,14 @@ import {
   Box,
   Button,
   Center,
+  Divider,
   Heading,
   Highlight,
   HStack,
   Image,
   SimpleGrid,
   Skeleton,
+  Spacer,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -50,7 +52,7 @@ function PlaylistView() {
                     borderRadius="md"
                     borderColor="yellow.100"
                   >
-                    <HStack>
+                    <HStack borderBottom="1px" p="1" mb="1.5">
                       <Avatar
                         size={["xs", "md"]}
                         src={list.creator.avatar}
@@ -84,6 +86,7 @@ function PlaylistView() {
                         </Text>
                       )}
                     </HStack>
+
                     <Link to={`/playlists/${list._id}`}>
                       <Center>
                         <VStack>
@@ -105,7 +108,6 @@ function PlaylistView() {
                       <Badge>{list.songs.length} songs</Badge>
                       <Badge>{list.mood}</Badge>
                     </HStack>
-
                     {/*  <LikeAndUnlikeButton
                       playlist_id={list._id}
                       user_id={userProfile._id}

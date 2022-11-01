@@ -165,8 +165,9 @@ const postNewComment = async (request, response) => {
         },
         { new: true }
       ).exec();
-      const comments = myPlaylist.comments;
-      response.status(200).json({ message: "Comment posted", comments });
+      response
+        .status(200)
+        .json({ message: "Comment posted", playlistUpdated: myPlaylist });
     } catch (error) {
       response
         .status(409)
@@ -192,7 +193,7 @@ const postNewComment = async (request, response) => {
 
 const removeComment = async (request, response) => {
   try {
-    await Playlist.findOneAndUpdate(
+    const myPlaylist = await Playlist.findOneAndUpdate(
       { _id: request.body.playlistId },
       {
         $pull: {
@@ -201,7 +202,9 @@ const removeComment = async (request, response) => {
       },
       { new: true }
     ).exec();
-    response.status(200).json({ message: "Comment removed" });
+    response
+      .status(200)
+      .json({ message: "Comment removed", updatedPlaylist: myPlaylist });
   } catch (error) {
     console.log(error);
     response.status(400).json({ message: "Could't remove comment" });
