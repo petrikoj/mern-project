@@ -54,7 +54,14 @@ function DetailView() {
     error,
     loading,
   } = useFetchPlaylistById(_id);
-  //const myCommentSection = useRef(null);
+
+  const myCommentSection = useRef(null);
+  const scrollToComments = () => {
+    window.scrollTo({
+      top: myCommentSection.current.offsetTop,
+      behavior: "smooth",
+    });
+  };
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -160,13 +167,6 @@ function DetailView() {
     }
   };
 
-  /* const scrollToComments = () => {
-    window.scrollTo({
-      top: myCommentSection.current.offsetTop,
-      behavior: "smooth",
-    });
-  }; */
-
   return (
     <Center m="2" w="auto" h="auto">
       <VStack>
@@ -191,7 +191,7 @@ function DetailView() {
               {playlist.creator?._id === userProfile._id && (
                 <IconButton icon={<EditIcon />} />
               )}
-              <Button leftIcon={<ChatIcon />}>
+              <Button leftIcon={<ChatIcon />} onClick={scrollToComments}>
                 <Text fontSize="md" fontWeight="semibold">
                   {playlist.comments?.length}
                 </Text>
@@ -233,7 +233,7 @@ function DetailView() {
                 );
               })}
             </Container>
-            <Divider borderColor="blackAlpha.900" />
+            <Divider borderColor="blackAlpha.900" ref={myCommentSection} />
             {/* <CommentSection
               playlist={playlist}
               comments={comments}
@@ -350,7 +350,7 @@ function DetailView() {
                         placeholder={"Write a comment ..."}
                         focusBorderColor="blackAlpha.900"
                         variant="filled"
-                        bgColor="gray.50"
+                        bgColor="whiteAlpha.900"
                         borderRadius="full"
                         type="text"
                         name="text"
