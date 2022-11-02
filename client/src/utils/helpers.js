@@ -7,9 +7,9 @@ const ScrollToTopButton = () => {
 
   const toggleVisible = () => {
     const scrolled = document.documentElement.scrollTop;
-    if (scrolled > 200) {
+    if (scrolled > 1000) {
       setVisible(true);
-    } else if (scrolled <= 200) {
+    } else if (scrolled <= 1000) {
       setVisible(false);
     }
   };
@@ -38,7 +38,7 @@ const ScrollToTopButton = () => {
       zIndex="1"
       cursor="pointer"
       color="blackAlpha.900"
-      bgColor="red.200"
+      bgColor="gray.100"
       opacity="0.65"
     />
   );
