@@ -13,6 +13,7 @@ import PostPlaylistView from "./views/PostPlaylistView.js";
 import PlaylistView from "./views/PlaylistView.js";
 import DetailView from "./views/DetailView.js";
 import NoMatchView from "./views/NoMatchView.js";
+import { ScrollToTopButton } from "./utils/helpers.js";
 
 function App() {
   const { user } = useContext(AuthContext);
@@ -44,6 +45,7 @@ function App() {
         />
         <Route path="*" element={<NoMatchView />} />
       </Routes>
+      <ScrollToTopButton />
     </ChakraProvider>
   );
 }
