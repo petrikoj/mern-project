@@ -5,6 +5,7 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  InputLeftElement,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -92,10 +93,11 @@ function Login() {
   return (
     <VStack>
       <InputGroup>
-        <InputLeftAddon>
+        <InputLeftElement>
           <Icon as={FiMail} />
-        </InputLeftAddon>
+        </InputLeftElement>
         <Input
+          variant="custom"
           type="text"
           name="email"
           id="email"
@@ -105,10 +107,11 @@ function Login() {
         />
       </InputGroup>
       <InputGroup>
-        <InputLeftAddon>
+        <InputLeftElement>
           <Icon as={MdOutlinePassword} />
-        </InputLeftAddon>
+        </InputLeftElement>
         <Input
+          variant="custom"
           type="password"
           name="password"
           id="password"

@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import {
+  Avatar,
   Button,
   Center,
   Container,
+  Divider,
   FormControl,
   FormLabel,
   IconButton,
@@ -103,7 +105,7 @@ function SignUp() {
       };
       try {
         const response = await fetch(
-          "https://baseURL +/api/users/signup",
+          baseURL + "/api/users/signup",
           requestOptions
         );
         const results = await response.json();
@@ -129,10 +131,11 @@ function SignUp() {
   }, [credentialsError, emailError, passwordError]);
 
   return (
-    <Container mb="3">
-      <FormControl mb="2">
+    <Container>
+      <FormControl mb="4">
         <FormLabel>Username</FormLabel>
         <Input
+          variant="custom"
           id="username"
           type="text"
           //ref="username"
@@ -142,10 +145,10 @@ function SignUp() {
           onChange={handleChangeHandler}
         />
       </FormControl>
-
-      <FormControl mb="2">
+      <FormControl mb="4">
         <FormLabel>E-Mail</FormLabel>
         <Input
+          variant="custom"
           type="text"
           name="email"
           id="email"
@@ -155,10 +158,10 @@ function SignUp() {
           onChange={handleChangeHandler}
         />
       </FormControl>
-
-      <FormControl mb="2">
+      <FormControl mb="4">
         <FormLabel>Password</FormLabel>
         <Input
+          variant="custom"
           type="password"
           name="password"
           id="password"
@@ -168,20 +171,32 @@ function SignUp() {
           onChange={handleChangeHandler}
         />
       </FormControl>
-
-      <FormControl mb="2">
+      <FormControl mb="8" display="flex" flexDir="column">
         <FormLabel>Profile Picture</FormLabel>
-        <Input type="file" name="image" onChange={attachFileHandler} p="1" />
+        <Input
+          variant="unstyled"
+          type="file"
+          accept=".jpg, .jpeg, .png"
+          name="image"
+          onChange={attachFileHandler}
+          p="2"
+          mb="2"
+        />
         {!newUser.avatar && (
-          <IconButton
-            rightIcon={<RiUploadCloud2Line />}
-            p="2"
-            onClick={submitForm}
-          >
-            <Text>Upload img</Text>
-          </IconButton>
+          <Center>
+            <IconButton
+              sx={{ bgColor: "green.200" }}
+              w={["80", "40"]}
+              leftIcon={<RiUploadCloud2Line size="1.2rem" />}
+              p="2"
+              onClick={submitForm}
+            >
+              <Text>Upload img</Text>
+            </IconButton>
+          </Center>
         )}
       </FormControl>
+
       {newUser.avatar && (
         <Center>
           <Image
@@ -195,8 +210,9 @@ function SignUp() {
           />
         </Center>
       )}
+
       <Center>
-        <Button w={["80", "24"]} mt="4" mb="8" onClick={registerNewUser}>
+        <Button w={["80", "40"]} onClick={registerNewUser}>
           Register
         </Button>
       </Center>

@@ -64,6 +64,7 @@ function DetailView() {
   };
 
   const toast = useToast();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 

@@ -60,22 +60,29 @@ function Navbar() {
               icon={<HamburgerIcon />}
               variant="ghost"
               fontSize={["lg", "x-large", "2xl"]}
+              sx={{ boxShadow: "0" }}
+              _hover={{ bgColor: "purple.200" }}
+              _active={{ bgColor: "purple.200" }}
             />
-            <MenuList>
+            <MenuList
+              boxShadow="5px 5px black"
+              borderRadius="base"
+              border="2px solid"
+              borderColor="blackAlpha.900"
+            >
               <NavLink to={`/profile/${userProfile._id}`}>
-                <MenuItem>
+                <MenuItem _hover={{ bgColor: "purple.200" }}>
                   <Icon as={BiUser} mr="2" />
                   Profile
                 </MenuItem>
               </NavLink>
               <NavLink to={"/create-playlist"}>
-                <MenuItem>
+                <MenuItem _hover={{ bgColor: "purple.200" }}>
                   <Icon as={MdOutlinePlaylistAdd} mr="2" />
                   Create Playlist
                 </MenuItem>
               </NavLink>
-              {/* <MenuItem>Something</MenuItem> */}
-              <MenuItem onClick={logoutUser}>
+              <MenuItem _hover={{ bgColor: "purple.200" }} onClick={logoutUser}>
                 <Icon as={MdLogout} mr="2" />
                 Logout
               </MenuItem>

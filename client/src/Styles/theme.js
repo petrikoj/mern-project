@@ -1,4 +1,7 @@
 import { extendTheme } from "@chakra-ui/react";
+import Button from "./Button";
+import Heading from "./Heading";
+import { inputTheme } from "./Input";
 
 const theme = extendTheme({
   styles: {
@@ -14,11 +17,11 @@ const theme = extendTheme({
         body: `"Montserrat", sans-serif`,
       },
     },
-    components: {
-      Button: {
-        baseStyle: { bg: "red.100", fontWeight: "bold", color: "red" },
-      },
-    },
+  },
+  components: {
+    Button,
+    Input: inputTheme,
+    Heading,
   },
 });
 
