@@ -48,7 +48,8 @@ function Navbar() {
             src={userProfile.avatar}
             boxSize={["10", "14"]}
             borderRadius="full"
-            border="1px"
+            border="2px solid"
+            borderColor="blackAlpha.900"
           />
           <NavLink to={"/"}>
             <Heading>playlist.</Heading>
