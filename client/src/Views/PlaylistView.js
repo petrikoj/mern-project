@@ -6,6 +6,7 @@ import {
   Button,
   Center,
   Divider,
+  GridItem,
   Heading,
   Highlight,
   HStack,
@@ -36,13 +37,13 @@ function PlaylistView() {
         {loading && <LoadingSpinner />}
         {error && <p>error</p>}
         <Heading>All</Heading>
-        <SimpleGrid columns={[1, 2, 4]} spacing={["5", "10", "14"]}>
+        <SimpleGrid spacingY="8">
           {myPlaylists &&
             myPlaylists.map((list) => {
               return (
                 <Box
                   key={list._id}
-                  w="80"
+                  w={["80", "container.sm"]}
                   border="2px solid"
                   borderRadius="base"
                   borderColor="blackAlpha.900"
@@ -92,19 +93,16 @@ function PlaylistView() {
                   <Link to={`/playlists/${list._id}`}>
                     <Center>
                       <Image
-                        boxSize="80"
-                        /* width={["36", "44", "52"]}
-                          height={["36", "44", "52"]} */
+                        boxSize={["80", "container.sm"]}
                         src={list.img_url}
                         fit="cover"
-                        /* borderRadius="base" */
                       />
                     </Center>
                   </Link>
                   <VStack
                     borderTop="2px solid"
                     borderColor="blackAlpha.900"
-                    bgColor="gray.50"
+                    bgColor="whiteAlpha.900"
                   >
                     <Text as="b" align="center">
                       {list.title}
