@@ -168,6 +168,40 @@ function DetailView() {
     }
   };
 
+  // DELETE playlist
+
+  const deletePlaylist = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${token}`);
+      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+      const urlencoded = new URLSearchParams();
+      urlencoded.append("_id", _id);
+      urlencoded.append("creator", userProfile._id);
+
+      const requestOptions = {
+        method: "DELETE",
+        headers: myHeaders,
+        body: urlencoded,
+        redirect: "follow",
+      };
+      try {
+        const response = await fetch(
+          baseURL + `/api/playlists/${_id}/delete-playlist`,
+          requestOptions
+        );
+        const result = await response.json();
+        console.log("result:", result);
+      } catch (error) {
+        console.log("error:", error);
+      }
+    } else {
+      alert("No token for this user");
+    }
+  };
+
   return (
     <Center m="2" w="auto" h="auto">
       <VStack>
@@ -190,7 +224,10 @@ function DetailView() {
 
             <ButtonGroup spacing={["4", "8"]} variant="ghost" size="lg">
               {playlist.creator?._id === userProfile._id && (
-                <IconButton icon={<EditIcon />} />
+                <ButtonGroup>
+                  <IconButton icon={<EditIcon />} />
+                  <IconButton icon={<DeleteIcon />} onClick={deletePlaylist} />
+                </ButtonGroup>
               )}
               <Button leftIcon={<ChatIcon />} onClick={scrollToComments}>
                 <Text fontSize="md" fontWeight="semibold">

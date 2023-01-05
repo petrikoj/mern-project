@@ -219,7 +219,7 @@ const deletePlaylist = async (request, response) => {
       _id: request.body._id,
     }).exec();
     if (!myPlaylist) {
-      return response.status(404).json({ message: "Paylist ID not found" });
+      return response.status(404).json({ message: "Playlist ID not found" });
     }
     const myUser = await User.updateOne(
       { _id: request.body.creator },
