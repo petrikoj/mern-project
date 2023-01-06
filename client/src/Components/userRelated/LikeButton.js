@@ -1,5 +1,5 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Button, Icon, useToast } from "@chakra-ui/react";
+import { AddIcon, CheckIcon } from "@chakra-ui/icons";
+import { Button, Icon, IconButton, useToast } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
 import { BsBookmarkHeart } from "react-icons/bs";
 import { baseURL } from "../../utils/getServerUrl.js";
@@ -50,12 +50,12 @@ const LikeButton = ({ user_id, playlist_id }) => {
   };
 
   return (
-    <Button
-      leftIcon={<BsBookmarkHeart />}
-      variant="unstyled"
-      size="lg"
+    <IconButton
+      icon={<AddIcon />}
+      variant="outlined"
+      border="2px solid black"
+      bgColor="purple.200"
       onClick={likePlaylist}
-      mr="-3.5"
     />
   );
 };
