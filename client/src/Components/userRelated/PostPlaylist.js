@@ -18,9 +18,11 @@ import { AuthContext } from "../../context/AuthContext";
 import getToken from "../../utils/getToken";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../utils/getServerUrl.js";
+import { PlaylistContext } from "../../context/PlaylistContext";
 
 function PostPlaylist() {
   const { userProfile } = useContext(AuthContext);
+  const { getAllPlaylists } = useContext(PlaylistContext);
   const toast = useToast();
   const redirect = useNavigate();
 
@@ -107,34 +109,6 @@ function PostPlaylist() {
     setSongArray(mySongs);
   };
 
-  // Upload (OLD!)
-
-  /*  const submitPlaylist = async () => {
-    let urlencoded = new URLSearchParams();
-    urlencoded.append("title", newPlaylist.title);
-    urlencoded.append("description", newPlaylist.description);
-    // urlencoded.append("author", newPlaylist.author);
-    urlencoded.append("mood", newPlaylist.mood);
-    urlencoded.append("songs", newPlaylist.songs);
-    urlencoded.append("image_url", newPlaylist.img_url);
-
-    const requestOptions = {
-      method: "POST",
-      body: urlencoded,
-    };
-
-    try {
-      const response = await fetch(
-        baseURL + "/api/playlists/create",
-        requestOptions
-      );
-      const results = await response.json();
-      console.log("Result:", results);
-    } catch (error) {
-      console.log("Fetch error", error);
-    }
-  }; */
-
   // Send input data with JSON stringify
 
   const uploadPlaylist = async () => {
@@ -162,7 +136,7 @@ function PostPlaylist() {
     console.log("requestOptions", requestOptions);
     try {
       const response = await fetch(
-        "https://baseURL +/api/playlists/create",
+        baseURL + "/api/playlists/create",
         requestOptions
       );
       const result = await response.json();
@@ -174,7 +148,8 @@ function PostPlaylist() {
         duration: 1500,
         isClosable: true,
       });
-      redirect("/playlists/all");
+      getAllPlaylists();
+      redirect("/playlists/all", { replace: true });
     } catch (error) {
       console.log("error", error);
     }
@@ -210,15 +185,6 @@ function PostPlaylist() {
             value={newPlaylist.description ? newPlaylist.description : ""}
             onChange={handleChangeHandler}
           />
-          {/* <FormLabel>Author</FormLabel>
-        <Input
-          name="author"
-          type="text"
-          // value={newPlaylist.author ? newPlaylist.author : ""}
-          value={userProfile.username}
-          isReadOnly={true}
-          onChange={handleChangeHandler}
-        /> */}
           <FormLabel>Mood</FormLabel>
           <Select
             name="mood"
@@ -255,14 +221,6 @@ function PostPlaylist() {
                       value={single.song_title ? single.song_title : ""}
                       onChange={(e) => handleSongInputHandler(e, i)}
                     />
-                    {/*  <Input
-                    name="album"
-                    type="text"
-                    placeholder="Album"
-                    value={single.album ? single.album : ""}
-                    onChange={(e) => handleSongInputHandler(e, i)}
-                  /> */}
-                    {/* <Input placeholder="Release Year" /> */}
                   </InputGroup>
                 </Stack>
               </Box>

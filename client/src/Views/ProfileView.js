@@ -106,8 +106,7 @@ function ProfileView() {
                           </Box>
                           <IconButton
                             icon={<DeleteIcon />}
-                            variant="unstyled"
-                            size="sm"
+                            sx={{ bgColor: "red.300" }}
                             onClick={deletePlaylist}
                             value={list._id}
                           />

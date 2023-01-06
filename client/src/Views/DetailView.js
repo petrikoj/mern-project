@@ -42,6 +42,8 @@ import { PlaylistContext } from "../context/PlaylistContext.js"; */
 
 function DetailView() {
   const { userProfile, user } = useContext(AuthContext);
+  const { deletePlaylist } = useContext(PlaylistContext);
+
   const { _id } = useParams();
   const {
     playlist,
@@ -122,7 +124,7 @@ function DetailView() {
     }
   };
 
-  // PUT (remove) a Comment
+  // PUT (remove) a comment
 
   const removeComment = async ({ currentTarget }) => {
     const token = localStorage.getItem("token");
@@ -168,7 +170,7 @@ function DetailView() {
     }
   };
 
-  // DELETE playlist
+  /* // DELETE playlist
 
   const deletePlaylist = async () => {
     const token = localStorage.getItem("token");
@@ -194,13 +196,14 @@ function DetailView() {
         );
         const result = await response.json();
         console.log("result:", result);
+        redirect(-1);
       } catch (error) {
-        console.log("error:", error);
+        console.log("Error deleting playlist:", error);
       }
     } else {
       alert("No token for this user");
     }
-  };
+  }; */
 
   return (
     <Center m="2" w="auto" h="auto">
@@ -213,7 +216,7 @@ function DetailView() {
             <Image
               src={playlist.img_url}
               alt="playlist picture"
-              boxSize={["fit-content", "lg"]}
+              boxSize={["object-fit", "container.sm"]}
               borderRadius="lg"
             />
             <Divider borderColor="blackAlpha.900" />
@@ -222,18 +225,29 @@ function DetailView() {
             <Text>{playlist.description}</Text>
             <Divider borderColor="blackAlpha.900" />
 
-            <ButtonGroup spacing={["4", "8"]} variant="ghost" size="lg">
+            <ButtonGroup spacing={["4", "8"]}>
               {playlist.creator?._id === userProfile._id && (
-                <ButtonGroup>
-                  <IconButton icon={<EditIcon />} />
-                  <IconButton icon={<DeleteIcon />} onClick={deletePlaylist} />
-                </ButtonGroup>
+                <>
+                  {/*  <IconButton
+                    icon={<EditIcon />}
+                    sx={{ bgColor: "blue.200" }}
+                  /> */}
+                  <IconButton
+                    icon={<DeleteIcon />}
+                    sx={{ bgColor: "red.300" }}
+                    onClick={deletePlaylist}
+                    value={playlist._id}
+                  />
+                </>
               )}
-              <Button leftIcon={<ChatIcon />} onClick={scrollToComments}>
-                <Text fontSize="md" fontWeight="semibold">
-                  {playlist.comments?.length}
-                </Text>
-              </Button>
+              <IconButton
+                p="2"
+                leftIcon={<ChatIcon />}
+                sx={{ bgColor: "whiteAlpha.900" }}
+                onClick={scrollToComments}
+              >
+                <Text>{playlist.comments?.length}</Text>
+              </IconButton>
               <HStack>
                 {/*  <LikeAndUnlikeButton
                   playlist_id={playlist._id}
@@ -243,16 +257,21 @@ function DetailView() {
                   <UnlikeButton
                     playlist_id={playlist._id}
                     user_id={userProfile._id}
-                  />
+                  >
+                    <Text fontSize="md" fontWeight="semibold">
+                      {playlist.liked_by?.length}
+                    </Text>
+                  </UnlikeButton>
                 ) : (
                   <LikeButton
                     playlist_id={playlist._id}
                     user_id={userProfile._id}
-                  />
+                  >
+                    <Text fontSize="md" fontWeight="semibold">
+                      {playlist.liked_by?.length}
+                    </Text>
+                  </LikeButton>
                 )}
-                <Text fontSize="md" fontWeight="semibold">
-                  {playlist.liked_by?.length}
-                </Text>
               </HStack>
             </ButtonGroup>
 
@@ -285,26 +304,25 @@ function DetailView() {
                 return (
                   <Flex
                     key={comment._id}
-                    boxShadow="sm"
+                    boxShadow="2px 2px black"
                     bgColor={
                       comment.author === userProfile._id
-                        ? "green.50"
+                        ? "blue.200"
                         : "gray.50"
                     }
-                    borderRadius="xl"
-                    border="1px"
-                    borderColor="gray.100"
+                    borderRadius="base"
+                    border="2px solid black"
                     p="3"
                     w={["xs", "md", "lg"]}
                     h="auto"
                     justify="start"
                   >
-                    <Box>
+                    <Box my="1">
                       <HStack pb="1.5" px="1">
                         <Avatar
                           size={["sm", "md"]}
                           src={comment.userphoto}
-                          border="1px"
+                          border="2px solid black"
                         />
                         <Stack direction="row" align="center">
                           <Text fontWeight="semibold">
@@ -321,7 +339,12 @@ function DetailView() {
                             <IconButton
                               icon={<DeleteIcon />}
                               variant="unstyled"
-                              size="sm"
+                              sx={{
+                                bgColor: "red.300",
+                                boxShadow: "1px 1px black",
+                              }}
+                              border="1.5px solid black"
+                              size="xs"
                               onClick={removeComment}
                               value={comment._id}
                             />
@@ -387,9 +410,10 @@ function DetailView() {
                       <Input
                         placeholder={"Write a comment ..."}
                         focusBorderColor="blackAlpha.900"
-                        variant="filled"
+                        variant="outlined"
                         bgColor="whiteAlpha.900"
-                        borderRadius="full"
+                        borderRadius="base"
+                        border="2px solid"
                         type="text"
                         name="text"
                         id="text"
@@ -398,7 +422,11 @@ function DetailView() {
                         onChange={handleChangeHandler}
                       />
                       <InputRightElement>
-                        <Button variant={"unstyled"} onClick={postComment}>
+                        <Button
+                          variant="unstyled"
+                          sx={{ boxShadow: "none" }}
+                          onClick={postComment}
+                        >
                           <Icon as={FiSend} />
                         </Button>
                       </InputRightElement>

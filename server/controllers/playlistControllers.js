@@ -215,7 +215,45 @@ const removeComment = async (request, response) => {
 
 const deletePlaylist = async (request, response) => {
   try {
-    const myPlaylist = await Playlist.findOneAndDelete({
+    const myPlaylist = await Playlist.findOneAndDelete(
+      {
+        _id: request.body._id,
+      },
+      { new: true }
+    ).exec();
+    if (!myPlaylist) {
+      return response.status(404).json({ message: "Playlist ID not found" });
+    }
+    const myUser = await User.updateOne(
+      { _id: request.body.creator },
+      {
+        $pull: { playlists: myPlaylist._id },
+      }
+    );
+    if (!myUser) {
+      return response.status(206).json({
+        message: "Error updating user profile after deleting playlist",
+      });
+    }
+    myPlaylist.liked_by.forEach(async (event) => {
+      await User.updateOne(
+        { _id: event },
+        {
+          $pull: { liked: myPlaylist._id },
+        }
+      );
+    });
+    return response.status(200).json({ message: "Playlist deleted" });
+  } catch (error) {
+    response.status(500).json({ error: error.message });
+  }
+};
+
+//
+
+const deletePlaylistWithPut = async (request, response) => {
+  try {
+    const myPlaylist = await Playlist.findOneAndD({
       _id: request.body._id,
     }).exec();
     if (!myPlaylist) {

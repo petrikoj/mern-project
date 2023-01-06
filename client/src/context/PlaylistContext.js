@@ -1,18 +1,19 @@
 import { useToast } from "@chakra-ui/react";
 import React, { createContext, useEffect, useState } from "react";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { baseURL } from "../utils/getServerUrl";
 import { AuthContext } from "./AuthContext";
 
 export const PlaylistContext = createContext();
 
 export const PlaylistContextProvider = (props) => {
+  const { userProfile, setUserProfile } = useContext(AuthContext);
   const [myPlaylists, setMyPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
-  const { userProfile } = useContext(AuthContext);
-
+  const redirect = useNavigate();
   const toast = useToast();
 
   // GET all Playlist
@@ -75,18 +76,21 @@ export const PlaylistContextProvider = (props) => {
 
       try {
         const response = await fetch(
-          "https://baseURL +/api/playlists/:id/delete-playlist",
+          baseURL + "/api/playlists/:id/delete-playlist",
           requestOptions
         );
         const result = await response.json();
         console.log(result);
-        setMyPlaylists(myPlaylists);
         toast({
           title: `${result.message}`,
           status: "success",
           duration: 1500,
           isClosable: true,
         });
+        //setMyPlaylists(
+        //myPlaylists.filter((list) => list._id !== currentTarget.value)
+        // );
+        //setUserProfile(userProfile);
       } catch (error) {
         console.log(error);
       }
