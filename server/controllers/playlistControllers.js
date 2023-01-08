@@ -72,19 +72,24 @@ const getPlaylistById = async (request, response) => {
 // POST new playlist
 
 const postNewPlaylist = async (request, response) => {
-  const newPlaylist = new Playlist({
-    title: request.body.title,
-    creator: request.body.creator,
-    description: request.body.description,
-    mood: request.body.mood,
-    img_url: request.body.img_url,
-    songs: request.body.songs,
-    date: request.body.date,
-    likes: request.body.likes,
-  });
   try {
-    const savedPlaylist = await newPlaylist.save();
-    response.status(200).json({ message: "Playlist succesfully created" });
+    const newPlaylist = await Playlist.create({
+      title: request.body.title,
+      creator: request.body.creator,
+      //creatorName: request.body.creatorName,
+      //creatorAvatar: request.body.creatorAvatar,
+      description: request.body.description,
+      mood: request.body.mood,
+      img_url: request.body.img_url,
+      songs: request.body.songs,
+      date: request.body.date,
+      likes: request.body.likes,
+    });
+    //await newPlaylist.save();
+    return response.status(200).json({
+      message: "Playlist successfully created",
+      newPlaylist: newPlaylist,
+    });
   } catch (error) {
     response.status(409).json({ message: "Failed to upload", error: error });
   }
@@ -202,7 +207,7 @@ const removeComment = async (request, response) => {
       },
       { new: true }
     ).exec();
-    response
+    return response
       .status(200)
       .json({ message: "Comment removed", updatedPlaylist: myPlaylist });
   } catch (error) {

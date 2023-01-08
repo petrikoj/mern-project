@@ -87,12 +87,13 @@ export const PlaylistContextProvider = (props) => {
           duration: 1500,
           isClosable: true,
         });
-        //setMyPlaylists(
-        //myPlaylists.filter((list) => list._id !== currentTarget.value)
-        // );
-        //setUserProfile(userProfile);
+        setMyPlaylists(
+          myPlaylists.filter((list) => list._id !== currentTarget.value)
+        );
+        setUserProfile(userProfile);
       } catch (error) {
         console.log(error);
+        return { error: error };
       }
     } else {
       alert("No token for this user");

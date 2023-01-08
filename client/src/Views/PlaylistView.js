@@ -58,7 +58,7 @@ function PlaylistView() {
                   >
                     <Avatar
                       size={["xs", "md"]}
-                      src={list.creator.avatar}
+                      src={list?.creator.avatar}
                       border="1px"
                     />
                     {user && userProfile._id === list.creator._id ? (

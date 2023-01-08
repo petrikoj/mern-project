@@ -22,7 +22,8 @@ import { PlaylistContext } from "../../context/PlaylistContext";
 
 function PostPlaylist() {
   const { userProfile } = useContext(AuthContext);
-  const { getAllPlaylists } = useContext(PlaylistContext);
+  const { getAllPlaylists, myPlaylists, setMyPlaylists } =
+    useContext(PlaylistContext);
   const toast = useToast();
   const redirect = useNavigate();
 
@@ -30,6 +31,8 @@ function PostPlaylist() {
   const [newPlaylist, setNewPlaylist] = useState({
     title: "",
     creator: "",
+    //creatorName: "",
+    //creatorAvatar: "",
     description: "",
     img_url: "",
     mood: "",
@@ -111,13 +114,16 @@ function PostPlaylist() {
 
   // Send input data with JSON stringify
 
-  const uploadPlaylist = async () => {
+  const uploadPlaylist = async (event) => {
+    event.preventDefault();
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     const myPlaylist = JSON.stringify({
       title: newPlaylist.title,
       creator: userProfile._id,
+      //creatorName: userProfile.username,
+      //creatorAvatar: userProfile.avatar,
       description: newPlaylist.description,
       img_url: newPlaylist.img_url,
       mood: newPlaylist.mood,
@@ -134,6 +140,7 @@ function PostPlaylist() {
       body: myPlaylist,
     };
     console.log("requestOptions", requestOptions);
+
     try {
       const response = await fetch(
         baseURL + "/api/playlists/create",
@@ -148,7 +155,8 @@ function PostPlaylist() {
         duration: 1500,
         isClosable: true,
       });
-      getAllPlaylists();
+      //getAllPlaylists();
+      setMyPlaylists([...myPlaylists, result.newPlaylist]);
       redirect("/playlists/all", { replace: true });
     } catch (error) {
       console.log("error", error);
