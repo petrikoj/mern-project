@@ -73,7 +73,6 @@ function PostPlaylist() {
       method: "POST",
       body: formData,
     };
-
     try {
       const response = await fetch(
         baseURL + "/api/playlists/image-upload",
@@ -82,7 +81,6 @@ function PostPlaylist() {
       const result = await response.json();
       console.log("Result:", result);
       setNewPlaylist({ ...newPlaylist, img_url: result.img_url });
-      console.log("newPlaylist :>> ", newPlaylist);
     } catch (error) {
       console.log("error :>> ", error);
     }
@@ -147,7 +145,6 @@ function PostPlaylist() {
         requestOptions
       );
       const result = await response.json();
-      console.log(result);
       toast({
         title: `${result.message}`,
         status: "info",
@@ -155,11 +152,16 @@ function PostPlaylist() {
         duration: 1500,
         isClosable: true,
       });
-      //getAllPlaylists();
       setMyPlaylists([...myPlaylists, result.newPlaylist]);
       redirect("/playlists/all", { replace: true });
     } catch (error) {
-      console.log("error", error);
+      toast({
+        title: `${error.message}`,
+        status: "error",
+        variant: "subtle",
+        duration: 1500,
+        isClosable: true,
+      });
     }
   };
 

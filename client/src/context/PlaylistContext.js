@@ -90,7 +90,6 @@ export const PlaylistContextProvider = (props) => {
         setMyPlaylists(
           myPlaylists.filter((list) => list._id !== currentTarget.value)
         );
-        setUserProfile(userProfile);
       } catch (error) {
         console.log(error);
         return { error: error };

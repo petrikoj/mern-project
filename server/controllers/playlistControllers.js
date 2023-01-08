@@ -76,8 +76,6 @@ const postNewPlaylist = async (request, response) => {
     const newPlaylist = await Playlist.create({
       title: request.body.title,
       creator: request.body.creator,
-      //creatorName: request.body.creatorName,
-      //creatorAvatar: request.body.creatorAvatar,
       description: request.body.description,
       mood: request.body.mood,
       img_url: request.body.img_url,
@@ -85,22 +83,32 @@ const postNewPlaylist = async (request, response) => {
       date: request.body.date,
       likes: request.body.likes,
     });
-    //await newPlaylist.save();
-    return response.status(200).json({
-      message: "Playlist successfully created",
-      newPlaylist: newPlaylist,
-    });
-  } catch (error) {
-    response.status(409).json({ message: "Failed to upload", error: error });
-  }
-  try {
-    await User.findOneAndUpdate(
+    if (!newPlaylist) {
+      return response.status(501).json({ error: "Couldn't submit playlist" });
+    }
+    const myUser = await User.findOneAndUpdate(
       { _id: request.body.creator },
       { $push: { playlists: newPlaylist._id } },
       { new: true }
     );
+    if (!myUser) {
+      return response.status(501).json({ error: "User not found" });
+    }
+    const savedPlaylist = await Playlist.findOne({ _id: newPlaylist._id })
+      .populate({
+        path: "creator",
+        select: ["username", "avatar"],
+      })
+      .exec();
+    if (!savedPlaylist) {
+      return response.status(501).json({ error: "Playlist not found" });
+    }
+    return response.status(200).json({
+      message: "Playlist successfully created",
+      newPlaylist: savedPlaylist,
+    });
   } catch (error) {
-    console.log(error);
+    response.status(409).json({ message: "Failed to upload", error: error });
   }
 };
 
