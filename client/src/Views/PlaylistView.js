@@ -52,42 +52,55 @@ function PlaylistView() {
                   <HStack
                     borderBottom="2px"
                     borderColor="blackAlpha.900"
-                    p="1"
-                    /*  mb="1.5" */
+                    py="1"
+                    pl="2.5"
+                    pr="4"
                     bgColor="purple.200"
+                    alignItems="center"
+                    justifyContent="space-between"
                   >
-                    <Avatar
-                      size={["xs", "md"]}
-                      src={list?.creator.avatar}
-                      border="1px"
-                    />
-                    {user && userProfile._id === list.creator._id ? (
-                      <Text
-                        fontSize={["sm", "md"]}
-                        letterSpacing="wide"
-                        fontWeight="medium"
-                      >
-                        <Highlight
-                          query="you"
-                          styles={{
-                            rounded: "full",
-                            px: "1.5",
-                            py: "1.5",
-                            bg: "purple.100",
-                          }}
+                    <HStack>
+                      <Avatar
+                        size={["xs", "md"]}
+                        src={list?.creator.avatar}
+                        border="1px"
+                      />
+                      {user && userProfile._id === list.creator._id ? (
+                        <Text
+                          fontSize={["sm", "md"]}
+                          letterSpacing="wide"
+                          fontWeight="medium"
                         >
-                          You
-                        </Highlight>
-                      </Text>
-                    ) : (
-                      <Text
-                        fontSize={["sm", "md"]}
-                        letterSpacing="wide"
-                        fontWeight="medium"
-                      >
-                        {list.creator.username}
-                      </Text>
-                    )}
+                          <Highlight
+                            query="you"
+                            styles={{
+                              rounded: "md",
+                              px: "1",
+                              py: "1",
+                              bg: "yellow.100",
+                            }}
+                          >
+                            YOU
+                          </Highlight>
+                        </Text>
+                      ) : (
+                        <Text
+                          fontSize={["md", "lg"]}
+                          letterSpacing="wide"
+                          fontWeight="semibold"
+                        >
+                          {list.creator.username}
+                        </Text>
+                      )}
+                    </HStack>
+
+                    <Text
+                      fontSize={["md", "lg"]}
+                      letterSpacing="tight"
+                      fontFamily="mono"
+                    >
+                      {new Date(list.date).toLocaleDateString()}
+                    </Text>
                   </HStack>
 
                   <Link to={`/playlists/${list._id}`}>
@@ -103,16 +116,25 @@ function PlaylistView() {
                     borderTop="2px solid"
                     borderColor="blackAlpha.900"
                     bgColor="whiteAlpha.900"
+                    alignItems="center"
+                    py="2"
                   >
-                    <Text as="b" align="center">
-                      {list.title}
-                    </Text>
-                    <HStack borderTop="1px" w="full">
+                    <Text fontSize={["lg", "xl"]}>{list.title}</Text>
+                    <HStack
+                      borderTop="1px"
+                      w="full"
+                      p="1"
+                      justifyContent="space-evenly"
+                    >
                       <Badge boxShadow="2px 2px black">
                         {list.songs.length} songs
                       </Badge>
                       <Badge boxShadow="2px 2px black">{list.mood}</Badge>
-                      <Button leftIcon={<ChatIcon />} variant="ghost">
+                      <Button
+                        leftIcon={<ChatIcon />}
+                        variant="ghost"
+                        sx={{ boxShadow: "none" }}
+                      >
                         <Text>{list.comments?.length}</Text>
                       </Button>
                       {list.liked_by?.includes(userProfile._id) ? (
