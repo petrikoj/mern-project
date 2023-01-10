@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { baseURL } from "../../utils/getServerUrl";
 import useFetch from "../../hooks/useFetch.js";
 
+// GET all playlists
+
 const useFetchPlaylists = () => {
   const {
     data: playlists,
@@ -54,15 +56,4 @@ const useFetchPlaylistById = (_id) => {
   };
 };
 
-// GET user by ID
-
-const useFetchUser = (_id) => {
-  const {
-    data: myUser,
-    error,
-    loading,
-  } = useFetch(baseURL + `/api/users/profile/${_id}`);
-  return { myUser, error, loading };
-};
-
-export { useFetchPlaylists, useFetchPlaylistById, useFetchUser };
+export { useFetchPlaylists, useFetchPlaylistById };
