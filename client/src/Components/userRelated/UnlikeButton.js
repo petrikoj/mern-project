@@ -1,5 +1,5 @@
-import { CheckIcon, CloseIcon, StarIcon } from "@chakra-ui/icons";
-import { Button, Icon, IconButton, Text, useToast } from "@chakra-ui/react";
+import { CheckIcon } from "@chakra-ui/icons";
+import { IconButton, useToast } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { BsBookmarkHeartFill } from "react-icons/bs";
 import { baseURL } from "../../utils/getServerUrl.js";
@@ -7,7 +7,7 @@ import { AuthContext } from "../../context/AuthContext";
 import { PlaylistContext } from "../../context/PlaylistContext";
 
 const UnlikeButton = ({ user_id, playlist_id }) => {
-  const { getAllPlaylists } = useContext(PlaylistContext);
+  const { userProfile, setUserProfile } = useContext(AuthContext);
   const toast = useToast();
   const unlikePlaylist = async () => {
     const myHeaders = new Headers();
@@ -30,7 +30,8 @@ const UnlikeButton = ({ user_id, playlist_id }) => {
       );
       const result = await response.json();
       console.log(result);
-      getAllPlaylists();
+      const userUpdated = result.userUpdated;
+      setUserProfile(userUpdated);
       toast({
         title: `${result.message}`,
         status: "success",
@@ -52,7 +53,9 @@ const UnlikeButton = ({ user_id, playlist_id }) => {
 
   return (
     <IconButton
-      icon={<BsBookmarkHeartFill />}
+      icon={<CheckIcon />}
+      sx={{ boxShadow: "1px 1px black" }}
+      borderRadius="full"
       variant="outlined"
       border="2px solid black"
       bgColor="green.200"
