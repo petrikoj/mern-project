@@ -8,13 +8,6 @@ import { AuthContext } from "../context/AuthContext.js";
 import { Link } from "react-router-dom";
 
 function LandingView() {
-  // const {
-  //   data: playlists,
-  //   loading,
-  //   error,
-  // } = useFetch(baseURL + "/api/all");
-  // console.log(playlists);
-
   const { user, userProfile } = useContext(AuthContext);
 
   return (
@@ -22,7 +15,7 @@ function LandingView() {
       <VStack>
         <Box mb="6">
           {user ? (
-            <Heading fontFamily="body">Hello {userProfile.username}</Heading>
+            <Heading fontFamily="body">Hello {userProfile?.username}</Heading>
           ) : (
             <Heading fontFamily="body">Hello World</Heading>
           )}

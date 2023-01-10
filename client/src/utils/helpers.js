@@ -29,8 +29,8 @@ const ScrollToTopButton = () => {
       onClick={scrollToTop}
       display={visible ? "inline" : "none"}
       position="fixed"
-      width="14"
-      ml="1"
+      boxSize="12"
+      ml="2"
       variant="solid"
       shadow="base"
       bottom="20"
@@ -38,7 +38,7 @@ const ScrollToTopButton = () => {
       zIndex="1"
       cursor="pointer"
       color="blackAlpha.900"
-      bgColor="gray.100"
+      bgColor="gray.200"
       opacity="0.65"
     />
   );

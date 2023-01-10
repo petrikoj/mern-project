@@ -32,11 +32,11 @@ function PlaylistView() {
   const { myPlaylists, error, loading } = useContext(PlaylistContext);
 
   return (
-    <Center mx={["2", "6", "10"]}>
+    <Center>
+      {error && <p>error</p>}
       <VStack>
-        {loading && <LoadingSpinner />}
-        {error && <p>error</p>}
         <Heading>All</Heading>
+        {loading && <LoadingSpinner />}
         <SimpleGrid spacingY="8">
           {myPlaylists &&
             myPlaylists.map((list) => {
@@ -65,7 +65,7 @@ function PlaylistView() {
                         src={list?.creator.avatar}
                         border="1px"
                       />
-                      {user && userProfile._id === list.creator._id ? (
+                      {user && userProfile?._id === list.creator._id ? (
                         <Text
                           fontSize={["sm", "md"]}
                           letterSpacing="wide"
@@ -124,28 +124,26 @@ function PlaylistView() {
                       borderTop="1px"
                       w="full"
                       p="1"
-                      justifyContent="space-evenly"
+                      justifyContent={["space-between", "space-around"]}
                     >
                       <Badge boxShadow="2px 2px black">
                         {list.songs.length} songs
                       </Badge>
                       <Badge boxShadow="2px 2px black">{list.mood}</Badge>
-                      <Button
-                        leftIcon={<ChatIcon />}
-                        variant="ghost"
-                        sx={{ boxShadow: "none" }}
-                      >
+                      <HStack>
+                        <ChatIcon />
                         <Text>{list.comments?.length}</Text>
-                      </Button>
-                      {list.liked_by?.includes(userProfile._id) ? (
+                      </HStack>
+
+                      {userProfile?.liked?.includes(list._id) ? (
                         <UnlikeButton
                           playlist_id={list._id}
-                          user_id={userProfile._id}
+                          user_id={userProfile?._id}
                         />
                       ) : (
                         <LikeButton
                           playlist_id={list._id}
-                          user_id={userProfile._id}
+                          user_id={userProfile?._id}
                         />
                       )}
                     </HStack>

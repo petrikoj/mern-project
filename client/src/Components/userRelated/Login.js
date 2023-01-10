@@ -67,6 +67,7 @@ function Login() {
         const token = result.token;
         if (token) {
           localStorage.setItem("token", token);
+          checkUserStatus();
           toast({
             title: "Login successful",
             status: "success",
@@ -75,7 +76,6 @@ function Login() {
             isClosable: true,
           });
           redirect(`/`);
-          checkUserStatus();
         }
         console.log("Result:", result);
       } catch (error) {
