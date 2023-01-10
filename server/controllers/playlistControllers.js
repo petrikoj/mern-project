@@ -242,7 +242,7 @@ const deletePlaylist = async (request, response) => {
       {
         $pull: { playlists: myPlaylist._id },
       }
-    );
+    ).exec();
     if (!myUser) {
       return response.status(206).json({
         message: "Error updating user profile after deleting playlist",
@@ -256,7 +256,9 @@ const deletePlaylist = async (request, response) => {
         }
       );
     });
-    return response.status(200).json({ message: "Playlist deleted" });
+    return response
+      .status(200)
+      .json({ message: "Playlist deleted", userUpdated: myUser });
   } catch (error) {
     response.status(500).json({ error: error.message });
   }
