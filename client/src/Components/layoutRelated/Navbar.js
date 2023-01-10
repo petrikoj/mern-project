@@ -41,11 +41,13 @@ function Navbar() {
       zIndex="banner"
       bg="yellow.100"
       boxSize="full"
+      borderBottom="0.1rem solid"
+      borderColor="blackAlpha.900"
     >
       {user ? (
         <Flex justify="space-around" align="center" p="5">
           <Image
-            src={userProfile.avatar}
+            src={userProfile?.avatar}
             boxSize={["10", "14"]}
             borderRadius="full"
             border="2px solid"
@@ -71,7 +73,7 @@ function Navbar() {
               border="2px solid"
               borderColor="blackAlpha.900"
             >
-              <NavLink to={`/profile/${userProfile._id}`}>
+              <NavLink to={`/profile/${userProfile?._id}`}>
                 <MenuItem _hover={{ bgColor: "purple.200" }}>
                   <Icon as={BiUser} mr="2" />
                   Profile
