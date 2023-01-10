@@ -18,7 +18,7 @@ const getAllUsers = async (request, response) => {
     if (allUsers.length === 0) {
       response.status(200).json({ msg: "Nothing found" });
     } else {
-      response.status(200).json(allUsers);
+      return response.status(200).json(allUsers);
     }
   } catch (error) {
     response.status(500).json({
@@ -133,7 +133,7 @@ const login = async (request, response) => {
         console.log("User is logged in");
         const token = issueToken(existingUser._id);
         console.log("Token:", token);
-        response.status(201).json({
+        return response.status(201).json({
           message: "Login successful",
           user: {
             _id: existingUser._id,
@@ -154,7 +154,7 @@ const login = async (request, response) => {
 
 const getUserProfile = async (request, response) => {
   console.log("Request.user from getUserProfile():", request.user);
-  response.status(201).json({
+  return response.status(201).json({
     _id: request.user._id,
     email: request.user.email,
     username: request.user.username,
@@ -165,7 +165,7 @@ const getUserProfile = async (request, response) => {
 };
 
 const getUserById = async (request, response) => {
-  const userId = request.params._id;
+  const userId = request.user._id;
   try {
     const myUser = await User.findOne({ _id: userId })
       .populate({
@@ -177,9 +177,8 @@ const getUserById = async (request, response) => {
         select: ["title", "img_url", "songs", "liked_by"],
       })
       .exec();
-    if (myUser) {
-      response.status(200).json(myUser);
-    }
+    console.log("getUserById", myUser);
+    return response.status(200).json(myUser);
   } catch (error) {
     response.status(400).json({
       message: "Invalid URL",
@@ -200,33 +199,29 @@ const likePlaylist = async (request, response) => {
   const hasMyUserLikedIt = await Playlist.findOne({ _id: playlist_id })
     .where("liked_by")
     .equals(`${myUser._id}`);
-  //.exists(`${myUser._id}`);
   console.log("Have they liked it?", hasMyUserLikedIt);
 
   if (!hasMyUserLikedIt) {
     try {
-      await User.findOneAndUpdate(
+      const userUpdated = await User.findOneAndUpdate(
         { _id: myUser._id },
         { $push: { liked: playlist_id } },
         { new: true }
-      );
-      response.status(200).json({ message: "Added to Favourites" });
-    } catch (error) {
-      response.status(409).json({ message: "Couldn't save" });
-      console.log("User.findOneAndUpdate in likePlaylist:", error);
-    }
-    try {
+      ).exec();
       await Playlist.findOneAndUpdate(
         { _id: playlist_id },
         { $push: { liked_by: myUser._id } },
         { new: true }
-      );
+      ).exec();
+      return response.status(200).json({
+        message: "Added to Favorites",
+        userUpdated: userUpdated,
+      });
     } catch (error) {
-      response.status(409).json({ message: "Playlist couldn't be liked" });
-      console.log("Playlist.findOneAndUpdate in likePlaylist:", error);
+      return response.status(409).json({ message: "Couldn't save" });
     }
   } else {
-    response.status(400).json({ message: "Already added" });
+    return response.status(400).json({ message: "Already added" });
   }
 };
 
@@ -241,41 +236,43 @@ const removeLikePlaylist = async (request, response) => {
   const myUserLikedIt = await Playlist.findOne({ _id: playlist_id })
     .where("liked_by")
     .equals(`${myUser._id}`);
-  //.exists(`${myUser._id}`);
-  console.log("Have they liked it?", myUserLikedIt);
 
   if (myUserLikedIt) {
     try {
-      await User.findOneAndUpdate(
+      const userUpdated = await User.findOneAndUpdate(
         { _id: myUser._id },
         { $pull: { liked: playlist_id } },
         { new: true }
-      );
-      response.status(200).json({ message: "Removed from Favorites" });
-    } catch (error) {
-      response.status(409).json({ message: "Error removing this item" });
-      console.log("Error in removeLikePlaylist:", error);
-    }
-    try {
+      )
+        .populate({
+          path: "liked",
+          select: ["title", "img_url", "songs", "liked_by"],
+        })
+        .populate({
+          path: "playlists",
+          select: ["title", "img_url", "songs", "liked_by"],
+        })
+        .exec();
       await Playlist.findOneAndUpdate(
         { _id: playlist_id },
         { $pull: { liked_by: myUser._id } },
         { new: true }
-      );
+      ).exec();
+      return response.status(200).json({
+        message: "Removed from Favorites",
+        userUpdated: userUpdated,
+      });
     } catch (error) {
-      response.status(409).json({ message: "Error" });
-      console.log("Error while unliking the playlist:", error);
+      return response.status(409).json({ message: "Error" });
     }
   } else {
-    response
-      .status(400)
-      .json({ message: "There seems to be no like to removed" });
+    return response.status(400).json({ message: "Like already removed" });
   }
 };
 
 // Like And Unlike
 
-const likeOrUnlikePlaylist = async (request, response) => {
+/* const likeOrUnlikePlaylist = async (request, response) => {
   const doWeHaveALike = await Playlist.findOne({
     _id: request.body.playlist_id,
   })
@@ -328,7 +325,7 @@ const likeOrUnlikePlaylist = async (request, response) => {
       console.log("Playlist.findOneAndUpdate in likePlaylist:", error);
     }
   }
-};
+}; */
 
 // PATCH update user profile
 
@@ -357,6 +354,5 @@ export {
   getUserById,
   likePlaylist,
   removeLikePlaylist,
-  likeOrUnlikePlaylist,
   //updateUser,
 };
