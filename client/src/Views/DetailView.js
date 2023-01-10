@@ -170,41 +170,6 @@ function DetailView() {
     }
   };
 
-  /* // DELETE playlist
-
-  const deletePlaylist = async () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const myHeaders = new Headers();
-      myHeaders.append("Authorization", `Bearer ${token}`);
-      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
-      const urlencoded = new URLSearchParams();
-      urlencoded.append("_id", _id);
-      urlencoded.append("creator", userProfile._id);
-
-      const requestOptions = {
-        method: "DELETE",
-        headers: myHeaders,
-        body: urlencoded,
-        redirect: "follow",
-      };
-      try {
-        const response = await fetch(
-          baseURL + `/api/playlists/${_id}/delete-playlist`,
-          requestOptions
-        );
-        const result = await response.json();
-        console.log("result:", result);
-        redirect(-1);
-      } catch (error) {
-        console.log("Error deleting playlist:", error);
-      }
-    } else {
-      alert("No token for this user");
-    }
-  }; */
-
   return (
     <Center m="2" w="auto" h="auto">
       <VStack>
@@ -308,7 +273,7 @@ function DetailView() {
                     bgColor={
                       comment.author === userProfile._id
                         ? "blue.200"
-                        : "gray.50"
+                        : "whiteAlpha.900"
                     }
                     borderRadius="base"
                     border="2px solid black"
@@ -338,10 +303,11 @@ function DetailView() {
                           <>
                             <IconButton
                               icon={<DeleteIcon />}
-                              variant="unstyled"
+                              variant="outlined"
                               sx={{
                                 bgColor: "red.300",
                                 boxShadow: "1px 1px black",
+                                borderRadius: "full",
                               }}
                               border="1.5px solid black"
                               size="xs"
