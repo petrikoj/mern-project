@@ -10,6 +10,7 @@ export const AuthContextProvider = (props) => {
   const [user, setUser] = useState(null);
   const [userProfile, setUserProfile] = useState({});
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const toast = useToast();
 
@@ -43,18 +44,22 @@ export const AuthContextProvider = (props) => {
         duration: 1500,
         isClosable: true,
       });
-      console.log("User logged out successfully");
     } catch (error) {
       console.log(error);
+      toast({
+        title: `${error.message}`,
+        status: "error",
+        variant: "subtle",
+        duration: 1500,
+        isClosable: true,
+      });
     }
   };
 
-  //
+  // GET userProfile
 
   const getUserProfile = async () => {
     const token = localStorage.getItem("token");
-    console.log("Token:", token);
-
     if (token) {
       const myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${token}`);
@@ -69,7 +74,6 @@ export const AuthContextProvider = (props) => {
           baseURL + "/api/users/profile/",
           requestOptions
         );
-
         const result = await response.json();
         console.log("getUserProfile:", result);
         setUserProfile({
@@ -82,18 +86,15 @@ export const AuthContextProvider = (props) => {
         });
       } catch (error) {
         console.log("Error accessing user's profile", error);
+        return error;
       }
-    } else {
-      setError(true);
-      console.log("No token for this user");
     }
   };
 
-  //
-  /* const getUserById = async (_id) => {
-    const token = localStorage.getItem("token");
-    console.log("Token:", token);
+  // GET user by ID
 
+  const getUserById = async (_id) => {
+    const token = localStorage.getItem("token");
     if (token) {
       const myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${token}`);
@@ -108,9 +109,8 @@ export const AuthContextProvider = (props) => {
           baseURL + `/api/users/profile/${_id}`,
           requestOptions
         );
-
         const myUser = await response.json();
-        console.log("getUserProfile:", myUser);
+        console.log("getUserById:", myUser);
         setUserProfile(myUser);
       } catch (error) {
         console.log("Error accessing user's profile", error);
@@ -119,7 +119,7 @@ export const AuthContextProvider = (props) => {
       setError(true);
       console.log("No token for this user");
     }
-  }; */
+  };
 
   //
 
@@ -149,9 +149,12 @@ export const AuthContextProvider = (props) => {
         getUserProfile,
         userProfile,
         setUserProfile,
+        getUserById,
         logoutUser,
         user,
         setUser,
+        loading,
+        setLoading,
       }}
     >
       {props.children}
