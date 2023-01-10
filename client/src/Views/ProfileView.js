@@ -35,18 +35,20 @@ import { DeleteIcon } from "@chakra-ui/icons";
 function ProfileView() {
   const { _id } = useParams();
   const { deletePlaylist } = useContext(PlaylistContext);
-  const { myUser, error, loading } = useFetchUser(_id);
-  console.log("Result of useFetchUser:", myUser);
+  const { userProfile, setUserProfile, loading, getUserById } =
+    useContext(AuthContext);
+
+  useEffect(() => {
+    getUserById(_id);
+  }, [_id]);
 
   return (
     <>
       {loading && <LoadingSpinner />}
-      {myUser && (
+      {userProfile && (
         <Center overflowX="hidden">
           <VStack>
-            <Divider borderColor="blackAlpha.900" />
-            <Heading>{myUser.username}'s Profile</Heading>
-
+            <Heading>{userProfile.username}'s Profile</Heading>
             <Tabs
               isFitted
               isLazy
@@ -78,11 +80,10 @@ function ProfileView() {
               <TabPanels>
                 <TabPanel overflowY="auto">
                   <>
-                    {myUser.playlists?.map((list, index) => {
+                    {userProfile.playlists?.map((list) => {
                       return (
-                        <HStack>
+                        <HStack key={list._id}>
                           <Box
-                            key={index}
                             border="1px"
                             borderRadius="md"
                             p="1.5"
@@ -99,7 +100,7 @@ function ProfileView() {
                                 />
                                 <VStack align="start">
                                   <Text as="b">{list.title}</Text>
-                                  <Badge>{list.songs.length} songs</Badge>
+                                  <Badge>{list.songs?.length} songs</Badge>
                                 </VStack>
                               </HStack>
                             </Link>
@@ -116,11 +117,10 @@ function ProfileView() {
                   </>
                 </TabPanel>
                 <TabPanel overflowY="auto">
-                  {myUser.liked?.map((list, index) => {
+                  {userProfile.liked?.map((list) => {
                     return (
-                      <HStack>
+                      <HStack key={list._id}>
                         <Box
-                          key={index}
                           border="1px"
                           borderRadius="md"
                           p="1.5"
@@ -137,22 +137,15 @@ function ProfileView() {
                               />
                               <VStack align="start">
                                 <Text as="b">{list.title}</Text>
-                                <Badge>{list.songs.length} songs</Badge>
+                                <Badge>{list.songs?.length} songs</Badge>
                               </VStack>
                             </HStack>
                           </Link>
                         </Box>
-                        {list.liked_by?.includes(myUser._id) ? (
-                          <UnlikeButton
-                            user_id={myUser._id}
-                            playlist_id={list._id}
-                          />
-                        ) : (
-                          <LikeButton
-                            user_id={myUser._id}
-                            playlist_id={list._id}
-                          />
-                        )}
+                        <UnlikeButton
+                          user_id={userProfile._id}
+                          playlist_id={list._id}
+                        />
                       </HStack>
                     );
                   })}
