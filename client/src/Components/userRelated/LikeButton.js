@@ -4,11 +4,9 @@ import { useContext, useEffect } from "react";
 import { BsBookmarkHeart } from "react-icons/bs";
 import { baseURL } from "../../utils/getServerUrl.js";
 import { AuthContext } from "../../context/AuthContext";
-import { PlaylistContext } from "../../context/PlaylistContext";
-import { useFetchPlaylistById } from "./FetchPlaylists.js";
 
 const LikeButton = ({ user_id, playlist_id }) => {
-  const { getAllPlaylists } = useContext(PlaylistContext);
+  const { setUserProfile } = useContext(AuthContext);
   const toast = useToast();
 
   const likePlaylist = async () => {
@@ -29,7 +27,8 @@ const LikeButton = ({ user_id, playlist_id }) => {
       const response = await fetch(baseURL + "/api/users/like", requestOptions);
       const result = await response.json();
       console.log(result);
-      getAllPlaylists();
+      const updatedProfile = result.userUpdated;
+      setUserProfile(updatedProfile);
       toast({
         title: `${result.message}`,
         status: "success",
@@ -52,9 +51,11 @@ const LikeButton = ({ user_id, playlist_id }) => {
   return (
     <IconButton
       icon={<AddIcon />}
+      sx={{ boxShadow: "1px 1px black" }}
+      borderRadius="full"
       variant="outlined"
       border="2px solid black"
-      bgColor="purple.200"
+      bgColor="gray.200"
       onClick={likePlaylist}
     />
   );
