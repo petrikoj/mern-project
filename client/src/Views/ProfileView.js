@@ -13,22 +13,18 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Tag,
   Text,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import { TbPlaylist } from "react-icons/tb";
 import { HiHeart } from "react-icons/hi";
-import { IoMdSettings } from "react-icons/io";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useParams } from "react-router-dom";
-import { useFetchUser } from "../components/userRelated/FetchPlaylists";
 import LoadingSpinner from "../components/layoutRelated/Spinner";
 //import LikeAndUnlikeButton from "../components/userRelated/LikeAndUnlikeButton";
 import UnlikeButton from "../components/userRelated/UnlikeButton";
-import LikeButton from "../components/userRelated/LikeButton";
 import { PlaylistContext } from "../context/PlaylistContext";
 import { DeleteIcon } from "@chakra-ui/icons";
 
@@ -67,12 +63,6 @@ function ProfileView() {
                   <VStack>
                     <Icon as={HiHeart} />
                     <Text>Favorites</Text>
-                  </VStack>
-                </Tab>
-                <Tab>
-                  <VStack>
-                    <Icon as={IoMdSettings} />
-                    <Text>Settings</Text>
                   </VStack>
                 </Tab>
               </TabList>
@@ -149,9 +139,6 @@ function ProfileView() {
                       </HStack>
                     );
                   })}
-                </TabPanel>
-                <TabPanel>
-                  <p>Settings ...</p>
                 </TabPanel>
               </TabPanels>
             </Tabs>
