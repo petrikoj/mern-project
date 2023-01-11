@@ -91,6 +91,7 @@ export const PlaylistContextProvider = (props) => {
         setMyPlaylists(
           myPlaylists.filter((list) => list._id !== playlistToBeDeletedId)
         );
+        setUserProfile(result.userUpdated);
       } catch (error) {
         console.log(error);
         return { error: error };

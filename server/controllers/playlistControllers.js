@@ -237,12 +237,22 @@ const deletePlaylist = async (request, response) => {
     if (!myPlaylist) {
       return response.status(404).json({ message: "Playlist ID not found" });
     }
-    const myUser = await User.updateOne(
+    const myUser = await User.findOneAndUpdate(
       { _id: request.body.creator },
       {
         $pull: { playlists: myPlaylist._id },
-      }
-    ).exec();
+      },
+      { new: true }
+    )
+      .populate({
+        path: "liked",
+        select: ["title", "img_url", "songs", "liked_by"],
+      })
+      .populate({
+        path: "playlists",
+        select: ["title", "img_url", "songs", "liked_by"],
+      })
+      .exec();
     if (!myUser) {
       return response.status(206).json({
         message: "Error updating user profile after deleting playlist",
