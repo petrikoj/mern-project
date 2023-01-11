@@ -50,7 +50,6 @@ export const PlaylistContextProvider = (props) => {
     } catch (error) {
       console.log(error);
     }
-
     return { myPlaylists, error, loading };
   };
 
