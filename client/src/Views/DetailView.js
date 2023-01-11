@@ -41,21 +41,10 @@ import { baseURL } from "../utils/getServerUrl";
 import { PlaylistContext } from "../context/PlaylistContext.js"; */
 
 function DetailView() {
-  const { userProfile, user } = useContext(AuthContext);
+  const { userProfile, setUserProfile, user } = useContext(AuthContext);
   const { deletePlaylist } = useContext(PlaylistContext);
-
   const { _id } = useParams();
-  const {
-    playlist,
-    setPlaylist,
-    comments,
-    setComments,
-    likes,
-    setLikes,
-    getPlaylist,
-    error,
-    loading,
-  } = useFetchPlaylistById(_id);
+  const { playlist, setPlaylist, error, loading } = useFetchPlaylistById(_id);
 
   const myCommentSection = useRef(null);
   const scrollToComments = () => {
@@ -91,7 +80,6 @@ function DetailView() {
   // POST a new comment
 
   const postComment = async (event) => {
-    console.log(newComment);
     event.preventDefault();
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -171,27 +159,36 @@ function DetailView() {
   };
 
   return (
-    <Center m="2" w="auto" h="auto">
+    <Center m="2" w="auto" h="auto" mt="2rem">
       <VStack>
         {loading && <LoadingSpinner />}
         {error && <ErrorAlert message={error.message} />}
         {playlist && (
           <>
-            <Heading>{playlist.title}</Heading>
+            <Container>
+              <HStack spacing="3">
+                <Avatar
+                  size={["xs", "sm"]}
+                  src={playlist.creator?.avatar}
+                  border="1px solid black"
+                />
+                <Text>{playlist.creator?.username}</Text>
+              </HStack>
+            </Container>
+
             <Image
               src={playlist.img_url}
               alt="playlist picture"
               boxSize={["object-fit", "container.sm"]}
               borderRadius="lg"
             />
+            <Heading>{playlist.title}</Heading>
             <Divider borderColor="blackAlpha.900" />
             <Tag>{playlist.mood}</Tag>
-
             <Text>{playlist.description}</Text>
             <Divider borderColor="blackAlpha.900" />
-
-            <ButtonGroup spacing={["4", "8"]}>
-              {playlist.creator?._id === userProfile._id && (
+            <ButtonGroup spacing={["4", "12"]}>
+              {userProfile?._id === playlist.creator?._id && (
                 <>
                   {/*  <IconButton
                     icon={<EditIcon />}
@@ -218,10 +215,10 @@ function DetailView() {
                   playlist_id={playlist._id}
                   user_id={userProfile._id}
                 /> */}
-                {userProfile.liked?.includes(playlist._id) ? (
+                {userProfile?.liked?.includes(playlist._id) ? (
                   <UnlikeButton
                     playlist_id={playlist._id}
-                    user_id={userProfile._id}
+                    user_id={userProfile?._id}
                   >
                     <Text fontSize="md" fontWeight="semibold">
                       {playlist.liked_by?.length}
@@ -230,7 +227,7 @@ function DetailView() {
                 ) : (
                   <LikeButton
                     playlist_id={playlist._id}
-                    user_id={userProfile._id}
+                    user_id={userProfile?._id}
                   >
                     <Text fontSize="md" fontWeight="semibold">
                       {playlist.liked_by?.length}
@@ -239,7 +236,6 @@ function DetailView() {
                 )}
               </HStack>
             </ButtonGroup>
-
             <Container>
               {playlist.songs?.map((song) => {
                 return (
@@ -271,7 +267,7 @@ function DetailView() {
                     key={comment._id}
                     boxShadow="2px 2px black"
                     bgColor={
-                      comment.author === userProfile._id
+                      comment.author === userProfile?._id
                         ? "blue.200"
                         : "whiteAlpha.900"
                     }
@@ -282,24 +278,25 @@ function DetailView() {
                     h="auto"
                     justify="start"
                   >
-                    <Box my="1">
-                      <HStack pb="1.5" px="1">
-                        <Avatar
-                          size={["sm", "md"]}
-                          src={comment.userphoto}
-                          border="2px solid black"
-                        />
+                    <Box my="1" mx="1">
+                      <HStack pb="1.5" px="1" spacing={["32", "72"]}>
                         <Stack direction="row" align="center">
-                          <Text fontWeight="semibold">
-                            {comment.author !== userProfile._id &&
-                              comment.username}
-                          </Text>
+                          <Avatar
+                            size={["sm", "md"]}
+                            src={comment.userphoto}
+                            border="2px solid black"
+                          />
+                          {comment.author !== userProfile?._id && (
+                            <Text fontWeight="semibold" fontSize="medium">
+                              {comment.username}
+                            </Text>
+                          )}
                           <Text fontWeight="light" fontSize="xs">
                             {new Date(comment.createdAt).toLocaleDateString()}
                           </Text>
                         </Stack>
 
-                        {comment.author === userProfile._id && (
+                        {comment.author === userProfile?._id && (
                           <>
                             <IconButton
                               icon={<DeleteIcon />}
@@ -359,7 +356,7 @@ function DetailView() {
                         )}
                       </HStack>
                       <Text
-                        fontWeight="light"
+                        fontWeight="medium"
                         letterSpacing="wide"
                         fontSize={["md", "lg"]}
                       >
