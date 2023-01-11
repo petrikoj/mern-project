@@ -41,6 +41,7 @@ function Navbar() {
       zIndex="banner"
       bg="yellow.100"
       boxSize="full"
+      opacity="0.98"
       borderBottom="0.1rem solid"
       borderColor="blackAlpha.900"
     >
