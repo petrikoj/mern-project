@@ -160,7 +160,6 @@ const uploadPlaylistPicture = async (request, response) => {
 
 const postNewComment = async (request, response) => {
   const doesUserExist = await User.findOne({ _id: request.body.userId });
-  console.log(request.body.userId);
   if (doesUserExist) {
     try {
       const myPlaylist = await Playlist.findOneAndUpdate(
@@ -177,8 +176,13 @@ const postNewComment = async (request, response) => {
           },
         },
         { new: true }
-      ).exec();
-      response
+      )
+        .populate({
+          path: "creator",
+          select: ["username", "avatar"],
+        })
+        .exec();
+      return response
         .status(200)
         .json({ message: "Comment posted", playlistUpdated: myPlaylist });
     } catch (error) {
@@ -186,19 +190,8 @@ const postNewComment = async (request, response) => {
         .status(409)
         .json({ message: "Comment couldn't be posted", error: error.message });
     }
-    try {
-      await User.findOneAndUpdate(
-        { _id: request.body.userId },
-        { $push: { commented: request.body.playlistId } },
-        { new: true }
-      );
-    } catch (error) {
-      console.log(error);
-    }
   } else {
-    response
-      .status(400)
-      .json({ message: "Error saving comment in user profile" });
+    response.status(400).json({ message: "User not found" });
   }
 };
 
@@ -214,7 +207,12 @@ const removeComment = async (request, response) => {
         },
       },
       { new: true }
-    ).exec();
+    )
+      .populate({
+        path: "creator",
+        select: ["username", "avatar"],
+      })
+      .exec();
     return response
       .status(200)
       .json({ message: "Comment removed", updatedPlaylist: myPlaylist });
