@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useFetchPlaylistById } from "../components/userRelated/FetchPlaylists.js";
+import { PlaylistContext } from "../context/PlaylistContext.js";
+import { AuthContext } from "../context/AuthContext.js";
+import { baseURL } from "../utils/getServerUrl";
 import {
   Box,
   Center,
@@ -30,34 +32,29 @@ import { FiSend } from "react-icons/fi";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/layoutRelated/Spinner.js";
 import { ErrorAlert } from "../components/layoutRelated/Alerts.js";
-import { AuthContext } from "../context/AuthContext.js";
 import UnlikeButton from "../components/userRelated/UnlikeButton.js";
 import LikeButton from "../components/userRelated/LikeButton.js";
-import { PlaylistContext } from "../context/PlaylistContext.js";
 import CommentSection from "../components/userRelated/CommentSection.js";
-import { baseURL } from "../utils/getServerUrl";
+import useGetPlaylistById from "../hooks/useFetchPlaylistById.js";
 //import LikeAndUnlikeButton from "../components/userRelated/LikeAndUnlikeButton.js";
-/* import { useContext } from "react";
-import { PlaylistContext } from "../context/PlaylistContext.js"; */
 
 function DetailView() {
   const { userProfile, setUserProfile, user } = useContext(AuthContext);
   const { deletePlaylist } = useContext(PlaylistContext);
   const { _id } = useParams();
-  const { playlist, setPlaylist, error, loading } = useFetchPlaylistById(_id);
-
+  const { playlist, setPlaylist, error, loading } = useGetPlaylistById(_id);
+  const toast = useToast();
   const myCommentSection = useRef(null);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef();
+
   const scrollToComments = () => {
     window.scrollTo({
       top: myCommentSection.current.offsetTop,
       behavior: "smooth",
     });
   };
-
-  const toast = useToast();
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const cancelRef = useRef();
 
   const [newComment, setNewComment] = useState({
     userId: "",
@@ -107,6 +104,7 @@ function DetailView() {
       const newPlaylist = result.playlistUpdated;
       setPlaylist(newPlaylist);
       setNewComment("");
+      scrollToInputField();
     } catch (error) {
       console.log("Error in POST a comment func", error);
     }
@@ -251,7 +249,7 @@ function DetailView() {
                 );
               })}
             </Container>
-            <Divider borderColor="blackAlpha.900" ref={myCommentSection} />
+            <Divider borderColor="blackAlpha.900" />
             {/* <CommentSection
               playlist={playlist}
               comments={comments}
@@ -260,7 +258,9 @@ function DetailView() {
             <>
               {/*  ////// Comment Section ////// */}
 
-              <Text fontSize="2xl">Comments</Text>
+              <Text fontSize="2xl" ref={myCommentSection}>
+                Comments
+              </Text>
               {playlist.comments?.map((comment) => {
                 return (
                   <Flex

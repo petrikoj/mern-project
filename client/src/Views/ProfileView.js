@@ -31,8 +31,7 @@ import { DeleteIcon } from "@chakra-ui/icons";
 function ProfileView() {
   const { _id } = useParams();
   const { deletePlaylist } = useContext(PlaylistContext);
-  const { userProfile, setUserProfile, loading, getUserById } =
-    useContext(AuthContext);
+  const { userProfile, loading, getUserById } = useContext(AuthContext);
 
   useEffect(() => {
     getUserById(_id);
