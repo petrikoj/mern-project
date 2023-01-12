@@ -104,7 +104,6 @@ function DetailView() {
       const newPlaylist = result.playlistUpdated;
       setPlaylist(newPlaylist);
       setNewComment("");
-      scrollToInputField();
     } catch (error) {
       console.log("Error in POST a comment func", error);
     }
