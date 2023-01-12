@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { HamburgerIcon, Icon } from "@chakra-ui/icons";
 import {
@@ -17,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { MdLogout, MdOutlinePlaylistAdd } from "react-icons/md";
 import { BiUser } from "react-icons/bi";
-
 import { AuthContext } from "../../context/AuthContext";
 
 function Navbar() {
@@ -41,7 +40,7 @@ function Navbar() {
       zIndex="banner"
       bg="yellow.100"
       boxSize="full"
-      opacity="0.98"
+      opacity="0.99"
       borderBottom="0.1rem solid"
       borderColor="blackAlpha.900"
     >
@@ -96,7 +95,9 @@ function Navbar() {
       ) : (
         <Flex justify="space-around" align="center" p={"3"}>
           <NavLink to={"/"}>
-            <Heading>playlist.</Heading>
+            <Heading fontFamily="monospace" fontSize={["lg", "2xl", "4xl"]}>
+              playlist.
+            </Heading>
           </NavLink>
           <HStack>
             <NavLink to={"/signup"}>
