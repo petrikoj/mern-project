@@ -218,7 +218,10 @@ const removeComment = async (request, response) => {
       .json({ message: "Comment removed", updatedPlaylist: myPlaylist });
   } catch (error) {
     console.log(error);
-    response.status(400).json({ message: "Could't remove comment" });
+    response
+      .status(400)
+      .json({ message: "Could't remove comment", error: error });
+    return error;
   }
 };
 
