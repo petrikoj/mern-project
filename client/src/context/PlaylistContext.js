@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import React, { createContext, useEffect, useState } from "react";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { baseURL } from "../utils/getServerUrl";
 import { AuthContext } from "./AuthContext";
 
@@ -10,6 +10,7 @@ export const PlaylistContext = createContext();
 export const PlaylistContextProvider = (props) => {
   const { userProfile, setUserProfile } = useContext(AuthContext);
   const [myPlaylists, setMyPlaylists] = useState([]);
+  const [playlist, setPlaylist] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
@@ -47,6 +48,7 @@ export const PlaylistContextProvider = (props) => {
       const result = response.json();
       setLoading(false);
       setMyPlaylists(result);
+      console.log(myPlaylists);
     } catch (error) {
       console.log(error);
     }
@@ -103,7 +105,7 @@ export const PlaylistContextProvider = (props) => {
   // Like + Unlike a Playlist (PUSH and PULL)
 
   // PUSH like to db
-
+  /*
   const likePlaylist = async () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -179,7 +181,7 @@ export const PlaylistContextProvider = (props) => {
       });
       console.log(error);
     }
-  };
+  }; */
 
   useEffect(() => {
     getAllPlaylists();
@@ -191,9 +193,10 @@ export const PlaylistContextProvider = (props) => {
       value={{
         getAllPlaylists,
         getPlaylistById,
-        deletePlaylist,
         myPlaylists,
         setMyPlaylists,
+        deletePlaylist,
+        error,
         loading,
         setLoading,
       }}
