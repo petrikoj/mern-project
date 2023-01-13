@@ -40,7 +40,8 @@ import useGetPlaylistById from "../hooks/useFetchPlaylistById.js";
 
 function DetailView() {
   const { userProfile, setUserProfile, user } = useContext(AuthContext);
-  const { deletePlaylist } = useContext(PlaylistContext);
+  const { myPlaylists, setMyPlaylists, deletePlaylist } =
+    useContext(PlaylistContext);
   const { _id } = useParams();
   const { playlist, setPlaylist, error, loading } = useGetPlaylistById(_id);
   const toast = useToast();
@@ -103,6 +104,14 @@ function DetailView() {
       console.log("PUT result", result);
       const newPlaylist = result.playlistUpdated;
       setPlaylist(newPlaylist);
+      setMyPlaylists(
+        myPlaylists.map((list) => {
+          if (list._id === newPlaylist._id) {
+            return { ...list, comments: newPlaylist.comments };
+          }
+          return list;
+        })
+      );
       setNewComment("");
     } catch (error) {
       console.log("Error in POST a comment func", error);
