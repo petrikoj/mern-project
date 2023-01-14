@@ -187,7 +187,7 @@ function SignUp() {
             <IconButton
               sx={{ bgColor: "green.200" }}
               w={["80", "40"]}
-              leftIcon={<RiUploadCloud2Line size="1.2rem" />}
+              leftIcon={<RiUploadCloud2Line />}
               p="2"
               onClick={submitForm}
             >
