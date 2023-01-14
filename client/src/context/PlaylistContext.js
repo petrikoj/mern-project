@@ -59,14 +59,14 @@ export const PlaylistContextProvider = (props) => {
 
   const deletePlaylist = async ({ currentTarget }) => {
     const token = localStorage.getItem("token");
-    const playlistToBeDeletedId = currentTarget.value;
+    const playlistToBeDeletedID = currentTarget.value;
     if (token) {
       const myHeaders = new Headers();
       myHeaders.append("Authorization", `Bearer ${token}`);
       myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
       const urlencoded = new URLSearchParams();
-      urlencoded.append("_id", playlistToBeDeletedId);
+      urlencoded.append("_id", playlistToBeDeletedID);
       urlencoded.append("creator", userProfile._id);
 
       const requestOptions = {
@@ -90,7 +90,7 @@ export const PlaylistContextProvider = (props) => {
           isClosable: true,
         });
         setMyPlaylists(
-          myPlaylists.filter((list) => list._id !== playlistToBeDeletedId)
+          myPlaylists.filter((list) => list._id !== playlistToBeDeletedID)
         );
         setUserProfile(result.userUpdated);
       } catch (error) {
