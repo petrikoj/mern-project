@@ -34,7 +34,7 @@ function ProfileView() {
   const { userProfile, loading, getUserById } = useContext(AuthContext);
 
   useEffect(() => {
-    getUserById(_id);
+    getUserById();
   }, [_id]);
 
   return (
