@@ -112,27 +112,6 @@ const postNewPlaylist = async (request, response) => {
   }
 };
 
-// Alternative upload function
-
-/* const uploadNewPlaylist = async (request, response) => {
-  console.log("request.body", request.body);
-  try {
-    const playlist = await Playlist.create(request.body);
-    response.status(200).json(playlist);
-  } catch (error) {
-    response.status(500).json({ error: error.message });
-    return;
-  }
-  try {
-    await User.findOneAndUpdate(
-      { _id: request.body.author_id },
-      { $push: { playlists: playlist._id } }
-    );
-  } catch (error) {
-    alert(error);
-  }
-}; */
-
 // POST playlist img
 
 const uploadPlaylistPicture = async (request, response) => {
@@ -195,7 +174,7 @@ const postNewComment = async (request, response) => {
   }
 };
 
-// PUT/delete a comment (to do: remove comment from user profile)
+// PUT/delete a comment
 
 const removeComment = async (request, response) => {
   try {
@@ -270,41 +249,6 @@ const deletePlaylist = async (request, response) => {
     return response
       .status(200)
       .json({ message: "Playlist deleted", userUpdated: myUser });
-  } catch (error) {
-    response.status(500).json({ error: error.message });
-  }
-};
-
-//
-
-const deletePlaylistWithPut = async (request, response) => {
-  try {
-    const myPlaylist = await Playlist.findOneAndD({
-      _id: request.body._id,
-    }).exec();
-    if (!myPlaylist) {
-      return response.status(404).json({ message: "Playlist ID not found" });
-    }
-    const myUser = await User.updateOne(
-      { _id: request.body.creator },
-      {
-        $pull: { playlists: myPlaylist._id },
-      }
-    );
-    if (!myUser) {
-      return response.status(206).json({
-        message: "Error updating user profile after deleting playlist",
-      });
-    }
-    myPlaylist.liked_by.forEach(async (event) => {
-      await User.updateOne(
-        { _id: event },
-        {
-          $pull: { liked: myPlaylist._id },
-        }
-      );
-    });
-    return response.status(200).json({ message: "Playlist deleted" });
   } catch (error) {
     response.status(500).json({ error: error.message });
   }
