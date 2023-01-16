@@ -50,7 +50,7 @@ function Navbar() {
             src={userProfile?.avatar}
             boxSize={["10", "14"]}
             borderRadius="full"
-            border="2px solid"
+            border="1px solid"
             borderColor="blackAlpha.900"
           />
           <NavLink to={"/"}>
