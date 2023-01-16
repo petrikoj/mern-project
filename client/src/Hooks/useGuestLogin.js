@@ -2,6 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext.js";
+import { guestUserEmail, guestUserPW } from "../utils/configs.js";
 import { baseURL } from "../utils/getServerUrl.js";
 
 const useGuestLogin = () => {
@@ -11,8 +12,8 @@ const useGuestLogin = () => {
 
   const handleLogin = async () => {
     const urlencoded = new URLSearchParams();
-    urlencoded.append("email", "guest@guest.com");
-    urlencoded.append("password", "123456");
+    urlencoded.append("email", guestUserEmail);
+    urlencoded.append("password", guestUserPW);
 
     const requestOptions = {
       method: "POST",
