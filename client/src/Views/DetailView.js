@@ -174,7 +174,7 @@ function DetailView() {
             <Container>
               <HStack spacing="3">
                 <Avatar
-                  size={["xs", "sm"]}
+                  size={["sm", "md"]}
                   src={playlist.creator?.avatar}
                   border="1px solid black"
                 />
@@ -292,7 +292,7 @@ function DetailView() {
                           <Avatar
                             size={["sm", "md"]}
                             src={comment.userphoto}
-                            border="2px solid black"
+                            border="1px solid black"
                           />
                           {comment.author !== userProfile?._id && (
                             <Text fontWeight="semibold" fontSize="medium">
