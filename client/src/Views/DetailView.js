@@ -148,6 +148,14 @@ function DetailView() {
         //onClose();
         const newPlaylist = result.updatedPlaylist;
         setPlaylist(newPlaylist);
+        setMyPlaylists(
+          myPlaylists.map((list) => {
+            if (list._id === newPlaylist._id) {
+              return { ...list, comments: newPlaylist.comments };
+            }
+            return list;
+          })
+        );
         toast({
           title: `${result.message}`,
           status: "success",
@@ -196,10 +204,10 @@ function DetailView() {
             <ButtonGroup spacing={["4", "12"]}>
               {userProfile?._id === playlist.creator?._id && (
                 <>
-                  {/*  <IconButton
+                  <IconButton
                     icon={<EditIcon />}
                     sx={{ bgColor: "blue.200" }}
-                  /> */}
+                  />
                   <IconButton
                     icon={<DeleteIcon />}
                     sx={{ bgColor: "red.300" }}
