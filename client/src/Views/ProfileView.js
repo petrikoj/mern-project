@@ -19,6 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { TbPlaylist } from "react-icons/tb";
 import { HiHeart } from "react-icons/hi";
+import { GrUserSettings } from "react-icons/gr";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useParams } from "react-router-dom";
@@ -27,6 +28,7 @@ import LoadingSpinner from "../components/layoutRelated/Spinner";
 import UnlikeButton from "../components/userRelated/UnlikeButton";
 import { PlaylistContext } from "../context/PlaylistContext";
 import { DeleteIcon } from "@chakra-ui/icons";
+import UpdateProfile from "../components/userRelated/UpdateProfile";
 
 function ProfileView() {
   const { _id } = useParams();
@@ -43,25 +45,54 @@ function ProfileView() {
       {userProfile && (
         <Center overflowX="hidden">
           <VStack>
-            <Heading>{userProfile.username}'s Profile</Heading>
+            <Heading>Hello {userProfile.username}</Heading>
+
             <Tabs
+              align="center"
               isFitted
               isLazy
               size={["md", "lg"]}
-              variant="soft-rounded"
-              colorScheme="gray"
+              variant="unstyled"
             >
-              <TabList m="3">
-                <Tab>
-                  <VStack>
+              <Divider borderColor="blackAlpha.900" />
+              <TabList>
+                <Tab
+                  _selected={{
+                    bg: "whiteAlpha.900",
+                    borderLeft: "1px",
+                    borderRight: "1px",
+                    borderColor: "blackAlpha.900",
+                  }}
+                >
+                  <VStack pt="2">
                     <Icon as={TbPlaylist} />
                     <Text>Playlists</Text>
                   </VStack>
                 </Tab>
-                <Tab>
-                  <VStack>
+                <Tab
+                  _selected={{
+                    bg: "whiteAlpha.900",
+                    borderLeft: "1px",
+                    borderRight: "1px",
+                    borderColor: "blackAlpha.900",
+                  }}
+                >
+                  <VStack pt="2">
                     <Icon as={HiHeart} />
                     <Text>Favorites</Text>
+                  </VStack>
+                </Tab>
+                <Tab
+                  _selected={{
+                    bg: "whiteAlpha.900",
+                    borderLeft: "1px",
+                    borderRight: "1px",
+                    borderColor: "blackAlpha.900",
+                  }}
+                >
+                  <VStack pt="2">
+                    <Icon as={GrUserSettings} />
+                    <Text>Account</Text>
                   </VStack>
                 </Tab>
               </TabList>
@@ -74,17 +105,19 @@ function ProfileView() {
                         <HStack key={list._id}>
                           <Box
                             border="1px"
-                            borderRadius="md"
+                            borderColor="blackAlpha.900"
+                            borderRadius="base"
                             p="1.5"
                             m="1"
                             w={["64", "xl", "2xl"]}
                             h="auto"
+                            //bgColor="whiteAlpha.900"
                           >
                             <Link to={`/playlists/${list._id}`}>
                               <HStack>
                                 <Image
                                   src={list.img_url}
-                                  borderRadius="md"
+                                  borderRadius="base"
                                   boxSize="16"
                                 />
                                 <VStack align="start">
@@ -138,6 +171,9 @@ function ProfileView() {
                       </HStack>
                     );
                   })}
+                </TabPanel>
+                <TabPanel>
+                  <UpdateProfile />
                 </TabPanel>
               </TabPanels>
             </Tabs>
