@@ -4,7 +4,7 @@ import Login from "../components/userRelated/Login";
 function LoginView() {
   return (
     <Center>
-      <VStack>
+      <VStack spacing="4">
         <Heading>Login</Heading>
         <Login />
       </VStack>
