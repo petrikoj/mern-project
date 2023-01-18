@@ -8,6 +8,7 @@ import {
   login,
   removeLikePlaylist,
   signUp,
+  updateUser,
   uploadUserPicture,
 } from "../controllers/userController.js";
 import jwtAuth from "../utils/jwtAuth.js";
@@ -24,6 +25,6 @@ router.post("/login", login);
 router.put("/like", likePlaylist);
 router.put("/unlike", removeLikePlaylist);
 
-//router.put("/profile/:id/update-profile", updateUser);
+router.patch("/profile/:id/update-profile", jwtAuth, updateUser);
 
 export default router;
