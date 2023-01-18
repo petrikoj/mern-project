@@ -13,7 +13,6 @@ function NoMatchView() {
     <Center>
       <VStack>
         <Icon as={TbError404} boxSize="44" color="blackAlpha.900" />
-        {/* <Heading>404</Heading> */}
         <Text as="b">This page doesn't exist.</Text>
         <IconButton
           leftIcon={<ArrowLeftIcon />}
@@ -24,7 +23,7 @@ function NoMatchView() {
           <Text>Back</Text>
         </IconButton>
         <Text>or</Text>
-        <Link to={"/"}>
+        <Link to={"/"} replace={true}>
           <IconButton rightIcon={<ArrowRightIcon />} size="lg" p="2">
             <Text>Home</Text>
           </IconButton>

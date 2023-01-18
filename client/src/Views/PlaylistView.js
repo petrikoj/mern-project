@@ -55,7 +55,7 @@ function PlaylistView() {
                     py="1"
                     pl="2.5"
                     pr="4"
-                    bgColor="purple.200"
+                    bgColor="pink.200"
                     alignItems="center"
                     justifyContent="space-between"
                   >

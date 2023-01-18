@@ -27,8 +27,6 @@ import {
 } from "@chakra-ui/react";
 import { DeleteIcon, WarningIcon } from "@chakra-ui/icons";
 import { FiSend } from "react-icons/fi";
-import { PlaylistContext } from "../../context/PlaylistContext";
-import getToken from "../../utils/getToken";
 import { baseURL } from "../../utils/getServerUrl.js";
 
 const CommentSection = ({ playlist, comments, setComments }) => {

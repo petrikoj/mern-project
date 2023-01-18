@@ -45,7 +45,7 @@ function ProfileView() {
       {userProfile && (
         <Center overflowX="hidden">
           <VStack>
-            <Heading>Hello {userProfile.username}</Heading>
+            <Heading>{userProfile.username}</Heading>
 
             <Tabs
               align="center"
@@ -58,7 +58,7 @@ function ProfileView() {
               <TabList>
                 <Tab
                   _selected={{
-                    bg: "whiteAlpha.900",
+                    bg: "pink.200",
                     borderLeft: "1px",
                     borderRight: "1px",
                     borderColor: "blackAlpha.900",
@@ -71,7 +71,7 @@ function ProfileView() {
                 </Tab>
                 <Tab
                   _selected={{
-                    bg: "whiteAlpha.900",
+                    bg: "pink.200",
                     borderLeft: "1px",
                     borderRight: "1px",
                     borderColor: "blackAlpha.900",
@@ -84,7 +84,7 @@ function ProfileView() {
                 </Tab>
                 <Tab
                   _selected={{
-                    bg: "whiteAlpha.900",
+                    bg: "pink.200",
                     borderLeft: "1px",
                     borderRight: "1px",
                     borderColor: "blackAlpha.900",

@@ -18,7 +18,6 @@ import {
 } from "@chakra-ui/react";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import getToken from "../../utils/getToken";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../../utils/getServerUrl.js";
 import { PlaylistContext } from "../../context/PlaylistContext";

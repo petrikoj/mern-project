@@ -2,7 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { baseURL } from "../utils/getServerUrl";
-import getToken from "../utils/getToken";
+import checkForToken from "../utils/checkForToken";
 
 export const AuthContext = createContext();
 
@@ -19,12 +19,12 @@ export const AuthContextProvider = (props) => {
   //
 
   const checkUserStatus = () => {
-    const token = getToken();
-    if (token) {
+    const isThereToken = checkForToken();
+    if (isThereToken) {
       setUser(true);
       console.log("User logged in");
     }
-    if (!token) {
+    if (!isThereToken) {
       setUser(false);
       console.log("User NOT logged in");
     }

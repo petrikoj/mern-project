@@ -26,7 +26,7 @@ const Button = defineStyleConfig({
       color: "purple.500",
     },
     solid: {
-      bg: "purple.200",
+      bg: "pink.200",
       color: "blackAlpha.900",
       border: "2px solid",
       borderColor: "black",
