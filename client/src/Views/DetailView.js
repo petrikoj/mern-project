@@ -51,9 +51,9 @@ function DetailView() {
   const cancelRef = useRef();
 
   const scrollToComments = () => {
-    window.scrollTo({
-      top: myCommentSection.current.offsetTop,
+    myCommentSection.current.scrollIntoView({
       behavior: "smooth",
+      block: "start",
     });
   };
 
@@ -274,7 +274,7 @@ function DetailView() {
             <>
               {/*  ////// Comment Section ////// */}
 
-              <Text fontSize="2xl" ref={myCommentSection}>
+              <Text fontSize="2xl" ref={myCommentSection} scrollMarginTop="28">
                 Comments
               </Text>
               {playlist.comments?.map((comment) => {
