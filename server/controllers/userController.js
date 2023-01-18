@@ -329,8 +329,8 @@ const removeLikePlaylist = async (request, response) => {
 
 // PATCH update user profile
 
-/* const updateUser = async (request, response) => {
-  const userId = request.params._id;
+const updateUser = async (request, response) => {
+  const userId = request.body._id;
   try {
     const myUser = await User.findOneAndUpdate(
       { _id: userId },
@@ -340,10 +340,15 @@ const removeLikePlaylist = async (request, response) => {
     if (!myUser) {
       return response.status(404).json({ message: "Couldn't find ID" });
     }
+    return response
+      .status(200)
+      .json({ message: "Update successful", userUpdated: myUser });
   } catch (error) {
-    return response.status(500).json({ message: "Something went wrong", error: error.message });
+    return response
+      .status(500)
+      .json({ message: "Something went wrong", error: error });
   }
-}; */
+};
 
 export {
   getAllUsers,
@@ -354,5 +359,5 @@ export {
   getUserById,
   likePlaylist,
   removeLikePlaylist,
-  //updateUser,
+  updateUser,
 };
