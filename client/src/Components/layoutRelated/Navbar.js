@@ -64,8 +64,8 @@ function Navbar() {
               variant="ghost"
               fontSize={["lg", "x-large", "2xl"]}
               sx={{ boxShadow: "0" }}
-              _hover={{ bgColor: "purple.200" }}
-              _active={{ bgColor: "purple.200" }}
+              _hover={{ bgColor: "pink.200" }}
+              _active={{ bgColor: "pink.200" }}
             />
             <MenuList
               boxShadow="5px 5px black"
@@ -74,18 +74,18 @@ function Navbar() {
               borderColor="blackAlpha.900"
             >
               <NavLink to={`/profile/${userProfile?._id}`}>
-                <MenuItem _hover={{ bgColor: "purple.200" }}>
+                <MenuItem _hover={{ bgColor: "pink.200" }}>
                   <Icon as={BiUser} mr="2" />
                   Profile
                 </MenuItem>
               </NavLink>
               <NavLink to={"/create-playlist"}>
-                <MenuItem _hover={{ bgColor: "purple.200" }}>
+                <MenuItem _hover={{ bgColor: "pink.200" }}>
                   <Icon as={MdOutlinePlaylistAdd} mr="2" />
                   Create Playlist
                 </MenuItem>
               </NavLink>
-              <MenuItem _hover={{ bgColor: "purple.200" }} onClick={logoutUser}>
+              <MenuItem _hover={{ bgColor: "pink.200" }} onClick={logoutUser}>
                 <Icon as={MdLogout} mr="2" />
                 Logout
               </MenuItem>
