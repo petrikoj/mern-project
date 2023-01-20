@@ -58,7 +58,7 @@ function ProfileView() {
               <TabList>
                 <Tab
                   _selected={{
-                    bg: "pink.200",
+                    bg: "yellow.200",
                     borderLeft: "1px",
                     borderRight: "1px",
                     borderColor: "blackAlpha.900",
@@ -71,7 +71,7 @@ function ProfileView() {
                 </Tab>
                 <Tab
                   _selected={{
-                    bg: "pink.200",
+                    bg: "yellow.200",
                     borderLeft: "1px",
                     borderRight: "1px",
                     borderColor: "blackAlpha.900",
@@ -84,7 +84,7 @@ function ProfileView() {
                 </Tab>
                 <Tab
                   _selected={{
-                    bg: "pink.200",
+                    bg: "yellow.200",
                     borderLeft: "1px",
                     borderRight: "1px",
                     borderColor: "blackAlpha.900",
