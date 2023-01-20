@@ -330,13 +330,22 @@ const removeLikePlaylist = async (request, response) => {
 // PATCH update user profile
 
 const updateUser = async (request, response) => {
-  const userId = request.body._id;
+  const userId = request.headers._id;
   try {
     const myUser = await User.findOneAndUpdate(
       { _id: userId },
       { ...request.body },
       { new: true }
-    );
+    )
+      .populate({
+        path: "liked",
+        select: ["title", "img_url", "songs", "liked_by"],
+      })
+      .populate({
+        path: "playlists",
+        select: ["title", "img_url", "songs", "liked_by"],
+      })
+      .exec();
     if (!myUser) {
       return response.status(404).json({ message: "Couldn't find ID" });
     }
