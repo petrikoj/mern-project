@@ -29,6 +29,7 @@ import UnlikeButton from "../components/userRelated/UnlikeButton";
 import { PlaylistContext } from "../context/PlaylistContext";
 import { DeleteIcon } from "@chakra-ui/icons";
 import UpdateProfile from "../components/userRelated/UpdateProfile";
+import { guestUserId } from "../utils/configs";
 
 function ProfileView() {
   const { _id } = useParams();
@@ -172,9 +173,11 @@ function ProfileView() {
                     );
                   })}
                 </TabPanel>
-                <TabPanel>
-                  <UpdateProfile />
-                </TabPanel>
+                {userProfile._id === guestUserId ? null : (
+                  <TabPanel>
+                    <UpdateProfile />
+                  </TabPanel>
+                )}
               </TabPanels>
             </Tabs>
           </VStack>
