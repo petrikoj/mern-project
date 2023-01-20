@@ -5,6 +5,7 @@ import useGetMeToken from "../../hooks/useGetMeToken";
 import { baseURL } from "../../utils/getServerUrl";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import {
+  Box,
   Button,
   ButtonGroup,
   Container,
@@ -17,8 +18,10 @@ import {
   Input,
   Text,
   useEditableControls,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
+import { isValidEmail } from "../../utils/validators";
 
 function UpdateProfile() {
   const { userProfile, setUserProfile } = useContext(AuthContext);
@@ -28,10 +31,20 @@ function UpdateProfile() {
   const username = useRef();
   const [newEmail, setNewEmail] = useState("");
   const [newUsername, setNewUsername] = useState("");
+  const toast = useToast();
 
-  const handleSubmit = () => {
-    setNewEmail(email.current.value);
-    setNewUsername(username.current.value);
+  const handleEmailSubmit = () => {
+    if (isValidEmail(email.current.value)) {
+      setNewEmail(email.current.value);
+    } else {
+      alert("Invalid Email");
+    }
+  };
+
+  const handleUsernameSubmit = () => {
+    if (username.current.value !== "") {
+      setNewUsername(username.current.value);
+    }
   };
 
   const updateUser = async (event) => {
@@ -45,10 +58,10 @@ function UpdateProfile() {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", `Bearer ${token}`);
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("_id", `${userProfile._id}`);
         const toBeUpdated = JSON.stringify({
-          ...userProfile,
-          email: newEmail,
-          username: newUsername,
+          email: newEmail ? newEmail : userProfile.email,
+          username: newUsername ? newUsername : userProfile.username,
         });
         const requestOptions = {
           method: "PATCH",
@@ -61,6 +74,24 @@ function UpdateProfile() {
         );
         const result = await response.json();
         setUserProfile(result.userUpdated);
+        toast({
+          duration: 2000,
+          position: "top",
+          render: () => (
+            <Box
+              bg="gray.200"
+              boxShadow="2px 2px"
+              p={3}
+              textAlign="center"
+              fontSize="lg"
+              fontWeight="semibold"
+              letterSpacing="wide"
+              fontFamily="body"
+            >
+              {result.message}
+            </Box>
+          ),
+        });
         console.log(result);
       } catch (error) {
         console.log(error);
@@ -90,6 +121,7 @@ function UpdateProfile() {
           icon={<CloseIcon />}
           {...getCancelButtonProps()}
           bgColor="red.300"
+          _hover={{ bg: "pink.500" }}
         />
       </ButtonGroup>
     ) : (
@@ -103,10 +135,9 @@ function UpdateProfile() {
     <VStack spacing="6">
       <Container>
         <Text fontWeight="extrabold">Email</Text>
-
         <Editable
           defaultValue={userProfile.email}
-          onSubmit={handleSubmit}
+          onSubmit={handleEmailSubmit}
           fontSize="lg"
           isPreviewFocusable={true}
           selectAllOnFocus={false}
@@ -126,7 +157,7 @@ function UpdateProfile() {
         <Text fontWeight="extrabold">Username</Text>
         <Editable
           defaultValue={userProfile.username}
-          onSubmit={handleSubmit}
+          onSubmit={handleUsernameSubmit}
           fontSize="lg"
           isPreviewFocusable={true}
           selectAllOnFocus={false}
@@ -142,7 +173,9 @@ function UpdateProfile() {
         </Editable>
       </Container>
       <Divider borderColor="blackAlpha.900" />
-      <Button onClick={updateUser}>Save changes</Button>
+      {newEmail || newUsername ? (
+        <Button onClick={updateUser}>Save changes</Button>
+      ) : null}
     </VStack>
   );
 }
