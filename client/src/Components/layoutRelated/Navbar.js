@@ -38,11 +38,11 @@ function Navbar() {
       p="2"
       mb="3"
       zIndex="banner"
-      bg="yellow.100"
+      bg="yellow.200"
       boxSize="full"
       opacity="0.99"
-      borderBottom="0.1rem solid"
-      borderColor="blackAlpha.900"
+      /* borderBottom="0.1rem solid"
+      borderColor="blackAlpha.900" */
     >
       {user ? (
         <Flex justify="space-around" align="center" p="5">
@@ -63,9 +63,20 @@ function Navbar() {
               icon={<HamburgerIcon />}
               variant="ghost"
               fontSize={["lg", "x-large", "2xl"]}
-              sx={{ boxShadow: "0" }}
-              _hover={{ bgColor: "pink.200" }}
-              _active={{ bgColor: "pink.200" }}
+              sx={{
+                boxShadow: "0",
+              }}
+              _hover={{
+                border: "2px solid",
+                borderColor: "blackAlpha.900",
+                boxShadow: "2px 2px black",
+              }}
+              _active={{
+                bgColor: "blue.200",
+                border: "2px solid",
+                borderColor: "blackAlpha.900",
+                boxShadow: "2px 2px black",
+              }}
             />
             <MenuList
               boxShadow="5px 5px black"
@@ -74,18 +85,18 @@ function Navbar() {
               borderColor="blackAlpha.900"
             >
               <NavLink to={`/profile/${userProfile?._id}`}>
-                <MenuItem _hover={{ bgColor: "pink.200" }}>
+                <MenuItem _hover={{ bgColor: "blue.200" }}>
                   <Icon as={BiUser} mr="2" />
                   Profile
                 </MenuItem>
               </NavLink>
               <NavLink to={"/create-playlist"}>
-                <MenuItem _hover={{ bgColor: "pink.200" }}>
+                <MenuItem _hover={{ bgColor: "blue.200" }}>
                   <Icon as={MdOutlinePlaylistAdd} mr="2" />
                   Create Playlist
                 </MenuItem>
               </NavLink>
-              <MenuItem _hover={{ bgColor: "pink.200" }} onClick={logoutUser}>
+              <MenuItem _hover={{ bgColor: "blue.200" }} onClick={logoutUser}>
                 <Icon as={MdLogout} mr="2" />
                 Logout
               </MenuItem>
