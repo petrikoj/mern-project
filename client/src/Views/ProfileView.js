@@ -83,19 +83,21 @@ function ProfileView() {
                     <Text>Favorites</Text>
                   </VStack>
                 </Tab>
-                <Tab
-                  _selected={{
-                    bg: "yellow.200",
-                    borderLeft: "1px",
-                    borderRight: "1px",
-                    borderColor: "blackAlpha.900",
-                  }}
-                >
-                  <VStack pt="2">
-                    <Icon as={GrUserSettings} />
-                    <Text>Account</Text>
-                  </VStack>
-                </Tab>
+                {userProfile._id === guestUserId ? null : (
+                  <Tab
+                    _selected={{
+                      bg: "yellow.200",
+                      borderLeft: "1px",
+                      borderRight: "1px",
+                      borderColor: "blackAlpha.900",
+                    }}
+                  >
+                    <VStack pt="2">
+                      <Icon as={GrUserSettings} />
+                      <Text>Account</Text>
+                    </VStack>
+                  </Tab>
+                )}
               </TabList>
               <Divider borderColor="blackAlpha.900" />
               <TabPanels>
