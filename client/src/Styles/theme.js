@@ -8,7 +8,7 @@ const theme = extendTheme({
     global: {
       body: {
         margin: 0,
-        bg: "yellow.100",
+        bg: "yellow.50",
         color: "blackAlpha.900",
         letterSpacing: "wide",
       },
