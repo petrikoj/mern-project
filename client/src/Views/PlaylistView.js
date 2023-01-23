@@ -65,7 +65,7 @@ function PlaylistView() {
                         src={list?.creator.avatar}
                         border="1px"
                       />
-                      {user && userProfile?._id === list.creator._id ? (
+                      {/*  {user && userProfile?._id === list.creator._id ? (
                         <Text
                           fontSize={["sm", "md"]}
                           letterSpacing="wide"
@@ -83,15 +83,15 @@ function PlaylistView() {
                             YOU
                           </Highlight>
                         </Text>
-                      ) : (
-                        <Text
-                          fontSize={["md", "lg"]}
-                          letterSpacing="wide"
-                          fontWeight="semibold"
-                        >
-                          {list.creator.username}
-                        </Text>
-                      )}
+                      ) : ( */}
+                      <Text
+                        fontSize={["md", "lg"]}
+                        letterSpacing="wide"
+                        fontWeight="semibold"
+                      >
+                        {list.creator.username}
+                      </Text>
+                      {/* ‚ */}
                     </HStack>
 
                     <Text
