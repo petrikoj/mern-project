@@ -33,8 +33,22 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/playlists/all" element={<PlaylistView />} />
-        <Route path="/playlists/:_id" element={<DetailView />} />
+        <Route
+          path="/playlists/all"
+          element={
+            <ProtectedRoute>
+              <PlaylistView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/playlists/:_id"
+          element={
+            <ProtectedRoute>
+              <DetailView />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/create-playlist"
           element={
