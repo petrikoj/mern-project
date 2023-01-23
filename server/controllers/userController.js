@@ -349,6 +349,16 @@ const updateUser = async (request, response) => {
     if (!myUser) {
       return response.status(404).json({ message: "Couldn't find ID" });
     }
+    if (request.body.username !== myUser.username) {
+      try {
+        await Playlist.updateMany(
+          { creator: userId },
+          { $set: { username: request.body.username } }
+        ).exec();
+      } catch (error) {
+        return error.message("Error updating playlists");
+      }
+    }
     return response
       .status(200)
       .json({ message: "Update successful", userUpdated: myUser });
