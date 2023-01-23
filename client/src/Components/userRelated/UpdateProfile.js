@@ -70,6 +70,12 @@ function UpdateProfile() {
     }
   };
 
+  const discardChanges = () => {
+    setNewEmail("");
+    setNewUsername("");
+    setUserProfile(userProfile);
+  };
+
   // PATCH req to update user
 
   const updateUser = async (event) => {
@@ -99,7 +105,7 @@ function UpdateProfile() {
         );
         const result = await response.json();
         setUserProfile(result.userUpdated);
-        //TODO - updating state of playlists after user update not working yet
+        //TODO - updating state of playlists after user update
         setMyPlaylists(
           myPlaylists.map((list) => {
             if (list.creator._id === result.userUpdated._id) {
@@ -151,7 +157,7 @@ function UpdateProfile() {
               />
               {emailError ? (
                 <FormHelperText color="red.300">
-                  Please enter a valid email adress
+                  Please enter a valid email address
                 </FormHelperText>
               ) : null}
               <ButtonGroup justifyContent="center" size="sm" spacing="4" pt="2">
@@ -225,9 +231,24 @@ function UpdateProfile() {
         )}
       </Container>
       <Divider borderColor="blackAlpha.900" />
-      {(newEmail && newEmail !== userProfile.email) ||
-      (newUsername && newUsername !== userProfile.username) ? (
-        <Button onClick={updateUser}>Save changes</Button>
+      {/*    Only show save/discard button after username/email change
+    Don't show save/discard button in edit mode */}
+      {(!isEditingEmail &&
+        !isEditingUsername &&
+        newEmail &&
+        newEmail !== userProfile.email) ||
+      (!isEditingEmail &&
+        !isEditingUsername &&
+        newUsername &&
+        newUsername !== userProfile.username) ? (
+        <VStack>
+          <Button bgColor="green.200" onClick={updateUser}>
+            Save
+          </Button>
+          <Button bgColor="red.300" onClick={discardChanges}>
+            Discard
+          </Button>
+        </VStack>
       ) : null}
     </VStack>
   );
