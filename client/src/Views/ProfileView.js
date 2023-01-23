@@ -28,8 +28,8 @@ import LoadingSpinner from "../components/layoutRelated/Spinner";
 import UnlikeButton from "../components/userRelated/UnlikeButton";
 import { PlaylistContext } from "../context/PlaylistContext";
 import { DeleteIcon } from "@chakra-ui/icons";
-import UpdateProfile from "../components/userRelated/UpdateProfile";
 import { guestUserId } from "../utils/configs";
+import UpdateProfile from "../components/userRelated/UpdateProfile";
 
 function ProfileView() {
   const { _id } = useParams();
@@ -83,21 +83,21 @@ function ProfileView() {
                     <Text>Favorites</Text>
                   </VStack>
                 </Tab>
-                {userProfile._id === guestUserId ? null : (
-                  <Tab
-                    _selected={{
-                      bg: "yellow.200",
-                      borderLeft: "1px",
-                      borderRight: "1px",
-                      borderColor: "blackAlpha.900",
-                    }}
-                  >
-                    <VStack pt="2">
-                      <Icon as={GrUserSettings} />
-                      <Text>Account</Text>
-                    </VStack>
-                  </Tab>
-                )}
+                {/* {userProfile._id === guestUserId ? null : ( */}
+                <Tab
+                  _selected={{
+                    bg: "yellow.200",
+                    borderLeft: "1px",
+                    borderRight: "1px",
+                    borderColor: "blackAlpha.900",
+                  }}
+                >
+                  <VStack pt="2">
+                    <Icon as={GrUserSettings} />
+                    <Text>Account</Text>
+                  </VStack>
+                </Tab>
+                {/*  )} */}
               </TabList>
               <Divider borderColor="blackAlpha.900" />
               <TabPanels>
@@ -175,7 +175,20 @@ function ProfileView() {
                     );
                   })}
                 </TabPanel>
-                {userProfile._id === guestUserId ? null : (
+                {userProfile._id === guestUserId ? (
+                  <TabPanel>
+                    <VStack spacing="2">
+                      <Text>
+                        Users other than the guest user account can change their
+                        profile data here.
+                      </Text>
+                      <Text>Want to see it working?</Text>
+                      <Link to="/signup">
+                        <Text as="u">Just create an account this time.</Text>
+                      </Link>
+                    </VStack>
+                  </TabPanel>
+                ) : (
                   <TabPanel>
                     <UpdateProfile />
                   </TabPanel>
