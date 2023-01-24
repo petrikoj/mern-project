@@ -1,51 +1,44 @@
-import { React, useState, useEffect, useContext, useRef } from "react";
+import { React, useState, useContext, useRef } from "react";
+import { AuthContext } from "../../context/AuthContext.js";
 import {
   Button,
   FormControl,
+  FormHelperText,
   Icon,
   Input,
   InputGroup,
-  InputLeftAddon,
   InputLeftElement,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import { isValidEmail, isValidPassword } from "../../utils/validators.js";
-import { AuthContext } from "../../context/AuthContext.js";
 import { useNavigate } from "react-router-dom";
 import { FiMail } from "react-icons/fi";
 import { MdOutlinePassword } from "react-icons/md";
 import { baseURL } from "../../utils/getServerUrl.js";
 
 function Login() {
-  const { checkUserStatus } = useContext(AuthContext);
-  const [userLogin, setUserLogin] = useState({
-    email: "",
-    password: "",
-  });
+  const { checkUserStatus, loading, setLoading } = useContext(AuthContext);
   const email = useRef();
   const password = useRef();
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [credentialsError, setCredentialsError] = useState(null);
   const redirect = useNavigate();
   const toast = useToast();
 
-  /*   const handleChangeHandler = (event) => {
-    setUserLogin({ ...userLogin, [event.target.name]: event.target.value });
-  }; */
-
-  //
+  // Checking the input values and pass them to callback login function
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Error handling
+    setLoading(true);
+    // Some error handling //
     if (
       !isValidEmail(email.current.value) &&
       !isValidPassword(password.current.value)
     ) {
       setEmailError(true);
       setPasswordError(true);
+      setLoading(false);
     }
     if (
       !isValidEmail(email.current.value) &&
@@ -53,6 +46,7 @@ function Login() {
     ) {
       setEmailError(true);
       setPasswordError(false);
+      setLoading(false);
     }
     if (
       !isValidPassword(email.current.value) &&
@@ -60,59 +54,27 @@ function Login() {
     ) {
       setPasswordError(true);
       setEmailError(false);
+      setLoading(false);
     }
-    // Handling valid input data
+    // Handling valid input data //
     if (
       isValidEmail(email.current.value) &&
       isValidPassword(password.current.value)
     ) {
       setEmailError(false);
       setPasswordError(false);
-      /* setUserLogin((prev) => {
-      return {
-        ...prev,
-        email: email.current.value,
-        password: password.current.value,
-      };
-    }); */
-      //console.log(userLogin);
       try {
         await handleLogin();
       } catch (error) {
         console.log(error);
+        alert(error.message);
       }
-    } /* else {
-      setEmailError(true);
-      setPasswordError(true);
-    } */
+    }
   };
 
-  //
+  // Handling login POST request //
 
   const handleLogin = async () => {
-    //console.log(userLogin);
-    /* if (
-      !isValidEmail(userLogin.email) &&
-      !isValidPassword(userLogin.password)
-    ) {
-      alert(credentialsError);
-      return;
-    }
-    if (!isValidEmail(userLogin.password)) {
-      alert(emailError);
-      return;
-    }
-    if (!isValidPassword(userLogin.password)) {
-      alert(passwordError);
-      return;
-    }
-    if (isValidEmail(userLogin.email) && isValidPassword(userLogin.password)) {
-      setUserLogin({
-        email: userLogin.email,
-        password: userLogin.password,
-      });
-    } */
-
     const urlencoded = new URLSearchParams();
     urlencoded.append("email", email.current.value);
     urlencoded.append("password", password.current.value);
@@ -127,10 +89,12 @@ function Login() {
         baseURL + "/api/users/login",
         requestOptions
       );
+      setLoading(true);
       const result = await response.json();
       if (response.status === 401) {
         setEmailError(true);
         setPasswordError(true);
+        setLoading(false);
         toast({
           title: `${result.message}`,
           status: "error",
@@ -152,56 +116,63 @@ function Login() {
           isClosable: true,
         });
         redirect(`/`);
+        setLoading(false);
       }
     } catch (error) {
+      setLoading(false);
+
       console.log("Login error", error);
     }
   };
 
-  /*   useEffect(() => {
-    setCredentialsError("Wrong credentials");
-    setEmailError("Wrong E-Mail");
-    setPasswordError("Wrong Password");
-  }, [credentialsError, emailError, passwordError]); */
-
   return (
-    <VStack>
+    <VStack spacing="4">
       <FormControl isInvalid={emailError}>
-        <InputGroup>
-          <InputLeftElement>
-            <Icon as={FiMail} />
-          </InputLeftElement>
-          <Input
-            variant="custom"
-            type="text"
-            placeholder="E-Mail"
-            //name="email"
-            //id="email"
-            //value={userLogin.email ? userLogin.email : ""}
-            //onChange={handleChangeHandler}
-            ref={email}
-          />
-        </InputGroup>
-      </FormControl>
-      <FormControl isInvalid={passwordError}>
-        <InputGroup>
-          <InputLeftElement>
-            <Icon as={MdOutlinePassword} />
-          </InputLeftElement>
-          <Input
-            variant="custom"
-            placeholder="Password"
-            type="password"
-            /* name="password"
-          id="password"
-          value={userLogin.password ? userLogin.password : ""}
-          onChange={handleChangeHandler} */
-            ref={password}
-          />
-        </InputGroup>
+        <VStack>
+          <InputGroup>
+            <InputLeftElement>
+              <Icon as={FiMail} />
+            </InputLeftElement>
+
+            <Input
+              variant="custom"
+              type="text"
+              placeholder="E-Mail"
+              ref={email}
+            />
+          </InputGroup>
+          {emailError ? (
+            <FormHelperText color="red.300">
+              Invalid email address
+            </FormHelperText>
+          ) : null}
+        </VStack>
       </FormControl>
 
-      <Button w={["80", "24"]} onClick={handleSubmit}>
+      <FormControl isInvalid={passwordError}>
+        <VStack>
+          <InputGroup>
+            <InputLeftElement>
+              <Icon as={MdOutlinePassword} />
+            </InputLeftElement>
+            <Input
+              variant="custom"
+              placeholder="Password"
+              type="password"
+              ref={password}
+            />
+          </InputGroup>
+          {passwordError ? (
+            <FormHelperText color="red.300">Invalid password</FormHelperText>
+          ) : null}
+        </VStack>
+      </FormControl>
+      <Button
+        w={["80", "24"]}
+        isLoading={loading ? true : false}
+        isDisabled={loading ? true : false}
+        onClick={handleSubmit}
+      >
         Login
       </Button>
     </VStack>
