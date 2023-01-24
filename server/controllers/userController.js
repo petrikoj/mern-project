@@ -118,7 +118,9 @@ const login = async (request, response) => {
       })
       .exec();
     if (!existingUser) {
-      response.status(401).json({ message: "No such user found" });
+      response.status(401).json({
+        message: "There is no such user. Please check your login data.",
+      });
     }
     if (existingUser) {
       // Create a function to compare request pw with pw stored in db: //
@@ -147,7 +149,9 @@ const login = async (request, response) => {
         });
       }
     }
-  } catch (error) {}
+  } catch (error) {
+    return error.message;
+  }
 };
 
 // GET user profile
