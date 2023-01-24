@@ -8,7 +8,8 @@ const custom = definePartsStyle({
     border: "2px solid",
     borderColor: "blackAlpha.900",
     bgColor: "whiteAlpha.900",
-    focusBorderColor: "red",
+    _focus: { borderColor: "blue.200" },
+    _invalid: { borderColor: "red.300" },
   },
 });
 
