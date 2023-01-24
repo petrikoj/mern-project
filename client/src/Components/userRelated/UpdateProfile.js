@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { PlaylistContext } from "../../context/PlaylistContext";
 import { useParams } from "react-router-dom";
@@ -27,6 +27,7 @@ function UpdateProfile() {
   const { myPlaylists, setMyPlaylists } = useContext(PlaylistContext);
   const { _id } = useParams();
   const { getMyToken } = useGetMeToken();
+  const toast = useToast();
   const email = useRef();
   const username = useRef();
   const [newEmail, setNewEmail] = useState("");
@@ -35,7 +36,6 @@ function UpdateProfile() {
   const [isEditingUsername, setIsEditingUsername] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
-  const toast = useToast();
 
   // Handling editable inputs
 
@@ -67,6 +67,7 @@ function UpdateProfile() {
       setIsEditingUsername(false);
       setUsernameError(false);
       setNewUsername(username.current.value);
+      console.log(newUsername);
     }
   };
 
@@ -110,8 +111,9 @@ function UpdateProfile() {
           myPlaylists.map((list) => {
             if (list.creator._id === result.userUpdated._id) {
               return { ...list, username: result.userUpdated.username };
+            } else {
+              return list;
             }
-            return list;
           })
         );
         toast({
@@ -149,12 +151,7 @@ function UpdateProfile() {
         {isEditingEmail ? (
           <VStack>
             <FormControl isInvalid={emailError}>
-              <Input
-                ref={email}
-                bgColor="whiteAlpha.900"
-                focusBorderColor="blackAlpha.900"
-                errorBorderColor="red.300"
-              />
+              <Input variant="custom" ref={email} />
               {emailError ? (
                 <FormHelperText color="red.300">
                   Please enter a valid email address
@@ -194,11 +191,7 @@ function UpdateProfile() {
         {isEditingUsername ? (
           <VStack>
             <FormControl isInvalid={usernameError}>
-              <Input
-                ref={username}
-                bgColor="whiteAlpha.900"
-                focusBorderColor="blackAlpha.900"
-              />
+              <Input ref={username} variant="custom" />
               {usernameError ? (
                 <FormHelperText color="red.300">
                   Invalid username
