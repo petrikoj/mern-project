@@ -23,8 +23,13 @@ function Login() {
   const password = useRef();
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [credentialsError, setCredentialsError] = useState(false);
   const redirect = useNavigate();
   const toast = useToast();
+
+  const resetCredentialsError = () => {
+    setCredentialsError(false);
+  };
 
   // Checking the input values and pass them to callback login function
 
@@ -92,9 +97,8 @@ function Login() {
       setLoading(true);
       const result = await response.json();
       if (response.status === 401) {
-        setEmailError(true);
-        setPasswordError(true);
         setLoading(false);
+        setCredentialsError(true);
         toast({
           title: `${result.message}`,
           status: "error",
@@ -115,12 +119,12 @@ function Login() {
           duration: 1500,
           isClosable: true,
         });
-        redirect(`/`);
+        setCredentialsError(false);
         setLoading(false);
+        redirect(`/`);
       }
     } catch (error) {
       setLoading(false);
-
       console.log("Login error", error);
     }
   };
@@ -139,6 +143,8 @@ function Login() {
               type="text"
               placeholder="E-Mail"
               ref={email}
+              sx={{ borderColor: credentialsError ? "red.400" : null }}
+              onFocus={resetCredentialsError}
             />
           </InputGroup>
           {emailError ? (
@@ -160,6 +166,8 @@ function Login() {
               placeholder="Password"
               type="password"
               ref={password}
+              sx={{ borderColor: credentialsError ? "red.400" : null }}
+              onFocus={resetCredentialsError}
             />
           </InputGroup>
           {passwordError ? (
