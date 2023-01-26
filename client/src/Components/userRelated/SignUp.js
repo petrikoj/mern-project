@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
+import { Formik, Field, Form } from "formik";
 import {
   Avatar,
   Button,
   Center,
-  Container,
-  Divider,
   FormControl,
-  FormHelperText,
+  FormErrorMessage,
   FormLabel,
   IconButton,
   Image,
   Input,
   Text,
   useToast,
+  VStack,
 } from "@chakra-ui/react";
 import { RiUploadCloud2Line } from "react-icons/ri";
 import {
@@ -25,40 +25,59 @@ import { baseURL } from "../../utils/getServerUrl.js";
 
 function SignUp() {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [newUser, setNewUser] = useState({});
-  const [submitLoading, setSubmitLoading] = useState(false);
-  const [imgLoading, setImgLoading] = useState(false);
-  const [isImg, setIsImg] = useState(false);
-  const [imgError, setImgError] = useState(false);
-  const [usernameError, setUsernameError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [isInput, setIsInput] = useState(true);
+  const [imgUrl, setImgUrl] = useState("");
   const redirect = useNavigate();
   const toast = useToast();
 
-  /*  const email = useRef();
-  const password = useRef();
-  const username = useRef();
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setNewUser({
-      ...newUser,
-      email: email.current.value,
-      password: password.current.value,
-      username: username.current.value,
-    });
-    console.log(newUser);
-  }; */
+  // VALIDATION FOR INPUT FIELDS //
 
-  const handleChangeHandler = (event) => {
-    setNewUser({ ...newUser, [event.target.name]: event.target.value });
+  const validateUsername = (value) => {
+    let error;
+    if (!value) {
+      error = "Username required";
+    } else if (!isValidUsername(value)) {
+      error = "Invalid username. Please try again";
+    }
+    return error;
   };
 
+  const validateEmail = (value) => {
+    let error;
+    if (!value) {
+      error = "Email required";
+    } else if (!isValidEmail(value)) {
+      error = "Invalid email address. Please try again";
+    }
+    return error;
+  };
+
+  const validatePassword = (value) => {
+    let error;
+    if (!value) {
+      error = "Password required";
+    } else if (!isValidPassword(value)) {
+      error = "Invalid password. Please try again";
+    }
+    return error;
+  };
+
+  ///TODO - SOURCE OF ERR FOR IMG UPLOAD?
+  const validateImgUpload = (value) => {
+    let error;
+    if (!value) {
+      error = "Please choose a profile picture.";
+    }
+    return error;
+  };
+  ///
+
+  ///TODO - CHECK STATE MANAGEMENT
   const attachFileHandler = (event) => {
     setSelectedFile(event.target.files[0]);
-    setIsImg(true);
+    console.log(selectedFile);
   };
+
+  /// IMG UPLOAD -> CLOUDINARY ///
 
   const submitForm = async (event) => {
     event.preventDefault();
@@ -66,313 +85,180 @@ function SignUp() {
     formData.append("image", selectedFile);
     console.log("selectedFile:", selectedFile);
     console.log("formData:", formData);
-    if (!selectedFile || selectedFile === "") {
-      setImgError(true);
-    } else {
-      setImgError(false);
-      const requestOptions = {
-        method: "POST",
-        body: formData,
-      };
-      try {
-        setImgLoading(true);
-        const response = await fetch(
-          baseURL + "/api/users/image-upload",
-          requestOptions
-        );
-        const result = await response.json();
-        console.log("Result:", result);
-        setNewUser({ ...newUser, avatar: result.avatar });
-        setImgLoading(false);
-      } catch (error) {
-        setImgLoading(false);
-        console.log(error);
-      }
+    const requestOptions = {
+      method: "POST",
+      body: formData,
+    };
+    try {
+      const response = await fetch(
+        baseURL + "/api/users/image-upload",
+        requestOptions
+      );
+      const result = await response.json();
+      console.log("Result:", result);
+      setImgUrl(result.avatar);
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const registerNewUser = async () => {
-    setSubmitLoading(true);
-    // Error handling //
-    /* if (
-      !isValidUsername(newUser.username) &&
-      !isValidEmail(newUser.email) &&
-      !isValidPassword(newUser.password) &&
-      !selectedFile
-    ) {
-      setSubmitLoading(false);
-      setUsernameError(true);
-      setEmailError(true);
-      setPasswordError(true);
-      setImgError(true);
-    }
-    if (
-      isValidUsername(newUser.username) &&
-      !isValidEmail(newUser.email) &&
-      !isValidPassword(newUser.password) &&
-      !selectedFile
-    ) {
-      setSubmitLoading(false);
-      setUsernameError(false);
-      setEmailError(true);
-      setPasswordError(true);
-      setImgError(true);
-    }
-    if (
-      isValidUsername(newUser.username) &&
-      isValidPassword(newUser.password) &&
-      !isValidEmail(newUser.email) &&
-      !selectedFile
-    ) {
-      setSubmitLoading(false);
-      setUsernameError(false);
-      setPasswordError(false);
-      setEmailError(true);
-      setImgError(true);
-    }
-    if (
-      isValidUsername(newUser.username) &&
-      isValidEmail(newUser.email) &&
-      !isValidPassword(newUser.password) &&
-      !selectedFile
-    ) {
-      setSubmitLoading(false);
-      setUsernameError(false);
-      setEmailError(false);
-      setPasswordError(true);
-      setImgError(true);
-    }
-    if (
-      isValidPassword(newUser.password) &&
-      !isValidUsername(newUser.username) &&
-      !isValidEmail(newUser.email) &&
-      !selectedFile
-    ) {
-      setSubmitLoading(false);
-      setPasswordError(false);
-      setUsernameError(true);
-      setEmailError(true);
-      setImgError(true);
-    }
-    if (
-      isValidUsername(newUser.username) &&
-      isValidPassword(newUser.password) &&
-      !isValidEmail(newUser.email) &&
-      !selectedFile
-    ) {
-      setSubmitLoading(false);
-      setPasswordError(false);
-      setUsernameError(false);
-      setEmailError(true);
-      setImgError(true);
-    }
-    if (
-      isValidUsername(newUser.username) &&
-      isValidEmail(newUser.email) &&
-      isValidPassword(newUser.password) &&
-      !selectedFile
-    ) {
-      setSubmitLoading(false);
-      setUsernameError(false);
-      setEmailError(false);
-      setPasswordError(false);
-      setImgError(true);
-    }
-    if (
-      isValidEmail(newUser.email) &&
-      isValidPassword(newUser.password) &&
-      !isValidUsername(newUser.username) &&
-      !selectedFile
-    ) {
-      setSubmitLoading(false);
-      setUsernameError(true);
-      setImgError(true);
-      setEmailError(false);
-      setPasswordError(false);
-    }
-    if (
-      isValidEmail(newUser.email) &&
-      !isValidPassword(newUser.password) &&
-      !isValidUsername(newUser.username) &&
-      !selectedFile
-    ) {
-      setSubmitLoading(false);
-      setEmailError(false);
-      setUsernameError(true);
-      setPasswordError(true);
-      setImgError(true);
-    }
-    if (
-      !isValidEmail(newUser.email) &&
-      !isValidPassword(newUser.password) &&
-      !isValidUsername(newUser.username) &&
-      isImg
-    ) {
-      setSubmitLoading(false);
-      setImgError(false);
-      setEmailError(true);
-      setUsernameError(true);
-      setPasswordError(true);
-    } */
+  // POST REQ FOR CREATING A NEW USER //
 
-    // Handle valid input data //
-    if (
-      isValidUsername(newUser.username) &&
-      isValidEmail(newUser.email) &&
-      isValidPassword(newUser.password) &&
-      selectedFile
-    ) {
-      setUsernameError(false);
-      setEmailError(false);
-      setPasswordError(false);
-      setImgError(false);
-      let urlencoded = new URLSearchParams();
-      urlencoded.append("username", newUser.username);
-      urlencoded.append("email", newUser.email);
-      urlencoded.append("password", newUser.password);
-      urlencoded.append("avatar", newUser.avatar);
-      const requestOptions = {
-        method: "POST",
-        body: urlencoded,
-      };
-      try {
-        const response = await fetch(
-          baseURL + "/api/users/signup",
-          requestOptions
-        );
-        const results = await response.json();
-        console.log("Result:", results);
-        toast({
-          title: "Registration successful",
-          status: "success",
-          variant: "subtle",
-          duration: 1500,
-          isClosable: true,
-        });
-        setSubmitLoading(false);
-        redirect("/login");
-      } catch (error) {
-        setSubmitLoading(false);
-        console.log("Fetch error", error);
-      }
-    } else {
-      alert("sry");
-      setSubmitLoading(false);
+  const registerNewUser = async (values) => {
+    let urlencoded = new URLSearchParams();
+    urlencoded.append("username", values.username);
+    urlencoded.append("email", values.email);
+    urlencoded.append("password", values.password);
+    urlencoded.append("avatar", imgUrl);
+    const requestOptions = {
+      method: "POST",
+      body: urlencoded,
+    };
+    try {
+      const response = await fetch(
+        baseURL + "/api/users/signup",
+        requestOptions
+      );
+      const results = await response.json();
+      console.log("Result:", results);
+      toast({
+        title: "Registration successful",
+        status: "success",
+        variant: "subtle",
+        duration: 1500,
+        isClosable: true,
+      });
+      redirect("/login");
+    } catch (error) {
+      console.log("Fetch error", error);
     }
   };
-
-  useEffect(() => {
-    console.log("useEffect in SignUp ran");
-  }, []);
 
   return (
-    <Container>
-      <FormControl mb="4" isInvalid={usernameError}>
-        <FormLabel>Username</FormLabel>
-        <Input
-          variant="custom"
-          id="username"
-          type="text"
-          //ref="username"
-          name="username"
-          placeholder="e. g. musiclover030"
-          value={newUser.username ? newUser.username : ""}
-          onChange={handleChangeHandler}
-        />
-        {usernameError ? (
-          <FormHelperText color="red.300">Invalid username</FormHelperText>
-        ) : null}
-      </FormControl>
-      <FormControl mb="4" isInvalid={emailError}>
-        <FormLabel>E-Mail</FormLabel>
-        <Input
-          variant="custom"
-          type="text"
-          name="email"
-          id="email"
-          placeholder="e. g. this@that.okay"
-          //ref="email"
-          value={newUser.email ? newUser.email : ""}
-          onChange={handleChangeHandler}
-        />
-        {emailError ? (
-          <FormHelperText color="red.300">Invalid email address</FormHelperText>
-        ) : null}
-      </FormControl>
-      <FormControl mb="4" isInvalid={passwordError}>
-        <FormLabel>Password</FormLabel>
-        <Input
-          variant="custom"
-          type="password"
-          name="password"
-          id="password"
-          placeholder="At least 6 characters"
-          //ref="password"
-          value={newUser.password ? newUser.password : ""}
-          onChange={handleChangeHandler}
-        />
-        {passwordError ? (
-          <FormHelperText color="red.300">Invalid password</FormHelperText>
-        ) : null}
-      </FormControl>
-      <FormControl mb="8" display="flex" flexDir="column" isInvalid={imgError}>
-        <FormLabel>Profile Picture</FormLabel>
-        <Input
-          variant="custom"
-          type="file"
-          accept=".jpg, .jpeg, .png"
-          name="image"
-          onChange={attachFileHandler}
-          p="2"
-          mb="2"
-        />
-        {imgError ? (
-          <FormHelperText color="red.300">
-            Please be so kind and provide a profile picture. It can be anything,
-            really.
-          </FormHelperText>
-        ) : null}
-        {!newUser.avatar && (
-          <Center>
-            <IconButton
-              sx={{ bgColor: "green.200" }}
-              w={["80", "40"]}
-              leftIcon={<RiUploadCloud2Line />}
-              p="2"
-              isLoading={imgLoading ? true : false}
-              isDisabled={!isImg ? true : false}
-              onClick={submitForm}
+    <Formik
+      initialValues={{
+        username: "",
+        email: "",
+        password: "",
+        image: "",
+      }}
+      onSubmit={(values) => {
+        console.log(values);
+        registerNewUser(values);
+      }}
+    >
+      {(props) => (
+        <Form>
+          <VStack spacing="4">
+            <Field
+              id="username"
+              name="username"
+              type="text"
+              validate={validateUsername}
             >
-              <Text>Upload</Text>
-            </IconButton>
-          </Center>
-        )}
-      </FormControl>
-      {/* Show the upload result */}
-      {newUser.avatar && (
-        <Center>
-          <Image
-            borderRadius="full"
-            border="1px"
-            fit="fill"
-            boxSize="32"
-            src={newUser.avatar}
-            alt="user pic"
-            my="2"
-          />
-        </Center>
+              {({ field, form }) => (
+                <FormControl
+                  isInvalid={form.errors.username && form.touched.username}
+                >
+                  <FormLabel htmlFor="username">Username</FormLabel>
+                  <Input
+                    {...field}
+                    variant="custom"
+                    placeholder="e. g. musiclover"
+                  />
+                  <FormErrorMessage>{form.errors.username}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Field
+              id="email"
+              name="email"
+              type="email"
+              validate={validateEmail}
+            >
+              {({ field, form }) => (
+                <FormControl
+                  isInvalid={form.errors.email && form.touched.email}
+                >
+                  <FormLabel htmlFor="email">Email</FormLabel>
+                  <Input
+                    {...field}
+                    variant="custom"
+                    placeholder="this@that.com"
+                  />
+                  <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Field id="password" name="password" validate={validatePassword}>
+              {({ field, form }) => (
+                <FormControl
+                  isInvalid={form.errors.password && form.touched.password}
+                >
+                  <FormLabel htmlFor="password">Password</FormLabel>
+                  <Input {...field} variant="custom" type="password" />
+                  <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            ///TODO - FIX IMG UPLOAD
+            <Field
+              id="image"
+              name="image"
+              validate={validateImgUpload}
+              onChange={attachFileHandler}
+            >
+              {({ field, form }) => (
+                <FormControl
+                  isInvalid={form.errors.image && form.touched.image}
+                >
+                  <FormLabel htmlFor="image">Profile Picture</FormLabel>
+                  <Input
+                    {...field}
+                    variant="flushed"
+                    type="file"
+                    accept=".jpg, .jpeg, .png"
+                    onChange={attachFileHandler}
+                  />
+                  <FormErrorMessage>{form.errors.image}</FormErrorMessage>
+                  <Center>
+                    {selectedFile ? (
+                      <IconButton
+                        sx={{ bgColor: "green.200" }}
+                        w={["80", "40"]}
+                        leftIcon={<RiUploadCloud2Line />}
+                        p="2"
+                        onClick={submitForm}
+                      >
+                        <Text>Upload</Text>
+                      </IconButton>
+                    ) : null}
+                    {imgUrl ? (
+                      <Image
+                        borderRadius="full"
+                        border="1px"
+                        fit="fill"
+                        boxSize="32"
+                        src={imgUrl}
+                        alt="user pic"
+                        my="2"
+                      />
+                    ) : null}
+                  </Center>
+                </FormControl>
+              )}
+            </Field>
+            <Button
+              w={["80", "40"]}
+              isLoading={props.isSubmitting}
+              type="submit"
+            >
+              Submit
+            </Button>
+          </VStack>
+        </Form>
       )}
-      <Center>
-        <Button
-          w={["80", "40"]}
-          isLoading={submitLoading ? true : false}
-          isDisabled={!isInput ? true : false}
-          onClick={registerNewUser}
-        >
-          Register
-        </Button>
-      </Center>
-    </Container>
+    </Formik>
   );
 }
 
