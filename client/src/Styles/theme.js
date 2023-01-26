@@ -11,6 +11,7 @@ const theme = extendTheme({
         bg: "yellow.50",
         color: "blackAlpha.900",
         letterSpacing: "wide",
+        wordSpacing: "0.15rem",
       },
       fonts: {
         heading: `"Vollkorn", serif`,
